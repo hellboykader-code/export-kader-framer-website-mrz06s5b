@@ -33,6 +33,28 @@
     return sec;
   }
 
+  var TEAM=[
+    {slug:"kader",name:"Kader",role:"Fondateur · Designer & Développeur"},
+    {slug:"amine",name:"Amine",role:"Relations & Marketing"},
+    {slug:"yanis",name:"Yanis",role:"Marketeur"}
+  ];
+  function buildTeam(){
+    var sec=document.createElement("section");
+    sec.id="dwp-team"; sec.setAttribute("data-dwp","1");
+    var cards=TEAM.map(function(m){
+      return '<figure class="dwp-member">'+
+        '<img src="'+BASE+'/assets/team/'+m.slug+'.webp" alt="'+m.name+'" loading="lazy">'+
+        '<figcaption class="dwp-member__body"><h3>'+m.name+'</h3><span class="dwp-member__role">'+m.role+'</span></figcaption>'+
+        '</figure>';
+    }).join("");
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<span class="dwp-eyebrow2">{ Notre équipe }</span>'+
+      '<h2>Rencontrez notre équipe</h2>'+
+      '<p class="dwp-sub">Une équipe soudée qui conçoit, développe et fait rayonner votre cabinet dentaire en ligne.</p>'+
+      '<div class="dwp-team-grid">'+cards+'</div></div>';
+    return sec;
+  }
+
   function apply(){
     // 1) retirer réseaux Facebook + Instagram
     document.querySelectorAll('a[href="https://www.facebook.com/"],a[href="https://www.instagram.com/"]').forEach(function(a){
@@ -52,6 +74,11 @@
       var gal=buildGallery();
       if(svc){ main.insertBefore(gal, svc); } else { main.insertBefore(gal, main.children[1]||null); }
     }
+    // 4) équipe personnalisée (accueil uniquement)
+    if(isHome && !document.getElementById("dwp-team")){
+      var teamSec=main.querySelector('[data-framer-name="Team Section"]');
+      if(teamSec){ main.insertBefore(buildTeam(), teamSec); }
+    }
   }
 
   function boot(){
@@ -59,8 +86,8 @@
     setTimeout(apply,400); setTimeout(apply,1200); setTimeout(apply,2500);
     // garde : ré-applique si Framer ré-hydrate
     var main=document.querySelector('main[data-framer-name="Main"]')||document.body;
-    var obs=new MutationObserver(function(){ 
-      if(!document.getElementById("dwp-gallery")) apply();
+    var obs=new MutationObserver(function(){
+      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")) apply();
     });
     try{ obs.observe(main,{childList:true}); }catch(e){}
   }
