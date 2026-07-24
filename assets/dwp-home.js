@@ -19,11 +19,12 @@
     var sec=document.createElement("section");
     sec.id="dwp-gallery"; sec.setAttribute("data-dwp","1");
     var cards=CLINICS.map(function(c){
-      return '<a class="dwp-cardlink" href="'+BASE+'/portfolio/'+c.slug+'.html">'+
+      var url=BASE+'/realisations/'+c.slug+'/index.html';
+      return '<div class="dwp-cardlink" role="link" tabindex="0" data-dwp-site="'+url+'">'+
         '<div class="dwp-card-shot"><img src="'+BASE+'/assets/realisations/'+c.slug+'.webp" alt="Aperçu du site '+c.name+'" loading="lazy"></div>'+
         '<div class="dwp-card-meta"><h3>'+c.name+'</h3><span class="dwp-card-city">'+c.city+'</span></div>'+
         '<span class="dwp-card-cat">Cabinet dentaire · '+c.city+'</span>'+
-        '</a>';
+        '</div>';
     }).join("");
     sec.innerHTML='<div class="dwp-wrap">'+
       '<span class="dwp-eyebrow2">{ Nos modèles }</span>'+
@@ -84,6 +85,11 @@
   function boot(){
     apply();
     setTimeout(apply,400); setTimeout(apply,1200); setTimeout(apply,2500);
+    // ouverture fiable des cartes (contourne le routeur Framer)
+    document.addEventListener("click",function(e){
+      var a=e.target.closest && e.target.closest("[data-dwp-site]");
+      if(a){ e.preventDefault(); e.stopPropagation(); window.location.href=a.getAttribute("data-dwp-site"); }
+    },true);
     // garde : ré-applique si Framer ré-hydrate
     var main=document.querySelector('main[data-framer-name="Main"]')||document.body;
     var obs=new MutationObserver(function(){

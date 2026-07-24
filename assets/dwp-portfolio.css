@@ -41,7 +41,7 @@
 #dwp-gallery h2{font-size:clamp(2rem,4.4vw,3.4rem);letter-spacing:-.03em;margin:.25em 0 .1em;color:var(--dwp-ink)}
 #dwp-gallery .dwp-sub{color:var(--dwp-muted);font-size:1.1rem;margin-bottom:40px;max-width:60ch}
 .dwp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
-.dwp-cardlink{text-decoration:none;color:inherit;display:block;transition:.25s;border-radius:16px}
+.dwp-cardlink{text-decoration:none;color:inherit;display:block;transition:.25s;border-radius:16px;cursor:pointer}
 .dwp-cardlink:hover{transform:translateY(-6px)}
 .dwp-card-shot{border-radius:14px;overflow:hidden;background:#eef0f3}
 .dwp-card-shot img{width:100%;display:block;transition:.4s}
