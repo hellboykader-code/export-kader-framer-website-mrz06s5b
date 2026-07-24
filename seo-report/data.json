@@ -1,0 +1,622 @@
+[
+  {
+    "url": "https://kader.framer.website/",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (10 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "131 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/about",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (10 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "86 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/about",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (10 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/contact",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (10 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "11 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/contact",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/pricing",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (10 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "109 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/pricing",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (10 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "16 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects/built-to-last",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (26 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Built to Last - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects/built-to-last",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects/fresh-beginnings",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (29 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Fresh Beginnings - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects/fresh-beginnings",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects/glow-theory",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (24 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Glow Theory - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects/glow-theory",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects/kindred-space",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (26 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Kindred Space - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects/kindred-space",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects/velocity",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (21 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "VeloCity - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects/velocity",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects/vistahaven",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (23 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "VistaHaven - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects/vistahaven",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/services",
+    "score": 85,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too short (10 chars). Aim for 50-60 characters."
+      },
+      {
+        "type": "warning",
+        "message": "51 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/services",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs/the-impact-of-artificial-intelligence-on-digital-marketing-strategies",
+    "score": 87,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too long (82 chars). May be truncated in search results."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "The Impact of Artificial Intelligence on Digital Marketing Strategies - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs/the-impact-of-artificial-intelligence-on-digital-marketing-strategies",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs/the-role-of-artificial-intelligence-in-modern-digital-marketing",
+    "score": 87,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "Title too long (76 chars). May be truncated in search results."
+      },
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "The Role of Artificial Intelligence in Modern Digital Marketing - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs/the-role-of-artificial-intelligence-in-modern-digital-marketing",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs/building-a-resilient-business-model-in-uncertain-times",
+    "score": 90,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "14 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Title tag is properly configured",
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Building a Resilient Business Model in Uncertain Times - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs/building-a-resilient-business-model-in-uncertain-times",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs/building-a-resilient-startup-key-strategies-for-success",
+    "score": 90,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Title tag is properly configured",
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Building a Resilient Startup: Key Strategies for Success - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs/building-a-resilient-startup-key-strategies-for-success",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs/strategies-for-building-a-sustainable-startup",
+    "score": 90,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Title tag is properly configured",
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Strategies for Building a Sustainable Startup - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs/strategies-for-building-a-sustainable-startup",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs/the-future-of-ai-in-digital-marketing",
+    "score": 90,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Title tag is properly configured",
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "The Future of AI in Digital Marketing - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs/the-future-of-ai-in-digital-marketing",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs/the-importance-of-user-centered-design",
+    "score": 90,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "14 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Title tag is properly configured",
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "The Importance of User-Centered Design - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs/the-importance-of-user-centered-design",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/blogs/top-digital-marketing-trends-for-2025",
+    "score": 90,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Title tag is properly configured",
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Top Digital Marketing Trends for 2025 - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/blogs/top-digital-marketing-trends-for-2025",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects/spreading-the-word",
+    "score": 90,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Title tag is properly configured",
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "Spreading the Word - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects/spreading-the-word",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  },
+  {
+    "url": "https://kader.framer.website/projects/the-perfect-frame",
+    "score": 90,
+    "issues": [
+      {
+        "type": "warning",
+        "message": "15 image(s) missing alt text"
+      }
+    ],
+    "passed": [
+      "Title tag is properly configured",
+      "Meta description is properly configured",
+      "Single H1 heading present",
+      "Canonical URL is set",
+      "Open Graph meta tags present",
+      "Viewport meta tag present",
+      "Language attribute set"
+    ],
+    "meta": {
+      "title": "The Perfect Frame - BrightEdge",
+      "description": "Creative studio crafting impactful brands and websites with strategy, design, code, and marketing — built for modern businesses.",
+      "canonical": "https://kader.framer.website/projects/the-perfect-frame",
+      "ogImage": "https://framerusercontent.com/images/OD6vdZ8Ve8bazc6mu22tunSE.jpg"
+    }
+  }
+]
