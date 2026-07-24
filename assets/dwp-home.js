@@ -63,7 +63,7 @@
       if(img.getAttribute("src")!==fresh) img.setAttribute("src", fresh);
     });
     // 1) retirer réseaux Facebook + Instagram + X/Twitter
-    document.querySelectorAll('a[href*="facebook.com"],a[href*="instagram.com"],a[href*="twitter.com"],a[href*="//x.com"]').forEach(function(a){
+    document.querySelectorAll('a[href*="facebook.com"],a[href*="instagram.com"],a[href*="twitter.com"],a[href*="//x.com"],a[href*="behance.net"]').forEach(function(a){
       var w=a.closest('[data-framer-name="Icon Wrap"]')||a; w.style.display="none";
     });
     // 1b) hero : remplacer les avatars de l'ancienne équipe + pointer le bouton vers la nouvelle équipe
@@ -71,6 +71,15 @@
     var avatars=document.querySelectorAll('[data-framer-name^="Avatar-"] img, [data-framer-name^="Avatar-"]>div>img');
     avatars.forEach(function(img,i){ img.setAttribute("src", TP[i%TP.length]); });
     document.querySelectorAll('[data-framer-name="Arrow Button"]').forEach(function(a){ a.style.cursor="pointer"; });
+    // 1c) retirer le crédit auteur du thème (« Créé par … » + logo oldshen) et le badge « acheter ce template »
+    document.querySelectorAll('a[href*="lemonsqueezy.com"]').forEach(function(a){
+      a.style.display="none"; if(a.parentElement) a.parentElement.style.display="none";
+    });
+    document.querySelectorAll('a[href*="ShenDuncan"]').forEach(function(a){
+      var p=a;
+      for(var k=0;k<7&&p;k++){ p=p.parentElement; if(p&&p.querySelector('img[src*="ZdGiQIvKJf4"]')){ p.style.display="none"; return; } }
+      a.style.display="none";
+    });
     // 2) retirer liens nav "Blog"/"Tarifs" ; repointer "Réalisations" vers la galerie
     document.querySelectorAll('nav a, header a, footer a, [data-framer-name*="Nav"] a, [data-framer-name*="Footer"] a').forEach(function(a){
       var t=(a.textContent||"").trim();

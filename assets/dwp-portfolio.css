@@ -62,9 +62,13 @@ main [data-framer-name="Project Section"],
 a[href*="facebook.com"],
 a[href*="instagram.com"],
 a[href*="twitter.com"],
-a[href*="//x.com"]{display:none !important}
+a[href*="//x.com"],
+a[href*="behance.net"]{display:none !important}
 a[href*="/pricing/"],
 a[href*="/blogs/"]{display:none !important}
+/* crédit auteur du thème + badge « acheter ce template » */
+a[href*="lemonsqueezy.com"],
+a[href*="ShenDuncan"]{display:none !important}
 
 /* ===== Section équipe personnalisée ===== */
 main [data-framer-name="Team Section"]{display:none !important}
