@@ -59,8 +59,10 @@ main [data-framer-name="Testimonials Section"],
 main [data-framer-name="Blogs Section"],
 main [data-framer-name="Project Section"],
 [data-framer-name="About Partners Wrap"]{display:none !important}
-a[href="https://www.facebook.com/"],
-a[href="https://www.instagram.com/"]{display:none !important}
+a[href*="facebook.com"],
+a[href*="instagram.com"],
+a[href*="twitter.com"],
+a[href*="//x.com"]{display:none !important}
 a[href*="/pricing/"],
 a[href*="/blogs/"]{display:none !important}
 

@@ -57,10 +57,20 @@
   }
 
   function apply(){
-    // 1) retirer réseaux Facebook + Instagram
-    document.querySelectorAll('a[href="https://www.facebook.com/"],a[href="https://www.instagram.com/"]').forEach(function(a){
+    // 0) forcer le logo DentWebPro via une URL fraîche (contourne le cache navigateur)
+    document.querySelectorAll('[data-framer-name="Brand"] img, [data-framer-name*="Logo"] img').forEach(function(img){
+      var fresh=BASE+"/assets/dwp-brand-vertical.svg";
+      if(img.getAttribute("src")!==fresh) img.setAttribute("src", fresh);
+    });
+    // 1) retirer réseaux Facebook + Instagram + X/Twitter
+    document.querySelectorAll('a[href*="facebook.com"],a[href*="instagram.com"],a[href*="twitter.com"],a[href*="//x.com"]').forEach(function(a){
       var w=a.closest('[data-framer-name="Icon Wrap"]')||a; w.style.display="none";
     });
+    // 1b) hero : remplacer les avatars de l'ancienne équipe + pointer le bouton vers la nouvelle équipe
+    var TP=[BASE+"/assets/team/kader.webp",BASE+"/assets/team/amine.webp",BASE+"/assets/team/yanis.webp"];
+    var avatars=document.querySelectorAll('[data-framer-name^="Avatar-"] img, [data-framer-name^="Avatar-"]>div>img');
+    avatars.forEach(function(img,i){ img.setAttribute("src", TP[i%TP.length]); });
+    document.querySelectorAll('[data-framer-name="Arrow Button"]').forEach(function(a){ a.style.cursor="pointer"; });
     // 2) retirer liens nav "Blog"/"Tarifs" ; repointer "Réalisations" vers la galerie
     document.querySelectorAll('nav a, header a, footer a, [data-framer-name*="Nav"] a, [data-framer-name*="Footer"] a').forEach(function(a){
       var t=(a.textContent||"").trim();
@@ -84,11 +94,17 @@
 
   function boot(){
     apply();
-    setTimeout(apply,400); setTimeout(apply,1200); setTimeout(apply,2500);
+    [200,400,800,1200,2000,2800,4000,6000].forEach(function(t){ setTimeout(apply,t); });
+    // maintien du logo/avatars pendant que Framer s'hydrate
+    var n=0, iv=setInterval(function(){ apply(); if(++n>20) clearInterval(iv); }, 500);
     // ouverture fiable des cartes (contourne le routeur Framer)
     document.addEventListener("click",function(e){
-      var a=e.target.closest && e.target.closest("[data-dwp-site]");
-      if(a){ e.preventDefault(); e.stopPropagation(); window.location.href=a.getAttribute("data-dwp-site"); }
+      if(!e.target.closest) return;
+      var a=e.target.closest("[data-dwp-site]");
+      if(a){ e.preventDefault(); e.stopPropagation(); window.location.href=a.getAttribute("data-dwp-site"); return; }
+      var arrow=e.target.closest('[data-framer-name="Arrow Button"]');
+      var team=document.getElementById("dwp-team");
+      if(arrow && team){ e.preventDefault(); e.stopPropagation(); team.scrollIntoView({behavior:"smooth"}); }
     },true);
     // garde : ré-applique si Framer ré-hydrate
     var main=document.querySelector('main[data-framer-name="Main"]')||document.body;
