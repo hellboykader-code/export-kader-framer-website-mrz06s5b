@@ -17,22 +17,43 @@
 
   // Sites réels déjà livrés & en ligne (clic -> ouverture du site en direct, nouvel onglet)
   var LIVE=[
-    {name:"Oléa",  city:"Marseille", url:"https://hellboykader-code.github.io/export-kader1-framer-website-ms074a1w/",  brand:"#0d1b15", accent:"#d1fc71"},
-    {name:"Novéo", city:"Lyon",      url:"https://hellboykader-code.github.io/export-kader9-framer-website-mrzfoouq/",  brand:"#33231a", accent:"#e8853b"},
-    {name:"Zenta", city:"Paris",     url:"https://hellboykader-code.github.io/export-kader10-framer-website-mrzfwfoi/", brand:"#2f2e5c", accent:"#b9b7f0"}
+    {name:"Oléa",  city:"Marseille", url:"https://hellboykader-code.github.io/export-kader1-framer-website-ms074a1w/",  vid:"olea",  brand:"#0d1b15", accent:"#d1fc71"},
+    {name:"Novéo", city:"Lyon",      url:"https://hellboykader-code.github.io/export-kader9-framer-website-mrzfoouq/",  vid:"noveo", brand:"#33231a", accent:"#e8853b"},
+    {name:"Zenta", city:"Paris",     url:"https://hellboykader-code.github.io/export-kader10-framer-website-mrzfwfoi/", vid:"zenta", brand:"#2f2e5c", accent:"#b9b7f0"}
   ];
-  // carte « site réel en ligne » (tuile de marque) — intégrée dans la même galerie
+  // carte « site réel en ligne » : vidéo (survol) si dispo, sinon tuile de marque
   function liveCard(c){
-    return '<div class="dwp-cardlink dwp-live-card" role="link" tabindex="0" data-dwp-site="'+c.url+'" data-dwp-ext="1" style="--brand:'+c.brand+';--accent:'+c.accent+'">'+
-      '<div class="dwp-card-shot dwp-live-shot">'+
+    var shot;
+    if(c.vid){
+      shot='<div class="dwp-card-shot dwp-vid-shot">'+
+        '<span class="dwp-live-badge"><i></i>En ligne</span>'+
+        '<video class="dwp-vid" muted loop playsinline preload="metadata" poster="'+BASE+'/assets/realisations/'+c.vid+'-poster.jpg">'+
+          '<source src="'+BASE+'/assets/realisations/'+c.vid+'.mp4" type="video/mp4"></video>'+
+        '<span class="dwp-vid-play">▶</span>'+
+        '</div>';
+    } else {
+      shot='<div class="dwp-card-shot dwp-live-shot">'+
         '<span class="dwp-live-badge"><i></i>En ligne</span>'+
         '<span class="dwp-live-name">'+c.name+'</span>'+
         '<span class="dwp-live-tag">Cabinet dentaire · '+c.city+'</span>'+
         '<span class="dwp-live-cta">Voir le site en direct →</span>'+
-      '</div>'+
+        '</div>';
+    }
+    return '<div class="dwp-cardlink dwp-live-card'+(c.vid?' dwp-vid-card':'')+'" role="link" tabindex="0" data-dwp-site="'+c.url+'" data-dwp-ext="1" style="--brand:'+c.brand+';--accent:'+c.accent+'">'+
+      shot+
       '<div class="dwp-card-meta"><h3>'+c.name+'</h3><span class="dwp-card-city">'+c.city+'</span></div>'+
       '<span class="dwp-card-cat">Site livré · en ligne</span>'+
       '</div>';
+  }
+  // lecture de la vidéo au survol de la carte
+  function wireVideos(){
+    document.querySelectorAll('.dwp-vid-card').forEach(function(card){
+      if(card.getAttribute('data-vwired')) return;
+      card.setAttribute('data-vwired','1');
+      var v=card.querySelector('video'); if(!v) return;
+      card.addEventListener('mouseenter',function(){ try{ v.play(); }catch(e){} });
+      card.addEventListener('mouseleave',function(){ try{ v.pause(); v.currentTime=0; }catch(e){} });
+    });
   }
 
   function buildGallery(){
@@ -115,6 +136,7 @@
       var gal=buildGallery();
       if(svc){ main.insertBefore(gal, svc); } else { main.insertBefore(gal, main.children[1]||null); }
     }
+    wireVideos();
     // 4) équipe personnalisée (accueil uniquement)
     if(isHome && !document.getElementById("dwp-team")){
       var teamSec=main.querySelector('[data-framer-name="Team Section"]');

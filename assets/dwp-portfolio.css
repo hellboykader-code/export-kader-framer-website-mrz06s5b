@@ -69,6 +69,11 @@
 .dwp-live-badge i{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.28)}
 .dwp-live-card:hover .dwp-live-shot{filter:brightness(1.07)}
 .dwp-live-card .dwp-card-cat{color:#3a9e57}
+/* carte vidéo (aperçu du site en mouvement) */
+.dwp-vid-shot{position:relative;aspect-ratio:16/10;overflow:hidden;background:#000;border-radius:14px}
+.dwp-vid{width:100%;height:100%;object-fit:cover;display:block}
+.dwp-vid-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;pointer-events:none;transition:opacity .25s}
+.dwp-vid-card:hover .dwp-vid-play{opacity:0}
 
 /* ===== Nettoyage global du studio (robuste, survit à l'hydratation) ===== */
 main [data-framer-name="Pricing Section"],
