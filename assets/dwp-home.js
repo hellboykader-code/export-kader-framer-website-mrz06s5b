@@ -15,6 +15,35 @@
     {slug:"deentiva",name:"Sourelia",city:"Créteil"}
   ];
 
+  // Sites réels déjà livrés & en ligne (clic -> ouverture du site en direct, nouvel onglet)
+  var LIVE=[
+    {name:"Oléa",  city:"Marseille", url:"https://hellboykader-code.github.io/export-kader1-framer-website-ms074a1w/",  brand:"#0d1b15", accent:"#d1fc71"},
+    {name:"Novéo", city:"Lyon",      url:"https://hellboykader-code.github.io/export-kader9-framer-website-mrzfoouq/",  brand:"#33231a", accent:"#e8853b"},
+    {name:"Zenta", city:"Paris",     url:"https://hellboykader-code.github.io/export-kader10-framer-website-mrzfwfoi/", brand:"#2f2e5c", accent:"#b9b7f0"}
+  ];
+  function buildLive(){
+    var sec=document.createElement("section");
+    sec.id="dwp-live"; sec.setAttribute("data-dwp","1");
+    var cards=LIVE.map(function(c){
+      return '<div class="dwp-cardlink dwp-live-card" role="link" tabindex="0" data-dwp-site="'+c.url+'" data-dwp-ext="1" style="--brand:'+c.brand+';--accent:'+c.accent+'">'+
+        '<div class="dwp-card-shot dwp-live-shot">'+
+          '<span class="dwp-live-badge"><i></i>En ligne</span>'+
+          '<span class="dwp-live-name">'+c.name+'</span>'+
+          '<span class="dwp-live-tag">Cabinet dentaire · '+c.city+'</span>'+
+          '<span class="dwp-live-cta">Voir le site en direct →</span>'+
+        '</div>'+
+        '<div class="dwp-card-meta"><h3>'+c.name+'</h3><span class="dwp-card-city">'+c.city+'</span></div>'+
+        '<span class="dwp-card-cat">Site livré · en ligne</span>'+
+        '</div>';
+    }).join("");
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<span class="dwp-eyebrow2">{ Nos cabinets en ligne }</span>'+
+      '<h2>Des cabinets déjà en ligne</h2>'+
+      '<p class="dwp-sub">Des sites que nous avons conçus et mis en ligne pour de vrais cabinets. Cliquez pour visiter le site en direct.</p>'+
+      '<div class="dwp-grid dwp-grid--3">'+cards+'</div></div>';
+    return sec;
+  }
+
   function buildGallery(){
     var sec=document.createElement("section");
     sec.id="dwp-gallery"; sec.setAttribute("data-dwp","1");
@@ -94,6 +123,13 @@
       var gal=buildGallery();
       if(svc){ main.insertBefore(gal, svc); } else { main.insertBefore(gal, main.children[1]||null); }
     }
+    // 3b) sites réels déjà en ligne — juste au-dessus de la galerie de modèles
+    if(isHome && !document.getElementById("dwp-live")){
+      var galRef=document.getElementById("dwp-gallery");
+      var liveSec=buildLive();
+      if(galRef){ main.insertBefore(liveSec, galRef); }
+      else { var svc2=main.querySelector('[data-framer-name="Service Section"]'); if(svc2){ main.insertBefore(liveSec, svc2); } }
+    }
     // 4) équipe personnalisée (accueil uniquement)
     if(isHome && !document.getElementById("dwp-team")){
       var teamSec=main.querySelector('[data-framer-name="Team Section"]');
@@ -110,7 +146,8 @@
     document.addEventListener("click",function(e){
       if(!e.target.closest) return;
       var a=e.target.closest("[data-dwp-site]");
-      if(a){ e.preventDefault(); e.stopPropagation(); window.location.href=a.getAttribute("data-dwp-site"); return; }
+      if(a){ e.preventDefault(); e.stopPropagation(); var u=a.getAttribute("data-dwp-site");
+        if(a.getAttribute("data-dwp-ext")){ window.open(u,"_blank","noopener"); } else { window.location.href=u; } return; }
       var arrow=e.target.closest('[data-framer-name="Arrow Button"]');
       var team=document.getElementById("dwp-team");
       if(arrow && team){ e.preventDefault(); e.stopPropagation(); team.scrollIntoView({behavior:"smooth"}); }
@@ -118,7 +155,7 @@
     // garde : ré-applique si Framer ré-hydrate
     var main=document.querySelector('main[data-framer-name="Main"]')||document.body;
     var obs=new MutationObserver(function(){
-      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")) apply();
+      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-live")||!document.getElementById("dwp-team")) apply();
     });
     try{ obs.observe(main,{childList:true}); }catch(e){}
   }
