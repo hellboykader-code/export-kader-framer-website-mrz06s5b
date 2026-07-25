@@ -21,33 +21,25 @@
     {name:"Novéo", city:"Lyon",      url:"https://hellboykader-code.github.io/export-kader9-framer-website-mrzfoouq/",  brand:"#33231a", accent:"#e8853b"},
     {name:"Zenta", city:"Paris",     url:"https://hellboykader-code.github.io/export-kader10-framer-website-mrzfwfoi/", brand:"#2f2e5c", accent:"#b9b7f0"}
   ];
-  function buildLive(){
-    var sec=document.createElement("section");
-    sec.id="dwp-live"; sec.setAttribute("data-dwp","1");
-    var cards=LIVE.map(function(c){
-      return '<div class="dwp-cardlink dwp-live-card" role="link" tabindex="0" data-dwp-site="'+c.url+'" data-dwp-ext="1" style="--brand:'+c.brand+';--accent:'+c.accent+'">'+
-        '<div class="dwp-card-shot dwp-live-shot">'+
-          '<span class="dwp-live-badge"><i></i>En ligne</span>'+
-          '<span class="dwp-live-name">'+c.name+'</span>'+
-          '<span class="dwp-live-tag">Cabinet dentaire · '+c.city+'</span>'+
-          '<span class="dwp-live-cta">Voir le site en direct →</span>'+
-        '</div>'+
-        '<div class="dwp-card-meta"><h3>'+c.name+'</h3><span class="dwp-card-city">'+c.city+'</span></div>'+
-        '<span class="dwp-card-cat">Site livré · en ligne</span>'+
-        '</div>';
-    }).join("");
-    sec.innerHTML='<div class="dwp-wrap">'+
-      '<span class="dwp-eyebrow2">{ Nos cabinets en ligne }</span>'+
-      '<h2>Des cabinets déjà en ligne</h2>'+
-      '<p class="dwp-sub">Des sites que nous avons conçus et mis en ligne pour de vrais cabinets. Cliquez pour visiter le site en direct.</p>'+
-      '<div class="dwp-grid dwp-grid--3">'+cards+'</div></div>';
-    return sec;
+  // carte « site réel en ligne » (tuile de marque) — intégrée dans la même galerie
+  function liveCard(c){
+    return '<div class="dwp-cardlink dwp-live-card" role="link" tabindex="0" data-dwp-site="'+c.url+'" data-dwp-ext="1" style="--brand:'+c.brand+';--accent:'+c.accent+'">'+
+      '<div class="dwp-card-shot dwp-live-shot">'+
+        '<span class="dwp-live-badge"><i></i>En ligne</span>'+
+        '<span class="dwp-live-name">'+c.name+'</span>'+
+        '<span class="dwp-live-tag">Cabinet dentaire · '+c.city+'</span>'+
+        '<span class="dwp-live-cta">Voir le site en direct →</span>'+
+      '</div>'+
+      '<div class="dwp-card-meta"><h3>'+c.name+'</h3><span class="dwp-card-city">'+c.city+'</span></div>'+
+      '<span class="dwp-card-cat">Site livré · en ligne</span>'+
+      '</div>';
   }
 
   function buildGallery(){
     var sec=document.createElement("section");
     sec.id="dwp-gallery"; sec.setAttribute("data-dwp","1");
-    var cards=CLINICS.map(function(c){
+    var live=LIVE.map(liveCard).join("");
+    var demo=CLINICS.map(function(c){
       var url=BASE+'/realisations/'+c.slug+'/index.html';
       return '<div class="dwp-cardlink" role="link" tabindex="0" data-dwp-site="'+url+'">'+
         '<div class="dwp-card-shot"><img src="'+BASE+'/assets/realisations/'+c.slug+'.webp" alt="Aperçu du site '+c.name+'" loading="lazy"></div>'+
@@ -56,10 +48,10 @@
         '</div>';
     }).join("");
     sec.innerHTML='<div class="dwp-wrap">'+
-      '<span class="dwp-eyebrow2">{ Nos modèles }</span>'+
+      '<span class="dwp-eyebrow2">{ Nos réalisations }</span>'+
       '<h2>Choisissez le site de votre cabinet</h2>'+
-      '<p class="dwp-sub">Des sites prêts à l\'emploi, conçus pour les cabinets dentaires. Cliquez sur un modèle pour le découvrir en détail.</p>'+
-      '<div class="dwp-grid">'+cards+'</div></div>';
+      '<p class="dwp-sub">Nos sites déjà en ligne et nos modèles prêts à l\'emploi, conçus pour les cabinets dentaires. Cliquez pour découvrir.</p>'+
+      '<div class="dwp-grid">'+live+demo+'</div></div>';
     return sec;
   }
 
@@ -123,13 +115,6 @@
       var gal=buildGallery();
       if(svc){ main.insertBefore(gal, svc); } else { main.insertBefore(gal, main.children[1]||null); }
     }
-    // 3b) sites réels déjà en ligne — juste au-dessus de la galerie de modèles
-    if(isHome && !document.getElementById("dwp-live")){
-      var galRef=document.getElementById("dwp-gallery");
-      var liveSec=buildLive();
-      if(galRef){ main.insertBefore(liveSec, galRef); }
-      else { var svc2=main.querySelector('[data-framer-name="Service Section"]'); if(svc2){ main.insertBefore(liveSec, svc2); } }
-    }
     // 4) équipe personnalisée (accueil uniquement)
     if(isHome && !document.getElementById("dwp-team")){
       var teamSec=main.querySelector('[data-framer-name="Team Section"]');
@@ -155,7 +140,7 @@
     // garde : ré-applique si Framer ré-hydrate
     var main=document.querySelector('main[data-framer-name="Main"]')||document.body;
     var obs=new MutationObserver(function(){
-      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-live")||!document.getElementById("dwp-team")) apply();
+      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")) apply();
     });
     try{ obs.observe(main,{childList:true}); }catch(e){}
   }
