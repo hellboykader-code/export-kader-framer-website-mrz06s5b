@@ -27,9 +27,8 @@
     if(c.vid){
       shot='<div class="dwp-card-shot dwp-vid-shot">'+
         '<span class="dwp-live-badge"><i></i>En ligne</span>'+
-        '<video class="dwp-vid" muted loop playsinline preload="metadata" poster="'+BASE+'/assets/realisations/'+c.vid+'-poster.jpg">'+
+        '<video class="dwp-vid" autoplay muted loop playsinline preload="auto" poster="'+BASE+'/assets/realisations/'+c.vid+'-poster.jpg">'+
           '<source src="'+BASE+'/assets/realisations/'+c.vid+'.mp4" type="video/mp4"></video>'+
-        '<span class="dwp-vid-play">▶</span>'+
         '</div>';
     } else {
       shot='<div class="dwp-card-shot dwp-live-shot">'+
@@ -45,14 +44,14 @@
       '<span class="dwp-card-cat">Site livré · en ligne</span>'+
       '</div>';
   }
-  // lecture de la vidéo au survol de la carte
+  // lecture automatique en boucle (relance si le navigateur met l'autoplay en pause)
   function wireVideos(){
-    document.querySelectorAll('.dwp-vid-card').forEach(function(card){
-      if(card.getAttribute('data-vwired')) return;
-      card.setAttribute('data-vwired','1');
-      var v=card.querySelector('video'); if(!v) return;
-      card.addEventListener('mouseenter',function(){ try{ v.play(); }catch(e){} });
-      card.addEventListener('mouseleave',function(){ try{ v.pause(); v.currentTime=0; }catch(e){} });
+    document.querySelectorAll('.dwp-vid-card video').forEach(function(v){
+      if(v.getAttribute('data-vwired')) return;
+      v.setAttribute('data-vwired','1');
+      v.muted=true;
+      var play=function(){ var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){}); };
+      play(); v.addEventListener('canplay',play); v.addEventListener('loadeddata',play);
     });
   }
 
