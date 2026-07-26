@@ -98,10 +98,22 @@
   }
 
   function apply(){
-    // 0) forcer le logo DentWebPro via une URL fraîche (contourne le cache navigateur)
+    // 0) forcer le logo DentWebPro. Sur mobile (<=810px) : version HORIZONTALE
+    //    (le logo vertical se retrouve écrasé/minuscule dans la barre du header).
+    var mobileLogo = window.innerWidth <= 810;
+    var fresh = BASE + (mobileLogo ? "/assets/dwp-brand-horizontal.svg" : "/assets/dwp-brand-vertical.svg");
+    // conteneur du logo : boîte horizontale sur mobile, réglages Framer d'origine sinon
+    document.querySelectorAll('[data-framer-name="Brand"] a, [data-framer-name="Logo / Vertical"]').forEach(function(a){
+      if(mobileLogo){ a.style.width="154px"; a.style.height="32px"; a.style.aspectRatio="auto"; a.style.flex="0 0 auto"; }
+      else { a.style.width=""; a.style.height=""; a.style.aspectRatio=""; a.style.flex=""; }
+    });
+    document.querySelectorAll('[data-framer-name="Brand"]').forEach(function(b){
+      if(mobileLogo){ b.style.width="auto"; b.style.minWidth="154px"; } else { b.style.width=""; b.style.minWidth=""; }
+    });
     document.querySelectorAll('[data-framer-name="Brand"] img, [data-framer-name*="Logo"] img').forEach(function(img){
-      var fresh=BASE+"/assets/dwp-brand-vertical.svg";
       if(img.getAttribute("src")!==fresh) img.setAttribute("src", fresh);
+      if(mobileLogo){ img.style.objectFit="contain"; img.style.objectPosition="left center"; img.style.maxWidth="none"; }
+      else { img.style.objectPosition=""; img.style.maxWidth=""; }
     });
     // 1) retirer réseaux Facebook + Instagram + X/Twitter
     document.querySelectorAll('a[href*="facebook.com"],a[href*="instagram.com"],a[href*="twitter.com"],a[href*="//x.com"],a[href*="behance.net"]').forEach(function(a){
@@ -164,6 +176,8 @@
       if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")) apply();
     });
     try{ obs.observe(main,{childList:true}); }catch(e){}
+    // ré-appliquer au redimensionnement/rotation (bascule logo vertical <-> horizontal)
+    var rt=null; window.addEventListener("resize",function(){ if(rt) clearTimeout(rt); rt=setTimeout(apply,150); });
   }
   if(document.readyState==="loading") document.addEventListener("DOMContentLoaded",boot);
   else boot();
