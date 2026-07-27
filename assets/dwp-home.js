@@ -139,6 +139,12 @@
       if(t==="Blog"||t==="Tarifs"){ a.style.display="none"; }
       if(t==="Réalisations"){ a.setAttribute("href", BASE+"/#dwp-gallery"); }
     });
+    // CSS robuste : masquer l'équipe fictive + fausses récompenses du thème (survit au re-render)
+    if(!document.getElementById("dwp-hide-css")){
+      var hc=document.createElement("style"); hc.id="dwp-hide-css";
+      hc.textContent='[data-framer-name="Team Section"]{display:none !important}[data-framer-name="Awards Section"]{display:none !important}';
+      (document.head||document.documentElement).appendChild(hc);
+    }
     // 3) galerie — accueil uniquement (page possédant la "Project Section")
     var main=document.querySelector('main[data-framer-name="Main"]');
     var isHome=main && main.querySelector('[data-framer-name="Project Section"]');
@@ -148,11 +154,26 @@
       if(svc){ main.insertBefore(gal, svc); } else { main.insertBefore(gal, main.children[1]||null); }
     }
     wireVideos();
-    // 4) équipe personnalisée (accueil uniquement)
-    if(isHome && !document.getElementById("dwp-team")){
+    // 4) équipe DentWebPro (Kader/Amine/Yanis) sur TOUTE page ayant une "Team Section"
+    //    (accueil ET À propos). On masque l'équipe fictive du thème + les fausses
+    //    récompenses (Awwwards…), vestiges du modèle « BrightEdge ».
+    if(main){
       var teamSec=main.querySelector('[data-framer-name="Team Section"]');
-      if(teamSec){ main.insertBefore(buildTeam(), teamSec); }
+      if(teamSec){
+        if(!document.getElementById("dwp-team")) main.insertBefore(buildTeam(), teamSec);
+        teamSec.style.display="none";
+      }
+      var awardsSec=main.querySelector('[data-framer-name="Awards Section"]');
+      if(awardsSec) awardsSec.style.display="none";
     }
+    // 5) retirer le crédit auteur du thème « Créé par Duncan Shen » (texte brut)
+    document.querySelectorAll('footer *, [data-framer-name*="Footer"] *').forEach(function(el){
+      if(el.children.length) return;
+      var t=(el.textContent||'').replace(/\s+/g,' ').trim();
+      if(/Cr[ée]{2}\s+par\s+Duncan\s+Shen|Duncan\s+Shen|Made by\b/i.test(t)){
+        (el.closest('div')||el).style.display="none"; el.style.display="none";
+      }
+    });
   }
 
   function boot(){
