@@ -1,0 +1,38 @@
+[
+  {
+    "path": "/",
+    "title": "Cabinet Dentaire Zenta — Soins dentaires à Paris",
+    "description": "Zenta est un cabinet dentaire dédié à des soins de haute qualité, à une expérience confortable et à des traitements qui aident les familles à préserver des sourires sains, avec clarté et des résultats durables.",
+    "excerpt": "Book a Visit"
+  },
+  {
+    "path": "/404",
+    "title": "Zenta - 404",
+    "description": "An error has occurred, please go back to the home page and try again.",
+    "excerpt": "Cette page n'existe pas."
+  },
+  {
+    "path": "/contacts",
+    "title": "Contact — Cabinet Dentaire Zenta",
+    "description": "Zenta is a dental clinic focused on high-quality patient care, comfortable experiences, and treatment qui aident les familles à préserver des sourires sains, avec clarté et des résultats durables.",
+    "excerpt": "© Zenta"
+  },
+  {
+    "path": "/legal",
+    "title": "Politique de confidentialité — Cabinet Dentaire Zenta",
+    "description": "Zenta is a dental clinic focused on high-quality patient care, comfortable experiences, and treatment qui aident les familles à préserver des sourires sains, avec clarté et des résultats durables.",
+    "excerpt": "Dernière mise à jour le 03/04/2026"
+  },
+  {
+    "path": "/services",
+    "title": "Nos soins — Cabinet Dentaire Zenta",
+    "description": "Zenta is a dental clinic focused on high-quality patient care, comfortable experiences, and treatment qui aident les familles à préserver des sourires sains, avec clarté et des résultats durables.",
+    "excerpt": "© Zenta"
+  },
+  {
+    "path": "/team",
+    "title": "Notre équipe — Cabinet Dentaire Zenta",
+    "description": "Zenta is a dental clinic focused on high-quality patient care, comfortable experiences, and treatment qui aident les familles à préserver des sourires sains, avec clarté et des résultats durables.",
+    "excerpt": "© Zenta"
+  }
+]

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recherche sur le site</title>
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f8f9fa; color: #1a1a2e; padding: 2rem; }
+.search-container { max-width: 640px; margin: 0 auto; }
+h1 { font-size: 1.5rem; margin-bottom: 1rem; }
+input[type="search"] { width: 100%; padding: 0.75rem 1rem; font-size: 1rem; border: 2px solid #e2e8f0; border-radius: 8px; outline: none; transition: border-color 0.2s; }
+input[type="search"]:focus { border-color: #6366f1; }
+.results { margin-top: 1.5rem; }
+.result-item { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 1rem; margin-bottom: 0.75rem; text-decoration: none; display: block; color: inherit; transition: box-shadow 0.2s; }
+.result-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.result-title { font-weight: 600; color: #4f46e5; margin-bottom: 0.25rem; }
+.result-path { font-size: 0.8rem; color: #64748b; margin-bottom: 0.25rem; }
+.result-excerpt { font-size: 0.9rem; color: #475569; }
+.no-results { color: #94a3b8; text-align: center; padding: 2rem 0; }
+.count { font-size: 0.85rem; color: #94a3b8; margin-bottom: 0.75rem; }
+</style>
+<link rel="stylesheet" href="/noveo/assets/clinic-fix.css"></head>
+<body>
+<div class="search-container">
+<h1>Rechercher</h1>
+<input type="search" id="q" placeholder="Search pages..." autofocus>
+<div class="results" id="results"></div>
+</div>
+<script>
+(function() {
+var pages = [{"path":"/","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"Cabinet dentaire de référence à Lyon"},{"path":"/404","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"La page que vous recherchez a peut-être été déplacée, renommée ou n'est plus disponible. Pas d'inquiétude."},{"path":"/about","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"Au cabinet Novéo, chaque sourire mérite des soins d'exception et une confiance durable. Notre cabinet allie technologie de pointe et spécialistes expérimentés."},{"path":"/appointment","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"Appointment"},{"path":"/blog","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"Santé bucco-dentaire"},{"path":"/contact","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"Prenez rendez-vous ou posez-nous vos questions : notre équipe vous répond avec plaisir."},{"path":"/legal","title":"Politique de confidentialité — Cabinet Dentaire Novéo","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"Politique de confidentialité"},{"path":"/reviews","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"\"I’m truly grateful for the gentle, professional care I received at Novéo. Dr. Amelia Johnson explained every step clearly and made me feel completely at ease. Thanks to her expertise, I now have a"},{"path":"/service","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"Au cabinet Novéo, nos soins de dentisterie générale préservent les fondations de votre santé bucco-dentaire : bilans réguliers et détartrages professionnels."},{"path":"/team","title":"Cabinet Dentaire Novéo — Soins dentaires à Lyon","description":"A modern Framer template for dental clinics, teeth cleaning services, cosmetic dentistry, and oral healthcare websites.","excerpt":"Fort de plus de 15 ans d'expérience, le Dr Marchand offre des soins de confiance et des sourires sains."}];
+var input = document.getElementById('q');
+var resultsEl = document.getElementById('results');
+
+function search(query) {
+    if (!query || query.length < 2) { resultsEl.innerHTML = ''; return; }
+    var q = query.toLowerCase();
+    var matches = pages.filter(function(p) {
+        return (p.title && p.title.toLowerCase().indexOf(q) !== -1) ||
+               (p.description && p.description.toLowerCase().indexOf(q) !== -1) ||
+               (p.excerpt && p.excerpt.toLowerCase().indexOf(q) !== -1);
+    });
+    if (matches.length === 0) {
+        resultsEl.innerHTML = '<div class="no-results">No results found.</div>';
+        return;
+    }
+    var html = '<div class="count">' + matches.length + ' result(s)</div>';
+    matches.forEach(function(p) {
+        var href = p.path === '/' ? 'index.html' : p.path.replace(/^\//, '') + '/index.html';
+        html += '<a class="result-item" href="' + href + '">' +
+            '<div class="result-title">' + esc(p.title || 'Untitled') + '</div>' +
+            '<div class="result-path">' + esc(p.path) + '</div>' +
+            '<div class="result-excerpt">' + esc(p.excerpt || p.description || '') + '</div>' +
+            '</a>';
+    });
+    resultsEl.innerHTML = html;
+}
+
+function esc(s) { var d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
+input.addEventListener('input', function() { search(this.value); });
+})();
+</script>
+<script src="/noveo/assets/clinic-fix.js?v=3" defer></script></body>
+</html>

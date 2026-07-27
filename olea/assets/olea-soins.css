@@ -1,0 +1,45 @@
+/* Oléa — grille 21 soins (cartes professionnelles, style Éclat) */
+#olea-soins{padding:80px 0;background:#f7f6f0;position:relative;z-index:2}
+#olea-soins .olea-wrap{max-width:1200px;margin:0 auto;padding:0 28px}
+#olea-soins .olea-eyebrow{display:inline-block;font-size:.8rem;font-weight:700;letter-spacing:.16em;text-transform:uppercase;color:#0d1b15;background:#d1fc71;padding:6px 14px;border-radius:999px}
+#olea-soins .olea-title{font-family:'Bricolage Grotesque','Trebuchet MS',sans-serif;font-size:clamp(2rem,4.4vw,3.2rem);letter-spacing:-.02em;color:#0d1b15;margin:.35em 0 .1em}
+#olea-soins .olea-sub{color:#595e5c;font-size:1.08rem;max-width:64ch;margin:0 0 26px}
+#olea-soins .olea-filters{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:34px}
+#olea-soins .olea-chip{border:1px solid #d7dad2;background:#fff;color:#0d1b15;font:600 .92rem/1 inherit;padding:10px 16px;border-radius:999px;cursor:pointer;transition:.18s}
+#olea-soins .olea-chip:hover{border-color:#0d1b15}
+#olea-soins .olea-chip.is-active{background:#0d1b15;color:#fff;border-color:#0d1b15}
+#olea-soins .olea-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+
+/* carte soin : média 4/3 + chip catégorie superposé + corps (titre, desc, lien flèche) */
+#olea-soins .olea-soin{background:#fff;border-radius:18px;overflow:hidden;box-shadow:0 1px 3px rgba(13,27,21,.07);transition:transform .3s ease,box-shadow .3s ease;height:100%}
+#olea-soins .olea-soin:hover{transform:translateY(-6px);box-shadow:0 20px 42px rgba(13,27,21,.13)}
+#olea-soins .olea-soin__link{display:flex;flex-direction:column;height:100%;cursor:pointer;text-decoration:none}
+#olea-soins .olea-soin__media{position:relative;aspect-ratio:4/3;overflow:hidden;background:#eef0ea}
+#olea-soins .olea-soin__img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .7s ease}
+#olea-soins .olea-soin:hover .olea-soin__img{transform:scale(1.06)}
+#olea-soins .olea-soin__cat{position:absolute;top:14px;left:14px;background:rgba(242,242,239,.92);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#0d1b15;font-size:.72rem;font-weight:600;letter-spacing:.03em;padding:6px 12px;border-radius:999px}
+#olea-soins .olea-soin__body{display:flex;flex-direction:column;gap:10px;padding:22px;flex:1}
+#olea-soins .olea-soin__title{font-family:'Bricolage Grotesque','Trebuchet MS',sans-serif;font-size:1.24rem;color:#0d1b15;margin:0;letter-spacing:-.01em;line-height:1.2}
+#olea-soins .olea-soin__desc{color:#595e5c;font-size:.95rem;line-height:1.55;margin:0;flex:1}
+#olea-soins .olea-soin__more{display:inline-flex;align-items:center;gap:6px;margin-top:6px;font-weight:700;font-size:.92rem;color:#0d1b15}
+#olea-soins .olea-soin__more svg{transition:transform .3s ease}
+#olea-soins .olea-soin:hover .olea-soin__more svg{transform:translateX(4px)}
+#olea-soins .olea-soin__link:focus-visible{outline:2px solid #0d1b15;outline-offset:3px}
+@media(max-width:980px){#olea-soins .olea-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:640px){#olea-soins .olea-grid{grid-template-columns:1fr}}
+
+/* bouton « Voir tous nos soins » (aperçu accueil) */
+#olea-soins .olea-more-wrap{display:flex;justify-content:center;margin-top:38px}
+#olea-soins .olea-more-btn{display:inline-flex;align-items:center;gap:8px;background:#0d1b15;color:#fff;font-weight:700;text-decoration:none;padding:15px 30px;border-radius:999px;font-size:1rem;transition:.2s;cursor:pointer}
+#olea-soins .olea-more-btn:hover{background:#1c3327;transform:translateY(-2px)}
+#olea-soins .olea-more-btn:focus-visible{outline:2px solid #0d1b15;outline-offset:2px}
+
+/* Masquage ROBUSTE (survit à l'hydratation Framer) des sections en anglais/filler
+   qui réapparaissent depuis les chunks .mjs :
+   - Innovation / Sticky Section = filler investisseurs + « Our Client's Words » (À propos)
+   - Sevice Cards / Service = anciennes cartes de services en anglais (Soins + Accueil),
+     remplacées par nos cartes photo. */
+[data-framer-name="Innovation"],
+[data-framer-name="Sticky Section"],
+[data-framer-name="Sevice Cards"],
+[data-framer-name="Service"]{display:none !important}

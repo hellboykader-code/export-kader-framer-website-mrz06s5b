@@ -1,0 +1,11 @@
+/* Novéo — nettoyage : pas d'avis/témoignages patients, pas de Blog/Legal autonomes */
+[data-framer-name="Review"],
+[data-framer-name="Review Images Container"],
+[data-framer-name*="Reviews"],
+[data-framer-name*="Smile Journey"],
+[data-framer-name*="Care Journey"],
+[data-framer-name*="Smile Experience"],
+[data-framer-name*="Testimonial"]{display:none !important}
+a[href*="/blog"],
+a[href*="/legal/"],
+a[href*="/reviews"]{display:none !important}

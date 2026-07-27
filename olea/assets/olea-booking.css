@@ -1,0 +1,25 @@
+/* Oléa — formulaire de rendez-vous (carte professionnelle, style Éclat) */
+#olea-booking{max-width:680px;width:100%;margin:0 auto;background:#fff;border-radius:22px;box-shadow:0 24px 60px rgba(13,27,21,.12);border:1px solid #edeee8;padding:clamp(24px,4vw,40px);font-family:'Figtree','Segoe UI',sans-serif}
+#olea-booking .ob-form{display:flex;flex-direction:column;gap:18px}
+#olea-booking .ob-head{margin-bottom:2px}
+#olea-booking .ob-eyebrow{display:inline-block;font-size:.72rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:#0d1b15;background:#d1fc71;padding:5px 12px;border-radius:999px;margin-bottom:12px}
+#olea-booking .ob-h{font-family:'Bricolage Grotesque','Trebuchet MS',sans-serif;font-size:1.6rem;line-height:1.15;letter-spacing:-.02em;color:#0d1b15;margin:0 0 6px}
+#olea-booking .ob-p{color:#595e5c;font-size:.98rem;line-height:1.5;margin:0}
+#olea-booking .ob-row{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+#olea-booking .ob-field{display:flex;flex-direction:column;gap:7px}
+#olea-booking label{font-size:.88rem;font-weight:600;color:#0d1b15}
+#olea-booking input,#olea-booking select,#olea-booking textarea{padding:14px 15px;border:1.5px solid #dcdfd7;border-radius:12px;font:inherit;font-size:.98rem;background:#fff;color:#0d1b15;width:100%;box-sizing:border-box;transition:border-color .18s,box-shadow .18s}
+#olea-booking input::placeholder,#olea-booking textarea::placeholder{color:#9aa19b}
+#olea-booking input:focus,#olea-booking select:focus,#olea-booking textarea:focus{outline:none;border-color:#0d1b15;box-shadow:0 0 0 4px rgba(209,252,113,.45)}
+#olea-booking textarea{resize:vertical;min-height:96px}
+#olea-booking .ob-submit{margin-top:8px;background:#0d1b15;color:#fff;border:none;border-radius:999px;padding:16px 28px;font-size:1.02rem;font-weight:700;cursor:pointer;transition:.2s}
+#olea-booking .ob-submit:hover{background:#1c3327;transform:translateY(-1px)}
+#olea-booking .ob-submit:disabled{opacity:.6;cursor:default;transform:none}
+#olea-booking .ob-error{color:#b3261e;font-size:.9rem;margin:0}
+@media(max-width:560px){#olea-booking .ob-row{grid-template-columns:1fr}}
+
+/* message de remerciement (à l'intérieur de la carte) */
+.ob-thanks{text-align:center;padding:22px 6px}
+.ob-thanks .ob-check{width:60px;height:60px;border-radius:50%;background:#0d1b15;color:#d1fc71;font-size:1.9rem;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+.ob-thanks h3{font-family:'Bricolage Grotesque','Trebuchet MS',sans-serif;color:#0d1b15;font-size:1.5rem;margin:0 0 8px}
+.ob-thanks p{color:#3a4a40;margin:0 auto;font-size:1.02rem;line-height:1.6;max-width:44ch}

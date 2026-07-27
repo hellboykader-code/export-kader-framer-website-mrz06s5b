@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>index.html</loc></url>
+  <url><loc>404/index.html</loc></url>
+  <url><loc>about/index.html</loc></url>
+  <url><loc>appointment/index.html</loc></url>
+  <url><loc>blog/index.html</loc></url>
+  <url><loc>contact/index.html</loc></url>
+  <url><loc>legal/privacy-policy/index.html</loc></url>
+  <url><loc>legal/terms-conditions/index.html</loc></url>
+  <url><loc>reviews/index.html</loc></url>
+  <url><loc>service/index.html</loc></url>
+  <url><loc>service/dental-implants/index.html</loc></url>
+  <url><loc>service/general-dentistry/index.html</loc></url>
+  <url><loc>service/orthodontics/index.html</loc></url>
+  <url><loc>service/pediatric-dentistry/index.html</loc></url>
+  <url><loc>service/teeth-whitening/index.html</loc></url>
+  <url><loc>team/index.html</loc></url>
+</urlset>

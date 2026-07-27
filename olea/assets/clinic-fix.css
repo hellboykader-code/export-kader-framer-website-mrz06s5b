@@ -1,0 +1,10 @@
+/* Oléa — nettoyage : pas d'avis/témoignages patients, pas de Blog ni crédit thème */
+[data-framer-name="Testimonial"],
+[data-framer-name="Review"],
+[data-framer-name="Reviewer Info"],
+[data-framer-name="Reviewer Name"],
+[data-framer-name*="Client's Words"],
+[data-framer-name="Our Client's Words"],
+[data-framer-name="Blog"]{display:none !important}
+a[href*="nivrit"]{display:none !important}
+a[href*="/blog"]{display:none !important}

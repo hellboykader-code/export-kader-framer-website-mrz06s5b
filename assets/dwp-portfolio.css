@@ -1,0 +1,108 @@
+/* DentWebPro — styles portfolio (pages détail + galerie injectée) */
+:root{
+  --dwp-ink:#17171b; --dwp-muted:#6c6c74; --dwp-bg:#fbfbfc; --dwp-line:#e9e9ee;
+  --dwp-dark:#1b1b1f; --dwp-accent:#f14e30; --dwp-card:#fff;
+  --dwp-radius:18px; --dwp-font:'Figtree','Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+}
+.dwp,.dwp *{box-sizing:border-box}
+.dwp{margin:0;font-family:var(--dwp-font);color:var(--dwp-ink);background:var(--dwp-bg);-webkit-font-smoothing:antialiased}
+.dwp-brand-mark{display:inline-block;width:18px;height:18px;border-radius:5px;background:var(--dwp-dark);position:relative;vertical-align:-3px}
+.dwp-brand-mark::after{content:"";position:absolute;inset:4px;border-radius:50% 50% 45% 45%;background:#fff}
+/* nav */
+.dwp-nav{display:flex;align-items:center;justify-content:space-between;max-width:1200px;margin:0 auto;padding:22px 28px}
+.dwp-brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.15rem;text-decoration:none;color:var(--dwp-ink);letter-spacing:-.02em}
+.dwp-back{text-decoration:none;color:var(--dwp-muted);font-weight:600;font-size:.95rem}
+.dwp-back:hover{color:var(--dwp-accent)}
+/* detail layout */
+.dwp-detail{max-width:1200px;margin:10px auto 60px;padding:0 28px;display:grid;grid-template-columns:260px 1fr;gap:48px;align-items:start}
+.dwp-detail__side{position:sticky;top:24px;display:flex;flex-direction:column;gap:20px;border-right:1px solid var(--dwp-line);padding-right:24px}
+.dwp-meta{display:flex;flex-direction:column;gap:3px;padding-bottom:16px;border-bottom:1px solid var(--dwp-line)}
+.dwp-meta span{font-size:.8rem;color:var(--dwp-muted);text-transform:uppercase;letter-spacing:.08em}
+.dwp-meta strong{font-size:1.05rem;font-weight:700}
+.dwp-shot{display:block;border-radius:var(--dwp-radius);overflow:hidden}
+.dwp-shot img{width:100%;display:block}
+.dwp-detail__body{margin-top:34px}
+.dwp-eyebrow{display:inline-block;font-size:.82rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--dwp-accent)}
+.dwp-detail__body h1{font-size:clamp(2rem,4vw,3rem);margin:.3em 0 .1em;letter-spacing:-.03em}
+.dwp-detail__body h2{font-size:1.3rem;margin:1.4em 0 .3em}
+.dwp-detail__body p{font-size:1.08rem;line-height:1.7;color:#3a3a42;max-width:60ch}
+/* buttons */
+.dwp-btn{display:inline-flex;align-items:center;gap:8px;font-weight:700;text-decoration:none;border-radius:999px;padding:12px 22px;font-size:.98rem;transition:.2s}
+.dwp-btn--primary{background:var(--dwp-dark);color:#fff}
+.dwp-btn--primary:hover{background:var(--dwp-accent)}
+.dwp-btn--lg{padding:15px 28px;font-size:1.05rem;margin-top:24px}
+.dwp-foot{max-width:1200px;margin:0 auto;padding:30px 28px;border-top:1px solid var(--dwp-line);color:var(--dwp-muted);font-size:.9rem}
+@media(max-width:820px){.dwp-detail{grid-template-columns:1fr;gap:26px}.dwp-detail__side{position:static;border-right:none;border-bottom:1px solid var(--dwp-line);padding:0 0 20px}}
+
+/* ===== Galerie injectée dans la page d'accueil du studio ===== */
+#dwp-gallery{padding:72px 0 60px;background:var(--dwp-bg);position:relative;z-index:3}
+#dwp-gallery .dwp-wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+#dwp-gallery .dwp-eyebrow2{color:var(--dwp-accent);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem}
+#dwp-gallery h2{font-size:clamp(2rem,4.4vw,3.4rem);letter-spacing:-.03em;margin:.25em 0 .1em;color:var(--dwp-ink)}
+#dwp-gallery .dwp-sub{color:var(--dwp-muted);font-size:1.1rem;margin-bottom:40px;max-width:60ch}
+.dwp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
+.dwp-cardlink{text-decoration:none;color:inherit;display:block;transition:.25s;border-radius:16px;cursor:pointer}
+.dwp-cardlink:hover{transform:translateY(-6px)}
+.dwp-card-shot{border-radius:14px;overflow:hidden;background:#eef0f3}
+.dwp-card-shot img{width:100%;display:block;transition:.4s}
+.dwp-cardlink:hover .dwp-card-shot img{transform:scale(1.03)}
+.dwp-card-meta{display:flex;align-items:baseline;justify-content:space-between;margin-top:16px;gap:12px}
+.dwp-card-meta h3{font-size:1.25rem;letter-spacing:-.02em;margin:0}
+.dwp-card-city{font-size:.9rem;color:var(--dwp-muted);white-space:nowrap}
+.dwp-card-cat{display:inline-block;margin-top:6px;font-size:.82rem;color:var(--dwp-accent);font-weight:600}
+@media(max-width:960px){.dwp-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:620px){.dwp-grid{grid-template-columns:1fr}}
+
+/* ===== Section « Cabinets déjà en ligne » (sites réels livrés) ===== */
+#dwp-live{padding:72px 0 8px;background:var(--dwp-bg);position:relative;z-index:3}
+#dwp-live .dwp-wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+#dwp-live .dwp-eyebrow2{color:var(--dwp-accent);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem}
+#dwp-live h2{font-size:clamp(2rem,4.4vw,3.4rem);letter-spacing:-.03em;margin:.25em 0 .1em;color:var(--dwp-ink)}
+#dwp-live .dwp-sub{color:var(--dwp-muted);font-size:1.1rem;margin-bottom:40px;max-width:60ch}
+.dwp-grid--3{grid-template-columns:repeat(3,1fr)}
+.dwp-live-shot{position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;padding:30px;color:#fff;
+  background:radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 60%), var(--brand)}
+.dwp-live-name{font-family:'Bricolage Grotesque',var(--dwp-font);font-weight:800;font-size:2.4rem;line-height:1;letter-spacing:-.03em}
+.dwp-live-tag{color:rgba(255,255,255,.82);font-size:.95rem;font-weight:600}
+.dwp-live-cta{margin-top:14px;display:inline-block;background:var(--accent);color:#0d0d0d;font-weight:700;font-size:.9rem;padding:10px 18px;border-radius:999px}
+.dwp-live-badge{position:absolute;top:16px;right:16px;display:inline-flex;align-items:center;gap:7px;background:rgba(255,255,255,.16);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);color:#fff;font-size:.74rem;font-weight:700;letter-spacing:.02em;padding:6px 12px;border-radius:999px}
+.dwp-live-badge i{width:8px;height:8px;border-radius:50%;background:#4ade80;box-shadow:0 0 0 3px rgba(74,222,128,.28)}
+.dwp-live-card:hover .dwp-live-shot{filter:brightness(1.07)}
+.dwp-live-card .dwp-card-cat{color:#3a9e57}
+/* carte vidéo (aperçu du site en mouvement) */
+.dwp-vid-shot{position:relative;aspect-ratio:16/10;overflow:hidden;background:#000;border-radius:14px}
+.dwp-vid{width:100%;height:100%;object-fit:cover;display:block}
+.dwp-vid-play{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:54px;height:54px;border-radius:50%;background:rgba(0,0,0,.45);-webkit-backdrop-filter:blur(4px);backdrop-filter:blur(4px);color:#fff;display:flex;align-items:center;justify-content:center;font-size:17px;pointer-events:none;transition:opacity .25s}
+.dwp-vid-card:hover .dwp-vid-play{opacity:0}
+
+/* ===== Nettoyage global du studio (robuste, survit à l'hydratation) ===== */
+main [data-framer-name="Pricing Section"],
+main [data-framer-name="Testimonials Section"],
+main [data-framer-name="Blogs Section"],
+main [data-framer-name="Project Section"],
+[data-framer-name="About Partners Wrap"]{display:none !important}
+a[href*="facebook.com"],
+a[href*="instagram.com"],
+a[href*="twitter.com"],
+a[href*="//x.com"],
+a[href*="behance.net"]{display:none !important}
+a[href*="/pricing/"],
+a[href*="/blogs/"]{display:none !important}
+/* crédit auteur du thème + badge « acheter ce template » */
+a[href*="lemonsqueezy.com"],
+a[href*="ShenDuncan"]{display:none !important}
+
+/* ===== Section équipe personnalisée ===== */
+main [data-framer-name="Team Section"]{display:none !important}
+#dwp-team{padding:80px 0;background:var(--dwp-dark);position:relative;z-index:3}
+#dwp-team .dwp-wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+#dwp-team .dwp-eyebrow2{color:var(--dwp-accent);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem}
+#dwp-team h2{color:#fff;font-size:clamp(2rem,4.4vw,3.2rem);letter-spacing:-.03em;margin:.25em 0 .1em}
+#dwp-team .dwp-sub{color:#b9b9c2;font-size:1.1rem;margin-bottom:44px;max-width:60ch}
+.dwp-team-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:28px}
+.dwp-member{background:#232329;border-radius:18px;overflow:hidden;border:1px solid #2e2e35}
+.dwp-member img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block}
+.dwp-member__body{padding:20px 22px 24px}
+.dwp-member__body h3{color:#fff;margin:0;font-size:1.3rem;letter-spacing:-.02em}
+.dwp-member__role{color:var(--dwp-accent);font-weight:600;font-size:.95rem;margin-top:4px;display:block}
+@media(max-width:820px){.dwp-team-grid{grid-template-columns:1fr;max-width:420px;margin:0 auto}}

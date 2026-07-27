@@ -1,0 +1,9 @@
+/* Zenta — nettoyage : pas d'avis/témoignages patients, pas de « partenaires » fictifs */
+[data-framer-name="Testimonials"],
+[data-framer-name="Testimonial"],
+[data-framer-name="About Partners Wrap"]{display:none !important}
+/* champs jour + heure injectés */
+#zenta-booking{display:flex;gap:14px;flex-wrap:wrap;margin:14px 0}
+#zenta-booking .zb-field{flex:1 1 180px;display:flex;flex-direction:column;gap:6px}
+#zenta-booking label{font-size:14px;font-weight:600;color:#27187E}
+#zenta-booking input,#zenta-booking select{padding:12px 14px;border:1px solid #d9d9ea;border-radius:10px;font:inherit;background:#fff;color:#27187E}
