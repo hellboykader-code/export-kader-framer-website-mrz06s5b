@@ -1,7 +1,7 @@
 /* DentWebPro — injection de la galerie « Choisissez le site de votre cabinet »
    + nettoyage nav/réseaux, exécuté après l'hydratation Framer. */
 (function(){
-  var BASE="/";
+  var BASE="";
   var CLINICS=[
     {slug:"dentica",name:"Dentélia",city:"Lyon"},
     {slug:"menta",name:"Menta",city:"Créteil"},
