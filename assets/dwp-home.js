@@ -234,11 +234,37 @@
   function boot(){
     apply();
     [200,400,800,1200,2000,2800,4000,6000].forEach(function(t){ setTimeout(apply,t); });
+    // arrivée sur l'accueil avec #dwp-gallery (depuis une autre page) : descendre vers
+    // la galerie une fois injectée (le scroll natif échoue car la galerie est injectée après).
+    if(location.hash==="#dwp-gallery"){
+      var gk=0, giv=setInterval(function(){ var g=document.getElementById("dwp-gallery");
+        if(g){ g.scrollIntoView({behavior:"smooth"}); clearInterval(giv); } if(++gk>30) clearInterval(giv); }, 300);
+    }
     // maintien du logo/avatars pendant que Framer s'hydrate
     var n=0, iv=setInterval(function(){ apply(); if(++n>20) clearInterval(iv); }, 500);
     // ouverture fiable des cartes (contourne le routeur Framer)
     document.addEventListener("click",function(e){
       if(!e.target.closest) return;
+      // ⭐ « Réalisations » : Framer vide le href et son routeur va vers /projects (thème).
+      //    On intercepte AVANT le routeur (phase capture) -> ferme le menu + galerie.
+      var rl=e.target.closest('a,[role="link"]');
+      if(rl){
+        var rt=(rl.textContent||'').replace(/[↗→»«]/g,'').replace(/\s+/g,' ').trim().toLowerCase();
+        while(rt.length>1 && rt.length%2===0 && rt.slice(0,rt.length/2)===rt.slice(rt.length/2)) rt=rt.slice(0,rt.length/2);
+        if(/^r[ée]alisation/.test(rt)){
+          e.preventDefault(); e.stopImmediatePropagation();
+          // fermer le menu mobile : le toggle est en haut-gauche (son data-framer-name
+          // change entre "Variant 1"/"Variant 2" à l'ouverture -> on le cible par position).
+          var tog=document.querySelector('[data-framer-name="Variant 1"],[data-framer-name="Variant 2"]');
+          if(!tog){ tog=[].slice.call(document.querySelectorAll('[data-framer-name],button,[role="button"]')).filter(function(el){
+            var r=el.getBoundingClientRect(); return r.top<110&&r.left<120&&r.width>20&&r.width<90&&r.height>20&&r.height<90; })[0]; }
+          if(tog){ try{ tog.click(); }catch(_){ } }
+          var gg=document.getElementById("dwp-gallery");
+          if(gg){ setTimeout(function(){ gg.scrollIntoView({behavior:"smooth"}); }, 340); }
+          else { window.location.assign(BASE+"/#dwp-gallery"); }
+          return;
+        }
+      }
       var a=e.target.closest("[data-dwp-site]");
       if(a){ e.preventDefault(); e.stopPropagation(); var u=a.getAttribute("data-dwp-site");
         if(a.getAttribute("data-dwp-ext")){ window.open(u,"_blank","noopener"); } else { window.location.href=u; } return; }
