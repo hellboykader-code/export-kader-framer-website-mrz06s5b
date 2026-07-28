@@ -269,7 +269,7 @@
     // 4d) À propos — remplacer les photos stock du thème par NOS réalisations
     //     (hero + section + chronologie = les vrais sites que nous avons conçus).
     var IMGMAP={
-      "29amBkkRhwTMnqGwWbRkfjBNCI":"eclat.jpg",        // hero
+      "29amBkkRhwTMnqGwWbRkfjBNCI":"story-hero.jpg",   // hero — studio web (site en cours de conception)
       "UnG0EgNqdGV1v1hATRNpeUNtE":"olea-poster.jpg",   // About section (large)
       "xmKml0E7v2iBI4zbbj0yVccaQwg":"reddent.jpg",     // About section (carré)
       "svW242XTP0J6OQ4zk9XflnjqxRQ":"story-1.jpg",     // chronologie 1 — 2017 débuts (travail sur ordinateur)
