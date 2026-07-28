@@ -115,6 +115,14 @@
       if(mobileLogo){ img.style.objectFit="contain"; img.style.objectPosition="left center"; img.style.maxWidth="none"; }
       else { img.style.objectPosition=""; img.style.maxWidth=""; }
     });
+    // logo du pied de page (« Footer / Top ») : version horizontale DentWebPro
+    // (le calque ne contient pas « Logo »/« Brand » => non couvert ci-dessus ; c'était
+    //  le logo « BrightEdge » du thème resté visible dans le footer).
+    document.querySelectorAll('[data-framer-name="Footer / Top"] img').forEach(function(img){
+      var fh=BASE+"/assets/dwp-brand-horizontal.svg";
+      if(img.getAttribute("src")!==fh) img.setAttribute("src", fh);
+      img.style.objectFit="contain"; img.style.objectPosition="left center";
+    });
     // 1) retirer réseaux Facebook + Instagram + X/Twitter
     document.querySelectorAll('a[href*="facebook.com"],a[href*="instagram.com"],a[href*="twitter.com"],a[href*="//x.com"],a[href*="behance.net"]').forEach(function(a){
       var w=a.closest('[data-framer-name="Icon Wrap"]')||a; w.style.display="none";
