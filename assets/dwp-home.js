@@ -272,11 +272,11 @@
       "29amBkkRhwTMnqGwWbRkfjBNCI":"eclat.jpg",        // hero
       "UnG0EgNqdGV1v1hATRNpeUNtE":"olea-poster.jpg",   // About section (large)
       "xmKml0E7v2iBI4zbbj0yVccaQwg":"reddent.jpg",     // About section (carré)
-      "svW242XTP0J6OQ4zk9XflnjqxRQ":"eclat.jpg",       // chronologie 1
-      "wOCTh6BhMTLrGPZ7C8doO3XdY":"dentitive.jpg",     // chronologie 2
-      "Ov53jG8lAoAFuct0Li7vWgmOqQ":"olea-poster.jpg",  // chronologie 3 (cabinets en ligne)
-      "RPxWdsXRtMBhMcTCb414zGg2QY":"noveo-poster.jpg", // chronologie 4
-      "fnlUqn2nbXPRmja93vjuaHzY":"zenta-poster.jpg"    // chronologie 5
+      "svW242XTP0J6OQ4zk9XflnjqxRQ":"story-ecom.jpg",  // chronologie 1 — 2017 vente en ligne
+      "wOCTh6BhMTLrGPZ7C8doO3XdY":"story-biz.jpg",     // chronologie 2 — sites d'entreprises
+      "Ov53jG8lAoAFuct0Li7vWgmOqQ":"story-dev.jpg",    // chronologie 3 — dev / design / SEO
+      "RPxWdsXRtMBhMcTCb414zGg2QY":"story-dental.jpg", // chronologie 4 — naissance DentWebPro (idée cabinets)
+      "fnlUqn2nbXPRmja93vjuaHzY":"zenta-poster.jpg"    // chronologie 5 — aujourd'hui (site livré)
     };
     document.querySelectorAll("img").forEach(function(im){
       var s=im.getAttribute("src")||"";
