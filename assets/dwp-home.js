@@ -41,7 +41,7 @@
     return '<div class="dwp-cardlink dwp-live-card'+(c.vid?' dwp-vid-card':'')+'" role="link" tabindex="0" data-dwp-site="'+c.url+'" data-dwp-ext="1" style="--brand:'+c.brand+';--accent:'+c.accent+'">'+
       shot+
       '<div class="dwp-card-meta"><h3>'+c.name+'</h3><span class="dwp-card-city">'+c.city+'</span></div>'+
-      '<span class="dwp-card-cat">Site livré · en ligne</span>'+
+      '<span class="dwp-card-cat">En ligne</span>'+
       '</div>';
   }
   // lecture automatique en boucle (relance si le navigateur met l'autoplay en pause)
@@ -53,6 +53,19 @@
       var play=function(){ var pr=v.play(); if(pr&&pr.catch) pr.catch(function(){}); };
       play(); v.addEventListener('canplay',play); v.addEventListener('loadeddata',play);
     });
+  }
+  // apparition animée des cartes (image/vidéo qui se révèle en zoom, en cascade)
+  function revealCards(){
+    var cards=document.querySelectorAll('#dwp-gallery .dwp-cardlink:not([data-dwp-seen])');
+    if(!cards.length) return;
+    if(!window.IntersectionObserver){ [].forEach.call(cards,function(c){c.classList.add('dwp-in');}); return; }
+    var io=new IntersectionObserver(function(es){
+      es.forEach(function(e){ if(e.isIntersecting){ var el=e.target;
+        var i=parseInt(el.getAttribute('data-dwp-idx')||'0',10);
+        el.style.transitionDelay=(Math.min(i,7)*0.09)+'s';
+        el.classList.add('dwp-in'); io.unobserve(el); } });
+    },{threshold:0.12,rootMargin:'0px 0px -8% 0px'});
+    [].forEach.call(cards,function(c,i){ c.setAttribute('data-dwp-seen','1'); c.setAttribute('data-dwp-idx',(i%12)); io.observe(c); });
   }
 
   function buildGallery(){
@@ -130,7 +143,12 @@
     // 1b) hero : remplacer les avatars de l'ancienne équipe + pointer le bouton vers la nouvelle équipe
     var TP=[BASE+"/assets/team/kader.webp",BASE+"/assets/team/amine.webp",BASE+"/assets/team/yanis.webp"];
     var avatars=document.querySelectorAll('[data-framer-name^="Avatar-"] img, [data-framer-name^="Avatar-"]>div>img');
-    avatars.forEach(function(img,i){ img.setAttribute("src", TP[i%TP.length]); });
+    // 3 membres seulement : remplir les 3 premiers, masquer les avatars en trop
+    // (le thème en avait 4 -> le 4e reprenait la photo de Kader = doublon).
+    avatars.forEach(function(img,i){
+      if(i<TP.length){ img.setAttribute("src", TP[i]); }
+      else { var av=img.closest('[data-framer-name^="Avatar-"]'); (av||img).style.display="none"; }
+    });
     document.querySelectorAll('[data-framer-name="Arrow Button"]').forEach(function(a){ a.style.cursor="pointer"; });
     // 1c) retirer le crédit auteur du thème (« Créé par … » + logo oldshen) et le badge « acheter ce template »
     document.querySelectorAll('a[href*="lemonsqueezy.com"]').forEach(function(a){
@@ -163,7 +181,14 @@
     // CSS robuste : masquer l'équipe fictive + fausses récompenses du thème (survit au re-render)
     if(!document.getElementById("dwp-hide-css")){
       var hc=document.createElement("style"); hc.id="dwp-hide-css";
-      hc.textContent='[data-framer-name="Team Section"]{display:none !important}[data-framer-name="Awards Section"]{display:none !important}';
+      hc.textContent='[data-framer-name="Team Section"]{display:none !important}[data-framer-name="Awards Section"]{display:none !important}'
+        // animation d'apparition des cartes du portfolio (image qui se révèle en zoom)
+        +'#dwp-gallery .dwp-cardlink{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}'
+        +'#dwp-gallery .dwp-cardlink.dwp-in{opacity:1;transform:none}'
+        +'#dwp-gallery .dwp-card-shot{overflow:hidden}'
+        +'#dwp-gallery .dwp-card-shot img,#dwp-gallery .dwp-card-shot video{transform:scale(1.14);transition:transform 1.15s cubic-bezier(.2,.7,.2,1)}'
+        +'#dwp-gallery .dwp-cardlink.dwp-in .dwp-card-shot img,#dwp-gallery .dwp-cardlink.dwp-in .dwp-card-shot video{transform:scale(1)}'
+        +'@media (prefers-reduced-motion:reduce){#dwp-gallery .dwp-cardlink,#dwp-gallery .dwp-card-shot img,#dwp-gallery .dwp-card-shot video{opacity:1;transform:none;transition:none}}';
       (document.head||document.documentElement).appendChild(hc);
     }
     // 3) galerie — accueil uniquement (page possédant la "Project Section")
@@ -175,6 +200,7 @@
       if(svc){ main.insertBefore(gal, svc); } else { main.insertBefore(gal, main.children[1]||null); }
     }
     wireVideos();
+    revealCards();
     // 4) équipe DentWebPro sur TOUTE page ayant une "Team Section" (accueil ET À propos).
     //    Masque l'équipe fictive du thème + les fausses récompenses (BrightEdge).
     if(main){
