@@ -55,6 +55,17 @@
       '</div>';
   }
   // lecture automatique en boucle (relance si le navigateur met l'autoplay en pause)
+  // écrit une valeur dans le 1er nœud texte (et vide les suivants) — gère les
+  // titres découpés en <span> (SplitText) sans casser la structure.
+  function abSetText(el,val){
+    var walk=function(n){for(var i=0;i<n.childNodes.length;i++){var c=n.childNodes[i];
+      if(c.nodeType===3 && c.nodeValue && c.nodeValue.trim()){c.nodeValue=val;
+        for(var j=i+1;j<n.childNodes.length;j++){var d=n.childNodes[j];
+          if(d.nodeType===3 && d.nodeValue && d.nodeValue.trim()) d.nodeValue="";}
+        return true;}
+      if(c.nodeType===1 && walk(c))return true;}return false;};
+    if(!walk(el)) el.textContent=val;
+  }
   function wireVideos(){
     document.querySelectorAll('.dwp-vid-card video').forEach(function(v){
       if(v.getAttribute('data-vwired')) return;
@@ -225,6 +236,55 @@
       var awardsSec=main.querySelector('[data-framer-name="Awards Section"]');
       if(awardsSec) awardsSec.style.display="none";
     }
+    // 4c) À propos — remplacer la chronologie fictive du thème (dates 2019→2024,
+    //     « 500 projets ») par NOTRE parcours réel (studio récent : Éclat, Oléa…).
+    var AB={
+      "Janvier 2019":"Début 2024","Juillet 2020":"Mi-2024","Mai 2021":"Fin 2024",
+      "Février 2023":"2025","Novembre 2024":"Aujourd'hui",
+      "Création de DentWebPro Studio":"Naissance de DentWebPro",
+      "Fondé avec l'ambition de transformer la présence en ligne des cabinets dentaires grâce à des sites web innovants.":
+        "L'idée : des sites web modernes, pensés uniquement pour les cabinets dentaires.",
+      "Lancement des services d'identité de marque":"Nos premiers modèles de sites",
+      "Élargissement de notre offre à des solutions complètes d'identité de marque, pour aider les cabinets à se démarquer.":
+        "Conception de modèles de sites dentaires soignés, prêts à personnaliser pour chaque cabinet.",
+      "Développement web avancé":"Premiers cabinets en ligne",
+      "Renforcement de nos compétences en développement web pour livrer des sites dynamiques et parfaitement responsives.":
+        "Livraison de nos premiers sites — Éclat, Oléa, Novéo, Zenta — design, développement et mise en ligne.",
+      "Extension au marketing digital":"Une offre complète",
+      "Développement de notre expertise en marketing digital pour accroître la visibilité et l'engagement en ligne de nos clients.":
+        "Identité de marque, développement web et référencement réunis pour faire rayonner chaque cabinet.",
+      "Plus de 500 projets réussis":"En pleine croissance",
+      "Plus de 500 projets menés à bien, témoignant de notre exigence et de la satisfaction de nos clients.":
+        "Nous accompagnons de plus en plus de cabinets dentaires dans leur présence en ligne."
+    };
+    document.querySelectorAll('p,h2,h3,h4,h5,h6,span,div,li').forEach(function(el){
+      if(el.getAttribute("data-abt")==="1") return;
+      var t=(el.textContent||"").replace(/\s+/g," ").trim();
+      if(AB[t]===undefined) return;
+      var childMatch=false;
+      for(var i=0;i<el.children.length;i++){ if((el.children[i].textContent||"").replace(/\s+/g," ").trim()===t){ childMatch=true; break; } }
+      if(childMatch) return;               // laisser l'enfant le plus profond gérer
+      abSetText(el, AB[t]); el.setAttribute("data-abt","1");
+    });
+    // 4d) À propos — remplacer les photos stock du thème par NOS réalisations
+    //     (hero + section + chronologie = les vrais sites que nous avons conçus).
+    var IMGMAP={
+      "29amBkkRhwTMnqGwWbRkfjBNCI":"eclat.jpg",        // hero
+      "UnG0EgNqdGV1v1hATRNpeUNtE":"olea-poster.jpg",   // About section (large)
+      "xmKml0E7v2iBI4zbbj0yVccaQwg":"reddent.jpg",     // About section (carré)
+      "svW242XTP0J6OQ4zk9XflnjqxRQ":"eclat.jpg",       // chronologie 1
+      "wOCTh6BhMTLrGPZ7C8doO3XdY":"dentitive.jpg",     // chronologie 2
+      "Ov53jG8lAoAFuct0Li7vWgmOqQ":"olea-poster.jpg",  // chronologie 3 (cabinets en ligne)
+      "RPxWdsXRtMBhMcTCb414zGg2QY":"noveo-poster.jpg", // chronologie 4
+      "fnlUqn2nbXPRmja93vjuaHzY":"zenta-poster.jpg"    // chronologie 5
+    };
+    document.querySelectorAll("img").forEach(function(im){
+      var s=im.getAttribute("src")||"";
+      for(var k in IMGMAP){ if(s.indexOf(k)>=0){
+        var nu=BASE+"/assets/realisations/"+IMGMAP[k];
+        if(im.getAttribute("src")!==nu){ im.setAttribute("src",nu); im.removeAttribute("srcset"); im.removeAttribute("sizes"); }
+        break; } }
+    });
     // 5) retirer le crédit auteur du thème « Créé par Duncan Shen »
     document.querySelectorAll('footer *, [data-framer-name*="Footer"] *').forEach(function(el){
       if(el.children.length) return;
