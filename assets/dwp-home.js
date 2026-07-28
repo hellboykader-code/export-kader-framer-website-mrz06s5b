@@ -246,7 +246,7 @@
         "Depuis 2017, je conçois des sites de vente en ligne — comme gsmak.com — pour des produits électroniques.",
       "Lancement des services d'identité de marque":"Des sites pour les entreprises",
       "Élargissement de notre offre à des solutions complètes d'identité de marque, pour aider les cabinets à se démarquer.":
-        "Création de sites web pour des entreprises et commerces en Algérie, dans des secteurs variés.",
+        "Création de sites web pour des entreprises et des commerces, dans des secteurs variés.",
       "Développement web avancé":"Montée en compétences",
       "Renforcement de nos compétences en développement web pour livrer des sites dynamiques et parfaitement responsives.":
         "Design, développement et référencement : des sites professionnels, rapides et faits sur mesure.",
