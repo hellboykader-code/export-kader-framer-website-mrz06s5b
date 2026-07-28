@@ -182,6 +182,9 @@
     if(!document.getElementById("dwp-hide-css")){
       var hc=document.createElement("style"); hc.id="dwp-hide-css";
       hc.textContent='[data-framer-name="Team Section"]{display:none !important}[data-framer-name="Awards Section"]{display:none !important}'
+        // logo blanc + mix-blend-difference => visible sur TOUT fond (clair OU foncé),
+        // auto-contrasté (noir sur clair, blanc sur foncé). Résout header/vertical/footer.
+        +'[data-framer-name="Brand"] img,[data-framer-name="Logo / Vertical"] img,[data-framer-name="Footer / Top"] img{mix-blend-mode:difference}'
         // animation d'apparition des cartes du portfolio (image qui se révèle en zoom)
         +'#dwp-gallery .dwp-cardlink{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}'
         +'#dwp-gallery .dwp-cardlink.dwp-in{opacity:1;transform:none}'
