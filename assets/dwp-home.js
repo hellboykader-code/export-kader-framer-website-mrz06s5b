@@ -111,8 +111,8 @@
 
   var TEAM=[
     {slug:"kader",name:"Kader",role:"Fondateur · Designer & Développeur"},
-    {slug:"amine",name:"Amine",role:"Relations & Marketing"},
-    {slug:"yanis",name:"Yanis",role:"Marketeur"}
+    {slug:"amine",name:"Amine",role:"Co-fondateur · Relations & Marketing"},
+    {slug:"yanis",name:"Yanis",role:"Relations & Marketing"}
   ];
   function buildTeam(){
     var sec=document.createElement("section");
@@ -144,8 +144,43 @@
     "wOCTh6BhMTLrGPZ7C8doO3XdY":"story-2.jpg",       // chronologie 2
     "Ov53jG8lAoAFuct0Li7vWgmOqQ":"story-3.jpg",      // chronologie 3
     "RPxWdsXRtMBhMcTCb414zGg2QY":"story-4.jpg",      // chronologie 4
-    "fnlUqn2nbXPRmja93vjuaHzY":"story-5.jpg"         // chronologie 5
+    "fnlUqn2nbXPRmja93vjuaHzY":"story-5.jpg",        // chronologie 5
+    "sO8Qc7EI5ijTzk0bY8jBsX1qYew":"amine-contact.webp" // section Contact — photo d'Amine
   };
+  // ⭐ Chronologie « À propos » (dates + textes) — NOTRE parcours réel, AUTO-RÉPARANT.
+  //    React reconstruit ces textes au scroll / à la navigation client-side (bien après
+  //    l'arrêt de apply()) -> « Novembre 2024 » revenait. fixText() est rappelé en continu.
+  var AB={
+    "Janvier 2019":"2017","Juillet 2020":"2018 – 2021","Mai 2021":"2022 – 2024",
+    "Février 2023":"2025","Novembre 2024":"Aujourd'hui",
+    "Création de DentWebPro Studio":"Mes débuts dans le web",
+    "Fondé avec l'ambition de transformer la présence en ligne des cabinets dentaires grâce à des sites web innovants.":
+      "Depuis 2017, je conçois des sites de vente en ligne — comme gsmak.com — pour des produits électroniques.",
+    "Lancement des services d'identité de marque":"Des sites pour les entreprises",
+    "Élargissement de notre offre à des solutions complètes d'identité de marque, pour aider les cabinets à se démarquer.":
+      "Création de sites web pour des entreprises et des commerces, dans des secteurs variés.",
+    "Développement web avancé":"Montée en compétences",
+    "Renforcement de nos compétences en développement web pour livrer des sites dynamiques et parfaitement responsives.":
+      "Design, développement et référencement : des sites professionnels, rapides et faits sur mesure.",
+    "Extension au marketing digital":"Naissance de DentWebPro",
+    "Développement de notre expertise en marketing digital pour accroître la visibilité et l'engagement en ligne de nos clients.":
+      "En 2025, l'idée d'un studio entièrement dédié aux sites web pour cabinets dentaires voit le jour.",
+    "Plus de 500 projets réussis":"DentWebPro aujourd'hui",
+    "Plus de 500 projets menés à bien, témoignant de notre exigence et de la satisfaction de nos clients.":
+      "L'idée concrétisée : premiers sites livrés — Éclat, Oléa, Novéo, Zenta — et en pleine croissance."
+  };
+  function fixText(){
+    document.querySelectorAll('p,h2,h3,h4,h5,h6,span,div,li').forEach(function(el){
+      if(el.getAttribute("data-abt")==="1") return;
+      var t=(el.textContent||"").replace(/\s+/g," ").trim();
+      if(AB[t]===undefined) return;
+      var childMatch=false;
+      for(var i=0;i<el.children.length;i++){ if((el.children[i].textContent||"").replace(/\s+/g," ").trim()===t){ childMatch=true; break; } }
+      if(childMatch) return;               // laisser l'enfant le plus profond gérer
+      abSetText(el, AB[t]); el.setAttribute("data-abt","1");
+    });
+  }
+
   function fixImgs(){
     document.querySelectorAll("img").forEach(function(im){
       var s=(im.getAttribute("src")||"")+" "+(im.getAttribute("srcset")||"");
@@ -228,6 +263,8 @@
     if(!document.getElementById("dwp-hide-css")){
       var hc=document.createElement("style"); hc.id="dwp-hide-css";
       hc.textContent='[data-framer-name="Team Section"]{display:none !important}[data-framer-name="Awards Section"]{display:none !important}'
+        // masquer le bloc de chiffres fictifs (10 ans / 500 sites / 140 cabinets / 98%)
+        +'[data-framer-name="About Achieve Numbers"]{display:none !important}'
         // logo blanc + mix-blend-difference => visible sur TOUT fond (clair OU foncé),
         // auto-contrasté (noir sur clair, blanc sur foncé). Résout header/vertical/footer.
         +'[data-framer-name="Brand"] img,[data-framer-name="Logo / Vertical"] img,[data-framer-name="Footer / Top"] img{mix-blend-mode:difference}'
@@ -261,37 +298,8 @@
       var awardsSec=main.querySelector('[data-framer-name="Awards Section"]');
       if(awardsSec) awardsSec.style.display="none";
     }
-    // 4c) À propos — remplacer la chronologie fictive du thème (dates 2019→2024,
-    //     « 500 projets ») par NOTRE parcours réel (studio récent : Éclat, Oléa…).
-    var AB={
-      "Janvier 2019":"2017","Juillet 2020":"2018 – 2021","Mai 2021":"2022 – 2024",
-      "Février 2023":"2025","Novembre 2024":"Aujourd'hui",
-      "Création de DentWebPro Studio":"Mes débuts dans le web",
-      "Fondé avec l'ambition de transformer la présence en ligne des cabinets dentaires grâce à des sites web innovants.":
-        "Depuis 2017, je conçois des sites de vente en ligne — comme gsmak.com — pour des produits électroniques.",
-      "Lancement des services d'identité de marque":"Des sites pour les entreprises",
-      "Élargissement de notre offre à des solutions complètes d'identité de marque, pour aider les cabinets à se démarquer.":
-        "Création de sites web pour des entreprises et des commerces, dans des secteurs variés.",
-      "Développement web avancé":"Montée en compétences",
-      "Renforcement de nos compétences en développement web pour livrer des sites dynamiques et parfaitement responsives.":
-        "Design, développement et référencement : des sites professionnels, rapides et faits sur mesure.",
-      "Extension au marketing digital":"Naissance de DentWebPro",
-      "Développement de notre expertise en marketing digital pour accroître la visibilité et l'engagement en ligne de nos clients.":
-        "En 2025, l'idée d'un studio entièrement dédié aux sites web pour cabinets dentaires voit le jour.",
-      "Plus de 500 projets réussis":"DentWebPro aujourd'hui",
-      "Plus de 500 projets menés à bien, témoignant de notre exigence et de la satisfaction de nos clients.":
-        "L'idée concrétisée : premiers sites livrés — Éclat, Oléa, Novéo, Zenta — et en pleine croissance."
-    };
-    document.querySelectorAll('p,h2,h3,h4,h5,h6,span,div,li').forEach(function(el){
-      if(el.getAttribute("data-abt")==="1") return;
-      var t=(el.textContent||"").replace(/\s+/g," ").trim();
-      if(AB[t]===undefined) return;
-      var childMatch=false;
-      for(var i=0;i<el.children.length;i++){ if((el.children[i].textContent||"").replace(/\s+/g," ").trim()===t){ childMatch=true; break; } }
-      if(childMatch) return;               // laisser l'enfant le plus profond gérer
-      abSetText(el, AB[t]); el.setAttribute("data-abt","1");
-    });
-    // 4d) À propos — remplacer les photos stock du thème par NOS visuels (auto-réparant).
+    // 4c/4d) À propos — chronologie (textes) + photos = NOTRE parcours, auto-réparant.
+    fixText();
     fixImgs();
     // 5) retirer le crédit auteur du thème « Créé par Duncan Shen »
     document.querySelectorAll('footer *, [data-framer-name*="Footer"] *').forEach(function(el){
@@ -361,9 +369,10 @@
     //    changement de src/srcset (observer) + filet interval léger. Le guard interne
     //    (ne réécrit que si différent) évite toute boucle.
     var fixT=null;
-    var imgObs=new MutationObserver(function(){ if(fixT) return; fixT=setTimeout(function(){ fixT=null; fixImgs(); },80); });
+    function healNow(){ fixT=null; fixImgs(); fixText(); }
+    var imgObs=new MutationObserver(function(){ if(fixT) return; fixT=setTimeout(healNow,80); });
     try{ imgObs.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:["src","srcset"]}); }catch(e){}
-    setInterval(fixImgs,1000);
+    setInterval(function(){ fixImgs(); fixText(); },1000);
     // ré-appliquer au redimensionnement/rotation (bascule logo vertical <-> horizontal)
     var rt=null; window.addEventListener("resize",function(){ if(rt) clearTimeout(rt); rt=setTimeout(apply,150); });
   }
