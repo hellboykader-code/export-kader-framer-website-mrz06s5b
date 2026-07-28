@@ -270,8 +270,8 @@
     //     (hero + section + chronologie = les vrais sites que nous avons conçus).
     var IMGMAP={
       "29amBkkRhwTMnqGwWbRkfjBNCI":"story-hero.jpg",   // hero — studio web (site en cours de conception)
-      "UnG0EgNqdGV1v1hATRNpeUNtE":"olea-poster.jpg",   // About section (large)
-      "xmKml0E7v2iBI4zbbj0yVccaQwg":"reddent.jpg",     // About section (carré)
+      "UnG0EgNqdGV1v1hATRNpeUNtE":"story-about-lg.jpg", // About section (large) — travail sur ordinateur
+      "xmKml0E7v2iBI4zbbj0yVccaQwg":"story-about-sq.jpg", // About section (carré) — code / développement
       "svW242XTP0J6OQ4zk9XflnjqxRQ":"story-1.jpg",     // chronologie 1 — 2017 débuts (travail sur ordinateur)
       "wOCTh6BhMTLrGPZ7C8doO3XdY":"story-2.jpg",       // chronologie 2 — sites d'entreprises (dév.)
       "Ov53jG8lAoAFuct0Li7vWgmOqQ":"story-3.jpg",      // chronologie 3 — design / dév. / SEO
