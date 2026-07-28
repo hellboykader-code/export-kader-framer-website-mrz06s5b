@@ -139,6 +139,20 @@
       if(t==="Blog"||t==="Tarifs"){ a.style.display="none"; }
       if(t==="Réalisations"){ a.setAttribute("href", BASE+"/#dwp-gallery"); }
     });
+    // 2b) TOUT lien vers la page "projects" (réalisations du thème : VistaHaven,
+    //     Kindred Space, Glow Theory…) -> notre galerie de sites. Évite d'afficher
+    //     des réalisations qui ne sont pas les nôtres.
+    document.querySelectorAll('a[href]').forEach(function(a){
+      var h=a.getAttribute("href")||"";
+      if(/\/projects(\/|$|#|\?)/.test(h) && h.indexOf("#dwp-gallery")<0){
+        a.setAttribute("href", BASE+"/#dwp-gallery");
+        if(!a.__dwpProj){ a.__dwpProj=1; a.addEventListener("click",function(e){
+          e.preventDefault(); e.stopPropagation();
+          var g=document.getElementById("dwp-gallery");
+          if(g){ g.scrollIntoView({behavior:"smooth"}); } else { location.href=BASE+"/#dwp-gallery"; }
+        },true); }
+      }
+    });
     // CSS robuste : masquer l'équipe fictive + fausses récompenses du thème (survit au re-render)
     if(!document.getElementById("dwp-hide-css")){
       var hc=document.createElement("style"); hc.id="dwp-hide-css";
