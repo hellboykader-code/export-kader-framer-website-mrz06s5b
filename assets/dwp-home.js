@@ -131,6 +131,31 @@
     return sec;
   }
 
+  // ⭐ Remplacement des photos « À propos » par NOS visuels — AUTO-RÉPARANT.
+  //    React reconstruit ces <img> quand la section entre dans le viewport (scroll)
+  //    et rétablit le src CDN d'origine. apply() s'arrête après ~10 s, donc un scroll
+  //    tardif « annulait » le remplacement. fixImgs() est rappelé en continu par un
+  //    MutationObserver + un interval léger -> le swap se ré-applique à chaque rendu.
+  var IMGMAP={
+    "29amBkkRhwTMnqGwWbRkfjBNCI":"story-hero.jpg",   // hero — studio web
+    "UnG0EgNqdGV1v1hATRNpeUNtE":"story-about-lg.jpg", // About section (large)
+    "xmKml0E7v2iBI4zbbj0yVccaQwg":"story-about-sq.jpg", // About section (carré)
+    "svW242XTP0J6OQ4zk9XflnjqxRQ":"story-1.jpg",     // chronologie 1
+    "wOCTh6BhMTLrGPZ7C8doO3XdY":"story-2.jpg",       // chronologie 2
+    "Ov53jG8lAoAFuct0Li7vWgmOqQ":"story-3.jpg",      // chronologie 3
+    "RPxWdsXRtMBhMcTCb414zGg2QY":"story-4.jpg",      // chronologie 4
+    "fnlUqn2nbXPRmja93vjuaHzY":"story-5.jpg"         // chronologie 5
+  };
+  function fixImgs(){
+    document.querySelectorAll("img").forEach(function(im){
+      var s=(im.getAttribute("src")||"")+" "+(im.getAttribute("srcset")||"");
+      for(var k in IMGMAP){ if(s.indexOf(k)>=0){
+        var nu=BASE+"/assets/realisations/"+IMGMAP[k];
+        if(im.getAttribute("src")!==nu){ im.setAttribute("src",nu); im.removeAttribute("srcset"); im.removeAttribute("sizes"); }
+        break; } }
+    });
+  }
+
   function apply(){
     // 0) forcer le logo DentWebPro. Sur mobile (<=810px) : version HORIZONTALE
     //    (le logo vertical se retrouve écrasé/minuscule dans la barre du header).
@@ -266,25 +291,8 @@
       if(childMatch) return;               // laisser l'enfant le plus profond gérer
       abSetText(el, AB[t]); el.setAttribute("data-abt","1");
     });
-    // 4d) À propos — remplacer les photos stock du thème par NOS réalisations
-    //     (hero + section + chronologie = les vrais sites que nous avons conçus).
-    var IMGMAP={
-      "29amBkkRhwTMnqGwWbRkfjBNCI":"story-hero.jpg",   // hero — studio web (site en cours de conception)
-      "UnG0EgNqdGV1v1hATRNpeUNtE":"story-about-lg.jpg", // About section (large) — travail sur ordinateur
-      "xmKml0E7v2iBI4zbbj0yVccaQwg":"story-about-sq.jpg", // About section (carré) — code / développement
-      "svW242XTP0J6OQ4zk9XflnjqxRQ":"story-1.jpg",     // chronologie 1 — 2017 débuts (travail sur ordinateur)
-      "wOCTh6BhMTLrGPZ7C8doO3XdY":"story-2.jpg",       // chronologie 2 — sites d'entreprises (dév.)
-      "Ov53jG8lAoAFuct0Li7vWgmOqQ":"story-3.jpg",      // chronologie 3 — design / dév. / SEO
-      "RPxWdsXRtMBhMcTCb414zGg2QY":"story-4.jpg",      // chronologie 4 — naissance DentWebPro (grand espace de travail, équipe + ordinateurs)
-      "fnlUqn2nbXPRmja93vjuaHzY":"story-5.jpg"         // chronologie 5 — aujourd'hui (équipe / croissance)
-    };
-    document.querySelectorAll("img").forEach(function(im){
-      var s=im.getAttribute("src")||"";
-      for(var k in IMGMAP){ if(s.indexOf(k)>=0){
-        var nu=BASE+"/assets/realisations/"+IMGMAP[k];
-        if(im.getAttribute("src")!==nu){ im.setAttribute("src",nu); im.removeAttribute("srcset"); im.removeAttribute("sizes"); }
-        break; } }
-    });
+    // 4d) À propos — remplacer les photos stock du thème par NOS visuels (auto-réparant).
+    fixImgs();
     // 5) retirer le crédit auteur du thème « Créé par Duncan Shen »
     document.querySelectorAll('footer *, [data-framer-name*="Footer"] *').forEach(function(el){
       if(el.children.length) return;
@@ -348,6 +356,14 @@
       if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")) apply();
     });
     try{ obs.observe(main,{childList:true}); }catch(e){}
+    // ⭐ garde PERMANENTE des photos « À propos » : React reconstruit ces <img> au
+    //    scroll (bien après l'arrêt de apply()) -> on ré-applique fixImgs() à chaque
+    //    changement de src/srcset (observer) + filet interval léger. Le guard interne
+    //    (ne réécrit que si différent) évite toute boucle.
+    var fixT=null;
+    var imgObs=new MutationObserver(function(){ if(fixT) return; fixT=setTimeout(function(){ fixT=null; fixImgs(); },80); });
+    try{ imgObs.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:["src","srcset"]}); }catch(e){}
+    setInterval(fixImgs,1000);
     // ré-appliquer au redimensionnement/rotation (bascule logo vertical <-> horizontal)
     var rt=null; window.addEventListener("resize",function(){ if(rt) clearTimeout(rt); rt=setTimeout(apply,150); });
   }
