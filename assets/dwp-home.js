@@ -239,23 +239,23 @@
     // 4c) À propos — remplacer la chronologie fictive du thème (dates 2019→2024,
     //     « 500 projets ») par NOTRE parcours réel (studio récent : Éclat, Oléa…).
     var AB={
-      "Janvier 2019":"Début 2024","Juillet 2020":"Mi-2024","Mai 2021":"Fin 2024",
+      "Janvier 2019":"2017","Juillet 2020":"2018 – 2021","Mai 2021":"2022 – 2024",
       "Février 2023":"2025","Novembre 2024":"Aujourd'hui",
-      "Création de DentWebPro Studio":"Naissance de DentWebPro",
+      "Création de DentWebPro Studio":"Mes débuts dans le web",
       "Fondé avec l'ambition de transformer la présence en ligne des cabinets dentaires grâce à des sites web innovants.":
-        "L'idée : des sites web modernes, pensés uniquement pour les cabinets dentaires.",
-      "Lancement des services d'identité de marque":"Nos premiers modèles de sites",
+        "Depuis 2017, je conçois des sites de vente en ligne — comme gsmak.com — pour des produits électroniques.",
+      "Lancement des services d'identité de marque":"Des sites pour les entreprises",
       "Élargissement de notre offre à des solutions complètes d'identité de marque, pour aider les cabinets à se démarquer.":
-        "Conception de modèles de sites dentaires soignés, prêts à personnaliser pour chaque cabinet.",
-      "Développement web avancé":"Premiers cabinets en ligne",
+        "Création de sites web pour des entreprises et commerces en Algérie, dans des secteurs variés.",
+      "Développement web avancé":"Montée en compétences",
       "Renforcement de nos compétences en développement web pour livrer des sites dynamiques et parfaitement responsives.":
-        "Livraison de nos premiers sites — Éclat, Oléa, Novéo, Zenta — design, développement et mise en ligne.",
-      "Extension au marketing digital":"Une offre complète",
+        "Design, développement et référencement : des sites professionnels, rapides et faits sur mesure.",
+      "Extension au marketing digital":"Naissance de DentWebPro",
       "Développement de notre expertise en marketing digital pour accroître la visibilité et l'engagement en ligne de nos clients.":
-        "Identité de marque, développement web et référencement réunis pour faire rayonner chaque cabinet.",
-      "Plus de 500 projets réussis":"En pleine croissance",
+        "En 2025, l'idée d'un studio entièrement dédié aux sites web pour cabinets dentaires voit le jour.",
+      "Plus de 500 projets réussis":"DentWebPro aujourd'hui",
       "Plus de 500 projets menés à bien, témoignant de notre exigence et de la satisfaction de nos clients.":
-        "Nous accompagnons de plus en plus de cabinets dentaires dans leur présence en ligne."
+        "L'idée concrétisée : premiers sites livrés — Éclat, Oléa, Novéo, Zenta — et en pleine croissance."
     };
     document.querySelectorAll('p,h2,h3,h4,h5,h6,span,div,li').forEach(function(el){
       if(el.getAttribute("data-abt")==="1") return;
