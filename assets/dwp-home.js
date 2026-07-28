@@ -272,11 +272,11 @@
       "29amBkkRhwTMnqGwWbRkfjBNCI":"eclat.jpg",        // hero
       "UnG0EgNqdGV1v1hATRNpeUNtE":"olea-poster.jpg",   // About section (large)
       "xmKml0E7v2iBI4zbbj0yVccaQwg":"reddent.jpg",     // About section (carré)
-      "svW242XTP0J6OQ4zk9XflnjqxRQ":"story-ecom.jpg",  // chronologie 1 — 2017 vente en ligne
-      "wOCTh6BhMTLrGPZ7C8doO3XdY":"story-biz.jpg",     // chronologie 2 — sites d'entreprises
-      "Ov53jG8lAoAFuct0Li7vWgmOqQ":"story-dev.jpg",    // chronologie 3 — dev / design / SEO
-      "RPxWdsXRtMBhMcTCb414zGg2QY":"story-dental.jpg", // chronologie 4 — naissance DentWebPro (idée cabinets)
-      "fnlUqn2nbXPRmja93vjuaHzY":"zenta-poster.jpg"    // chronologie 5 — aujourd'hui (site livré)
+      "svW242XTP0J6OQ4zk9XflnjqxRQ":"story-1.jpg",     // chronologie 1 — 2017 débuts (travail sur ordinateur)
+      "wOCTh6BhMTLrGPZ7C8doO3XdY":"story-2.jpg",       // chronologie 2 — sites d'entreprises (dév.)
+      "Ov53jG8lAoAFuct0Li7vWgmOqQ":"story-3.jpg",      // chronologie 3 — design / dév. / SEO
+      "RPxWdsXRtMBhMcTCb414zGg2QY":"story-4.jpg",      // chronologie 4 — naissance DentWebPro (grand espace de travail, équipe + ordinateurs)
+      "fnlUqn2nbXPRmja93vjuaHzY":"story-5.jpg"         // chronologie 5 — aujourd'hui (équipe / croissance)
     };
     document.querySelectorAll("img").forEach(function(im){
       var s=im.getAttribute("src")||"";
