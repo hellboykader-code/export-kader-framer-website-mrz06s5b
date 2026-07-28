@@ -19,7 +19,14 @@
   var LIVE=[
     {name:"Oléa",  city:"Marseille", url:"https://hellboykader-code.github.io/export-kader1-framer-website-ms074a1w/",  vid:"olea",  brand:"#0d1b15", accent:"#d1fc71"},
     {name:"Novéo", city:"Lyon",      url:"https://hellboykader-code.github.io/export-kader9-framer-website-mrzfoouq/",  vid:"noveo", brand:"#33231a", accent:"#e8853b"},
-    {name:"Zenta", city:"Paris",     url:"https://hellboykader-code.github.io/export-kader10-framer-website-mrzfwfoi/", vid:"zenta", brand:"#2f2e5c", accent:"#b9b7f0"}
+    {name:"Zenta", city:"Paris",     url:"https://hellboykader-code.github.io/export-kader10-framer-website-mrzfwfoi/", vid:"zenta", brand:"#2f2e5c", accent:"#b9b7f0"},
+    // Modèles livrés — image (capture) pour l'instant, vidéos à venir
+    {name:"DentArt",   city:"Modèle", url:"https://hellboykader-code.github.io/export-dentartt-framer-website-ms0tsqwz/",  img:"dentart.jpg",   brand:"#2f4a3f", accent:"#6aa88f"},
+    {name:"Dentitive", city:"Modèle", url:"https://hellboykader-code.github.io/export-dentitive1-framer-website-ms0t5u8s/", img:"dentitive.jpg", brand:"#0f2733", accent:"#37b3a3"},
+    {name:"Vivéa",     city:"Modèle", url:"https://hellboykader-code.github.io/export-vivadent-framer-website-ms0sw3tb/",  img:"vivea.jpg",     brand:"#0d5c52", accent:"#1aa88f"},
+    {name:"RedDent",   city:"Modèle", url:"https://hellboykader-code.github.io/export-reddent1-framer-website-ms1xnfft/",  img:"reddent.jpg",   brand:"#0b1e17", accent:"#d0fc6d"},
+    {name:"Vitaléa",   city:"Modèle", url:"https://hellboykader-code.github.io/export-med12-framer-website-ms0rzx7s/",     img:"vitalea.jpg",   brand:"#1e2b4a", accent:"#4d7cff"},
+    {name:"Dentry",    city:"Modèle", url:"https://hellboykader-code.github.io/export-kadaaaaa-framer-website-ms1twfho/",  img:"dentry.jpg",    brand:"#2f2733", accent:"#c9a24b"}
   ];
   // carte « site réel en ligne » : vidéo (survol) si dispo, sinon tuile de marque
   function liveCard(c){
@@ -29,6 +36,12 @@
         '<span class="dwp-live-badge"><i></i>En ligne</span>'+
         '<video class="dwp-vid" autoplay muted loop playsinline preload="auto" poster="'+BASE+'/assets/realisations/'+c.vid+'-poster.jpg">'+
           '<source src="'+BASE+'/assets/realisations/'+c.vid+'.mp4" type="video/mp4"></video>'+
+        '</div>';
+    } else if(c.img){
+      // capture d'écran (temporaire, remplacée par la vidéo plus tard)
+      shot='<div class="dwp-card-shot">'+
+        '<span class="dwp-live-badge"><i></i>En ligne</span>'+
+        '<img src="'+BASE+'/assets/realisations/'+c.img+'" alt="Aperçu du site '+c.name+'" loading="lazy">'+
         '</div>';
     } else {
       shot='<div class="dwp-card-shot dwp-live-shot">'+
