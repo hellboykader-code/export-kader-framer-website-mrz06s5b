@@ -223,6 +223,12 @@
         (el.closest('div')||el).style.display="none"; el.style.display="none";
       }
     });
+    // 6) carte du pied de page : forcer l'adresse Créteil (le CMS du thème
+    //    reconstruit l'iframe avec une adresse US -> on impose la bonne).
+    var MAP="https://maps.google.com/maps?q=4+Avenue+du+Mar%C3%A9chal+de+Lattre+de+Tassigny,+94000+Cr%C3%A9teil,+France&z=15&output=embed";
+    document.querySelectorAll('iframe[src*="maps.google"],iframe[src*="google.com/maps"]').forEach(function(f){
+      if(f.getAttribute("src")!==MAP) f.setAttribute("src", MAP);
+    });
   }
 
   function boot(){
