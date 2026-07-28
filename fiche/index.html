@@ -1,0 +1,304 @@
+<title>DentWebPro — Fiche de renseignements</title>
+<style>
+:root{
+  --ink:#17171B; --dark:#1B1B1F; --accent:#F14E30; --accent-d:#D33E22;
+  --paper:#FFFFFF; --bg:#FBFBFC; --panel:#F4F4F6; --line:#E7E7EC; --line-2:#F0F0F3; --soft:#6C6C74; --gold:#C77B2E;
+  --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
+  --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
+}
+*{box-sizing:border-box}
+body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
+.page{max-width:820px;margin:26px auto;background:var(--paper);box-shadow:0 20px 50px -24px rgba(20,20,30,.4);border-radius:6px;overflow:hidden}
+.pad{padding:clamp(24px,5vw,52px)}
+
+.bar{position:sticky;top:0;z-index:10;background:var(--ink);color:#F0F0F2;display:flex;align-items:center;gap:12px;padding:12px clamp(16px,4vw,26px)}
+.bar b{font-weight:600}
+.bar .sp{margin-left:auto}
+.pbtn{font-family:var(--sans);font-weight:600;font-size:.9rem;border:0;border-radius:6px;padding:.6em 1.1em;cursor:pointer;background:var(--accent);color:#fff;transition:background .2s}
+.pbtn:hover{background:var(--accent-d)}
+.pbtn.ghost{background:transparent;border:1px solid rgba(255,255,255,.3);color:#F0F0F2}
+
+.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:22px}
+.brand{display:flex;align-items:center;gap:11px}
+.mark{width:34px;height:34px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.05rem;flex:none}
+.mark span{color:var(--accent)}
+.brand .nm{font-weight:800;font-size:1.25rem;letter-spacing:-.01em}
+.brand .nm span{color:var(--accent)}
+.brand .bl{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin-top:2px}
+.hd .doc{text-align:right}
+.hd .doc h1{font-family:var(--serif);font-size:1.5rem;margin:0;font-weight:600;line-height:1.15}
+.hd .doc p{color:var(--soft);font-size:.82rem;margin:4px 0 0}
+
+.intro{background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:14px 16px;margin:22px 0 6px;font-size:.9rem;color:var(--soft)}
+.intro b{color:var(--ink)}
+
+.sec{margin-top:26px;break-inside:avoid}
+.sec__h{display:flex;align-items:center;gap:11px;margin-bottom:14px}
+.sec__n{width:26px;height:26px;flex:none;border-radius:6px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
+.sec__h h2{font-size:1.05rem;margin:0;font-weight:700;letter-spacing:.01em}
+.sec__h .hint{margin-left:auto;font-size:.72rem;color:var(--soft)}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
+.field{display:flex;flex-direction:column;gap:3px}
+.field.full{grid-column:1/-1}
+.field label{font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
+.field label .star{color:var(--accent)}
+.field input,.field textarea{font-family:var(--sans);font-size:.95rem;color:var(--ink);border:0;border-bottom:1.5px solid var(--line);background:transparent;padding:6px 2px;transition:border-color .2s}
+.field textarea{resize:vertical;min-height:52px;border:1.5px solid var(--line);border-radius:6px;padding:8px}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+
+.hours{width:100%;border-collapse:collapse;font-size:.9rem}
+.hours th,.hours td{border:1px solid var(--line);padding:7px 9px;text-align:left}
+.hours th{background:var(--panel);font-weight:600;font-size:.78rem;letter-spacing:.03em}
+.hours td:first-child{font-weight:500}
+.hours td input{border:0;width:100%;font-family:var(--sans);font-size:.9rem;padding:2px;background:transparent}
+.hours td input:focus{outline:1px solid var(--accent);border-radius:3px}
+
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px}
+@media(max-width:560px){.svc,.grid{grid-template-columns:1fr}}
+.svc__cat > b{display:block;font-size:.82rem;color:var(--accent-d);letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--line-2);padding-bottom:5px;margin-bottom:8px}
+.opt{display:flex;align-items:center;gap:9px;padding:3.5px 0;font-size:.9rem}
+.opt input{appearance:none;-webkit-appearance:none;width:17px;height:17px;flex:none;border:1.6px solid var(--soft);border-radius:4px;cursor:pointer;position:relative;transition:.15s}
+.opt input:checked{background:var(--accent);border-color:var(--accent)}
+.opt input:checked::after{content:"";position:absolute;left:5px;top:1.5px;width:4px;height:9px;border:solid #fff;border-width:0 2.4px 2.4px 0;transform:rotate(45deg)}
+.opt input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+
+.choices{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
+.pick{display:inline-flex;align-items:center;gap:7px;font-size:.9rem;cursor:pointer}
+.pick input{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:1.6px solid var(--soft);border-radius:50%;position:relative;cursor:pointer}
+.pick input[type=checkbox]{border-radius:4px}
+.pick input:checked{border-color:var(--accent)}
+.pick input:checked::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--accent)}
+.pick input[type=checkbox]:checked::after{inset:0;border-radius:0;left:4.5px;top:1px;width:4px;height:8px;border:solid var(--accent);border-width:0 2.2px 2.2px 0;transform:rotate(45deg);background:none}
+
+.file{display:flex;align-items:center;gap:12px;border:1.5px dashed var(--line);border-radius:8px;padding:12px 14px;background:var(--bg)}
+.file .ic{width:30px;height:30px;color:var(--accent);flex:none}
+.file input[type=file]{font-size:.85rem;color:var(--soft)}
+.file input[type=file]::file-selector-button{font-family:var(--sans);font-weight:600;font-size:.82rem;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:6px;padding:.5em .9em;margin-right:10px;cursor:pointer}
+
+.note{margin-top:8px;font-size:.8rem;color:var(--soft);background:#FFF3EE;border-left:3px solid var(--accent);padding:8px 12px;border-radius:0 6px 6px 0}
+
+.actions{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:22px}
+.send{font-family:var(--sans);font-weight:700;font-size:1rem;border:0;border-radius:8px;padding:.9em 1.8em;cursor:pointer;background:var(--accent);color:#fff;transition:background .2s,transform .2s}
+.send:hover{background:var(--accent-d);transform:translateY(-1px)}
+.send2{background:transparent;border:1.5px solid var(--line);color:var(--ink);font-weight:600;border-radius:8px;padding:.85em 1.4em;cursor:pointer}
+.actions small{color:var(--soft);font-size:.78rem}
+
+.foot{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--soft)}
+.foot b{color:var(--ink)}
+.hide{position:absolute;left:-9999px}
+
+@media print{
+  @page{size:A4;margin:14mm 14mm}
+  body{background:#fff;font-size:11.4px}
+  .page{box-shadow:none;margin:0;max-width:none;border-radius:0}
+  .pad{padding:0}
+  .bar,.actions,.file .ic{display:none}
+  .sec,.svc__cat,.field,.opt{break-inside:avoid}
+  .intro,.sec__n,.mark,.opt input:checked,.svc__cat>b{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  input,textarea{border-color:#b3b3ba!important}
+}
+</style>
+
+<form id="fiche" action="https://formsubmit.co/contact@dentwebpro.site" method="POST" enctype="multipart/form-data">
+<input type="hidden" name="_subject" value="Nouvelle fiche cabinet — DentWebPro">
+<input type="hidden" name="_template" value="table">
+<input type="hidden" name="_captcha" value="false">
+<input type="text" name="_honey" class="hide" tabindex="-1" autocomplete="off">
+
+<div class="bar">
+  <b>Fiche de renseignements</b>
+  <span style="opacity:.7;font-size:.85rem">— remplissez, puis envoyez (ou enregistrez en PDF)</span>
+  <span class="sp"></span>
+  <button type="button" class="pbtn ghost" onclick="document.getElementById('fiche').reset()">Réinitialiser</button>
+  <button type="button" class="pbtn ghost" onclick="window.print()">PDF</button>
+  <button type="submit" class="pbtn">Envoyer</button>
+</div>
+
+<div class="page"><div class="pad">
+
+  <div class="hd">
+    <div class="brand">
+      <div class="mark">D<span>.</span></div>
+      <div><div class="nm">Dent<span>WebPro</span></div><div class="bl">Studio web pour cabinets dentaires</div></div>
+    </div>
+    <div class="doc"><h1>Fiche de renseignements</h1><p>Création de votre site web · à remplir par le cabinet</p></div>
+  </div>
+
+  <div class="intro">
+    Ce document nous permet de concevoir un site <b>fidèle à votre cabinet</b>. Remplissez-le à l’écran puis cliquez sur
+    <b>Envoyer</b> — nous recevons tout par e-mail, pièces jointes comprises. Vous pouvez aussi l’<b>enregistrer en PDF</b>.
+    Les champs marqués <b style="color:var(--accent)">★</b> sont essentiels.
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">1</span><h2>Le cabinet</h2></div>
+    <div class="grid">
+      <div class="field"><label>Nom du cabinet <span class="star">★</span></label><input name="Nom du cabinet"></div>
+      <div class="field"><label>Praticien principal (Dr…)</label><input name="Praticien principal"></div>
+      <div class="field full"><label>Autres praticiens (nom + spécialité)</label><input name="Autres praticiens"></div>
+      <div class="field full"><label>Slogan / phrase d’accroche</label><input name="Slogan"></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">2</span><h2>Coordonnées</h2><span class="hint">affichées sur le site</span></div>
+    <div class="grid">
+      <div class="field full"><label>Adresse <span class="star">★</span></label><input name="Adresse"></div>
+      <div class="field"><label>Code postal &amp; ville <span class="star">★</span></label><input name="Code postal et ville"></div>
+      <div class="field"><label>Téléphone <span class="star">★</span></label><input name="Telephone" type="tel"></div>
+      <div class="field"><label>E-mail du cabinet <span class="star">★</span></label><input name="Email du cabinet" type="email"></div>
+      <div class="field"><label>Site web actuel</label><input name="Site actuel"></div>
+      <div class="field"><label>Lien Doctolib / prise de RDV</label><input name="Doctolib"></div>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">3</span><h2>Horaires d’ouverture</h2></div>
+    <table class="hours">
+      <tr><th style="width:26%">Jour</th><th>Matin</th><th>Après-midi</th></tr>
+      <tr><td>Lundi</td><td><input name="Lundi matin" placeholder="ex : 9h – 12h"></td><td><input name="Lundi apres-midi" placeholder="ex : 14h – 19h"></td></tr>
+      <tr><td>Mardi</td><td><input name="Mardi matin"></td><td><input name="Mardi apres-midi"></td></tr>
+      <tr><td>Mercredi</td><td><input name="Mercredi matin"></td><td><input name="Mercredi apres-midi"></td></tr>
+      <tr><td>Jeudi</td><td><input name="Jeudi matin"></td><td><input name="Jeudi apres-midi"></td></tr>
+      <tr><td>Vendredi</td><td><input name="Vendredi matin"></td><td><input name="Vendredi apres-midi"></td></tr>
+      <tr><td>Samedi</td><td><input name="Samedi matin"></td><td><input name="Samedi apres-midi"></td></tr>
+      <tr><td>Dimanche</td><td><input name="Dimanche matin" placeholder="Fermé"></td><td><input name="Dimanche apres-midi"></td></tr>
+    </table>
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">4</span><h2>Vos soins &amp; spécialités</h2><span class="hint">cochez ce que vous proposez</span></div>
+    <div class="svc">
+      <div class="svc__cat"><b>Soins généraux</b>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Consultation & bilan"> Consultation &amp; bilan bucco-dentaire</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Détartrage"> Détartrage / nettoyage</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Soin des caries"> Soin des caries (composite)</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Endodontie"> Dévitalisation (endodontie)</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Extraction"> Extraction dentaire</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Parodontologie"> Traitement des gencives (parodontologie)</label>
+      </div>
+      <div class="svc__cat"><b>Esthétique du sourire</b>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Blanchiment"> Blanchiment dentaire</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Facettes"> Facettes céramiques</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Composite esthétique"> Composite esthétique</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Smile design"> Design du sourire</label>
+      </div>
+      <div class="svc__cat"><b>Prothèses</b>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Couronnes & bridges"> Couronnes &amp; bridges</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Inlays/Onlays"> Inlays / Onlays</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Prothèses amovibles"> Prothèses amovibles (dentiers)</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Prothèses sur implants"> Prothèses sur implants</label>
+      </div>
+      <div class="svc__cat"><b>Chirurgie &amp; implantologie</b>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Implants"> Implants dentaires</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Greffe osseuse"> Greffe osseuse / sinus lift</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Dents de sagesse"> Extraction dents de sagesse</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Chirurgie parodontale"> Chirurgie parodontale</label>
+      </div>
+      <div class="svc__cat"><b>Orthodontie</b>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Ortho enfant"> Orthodontie enfant / adolescent</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Ortho adulte"> Orthodontie adulte</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Aligneurs"> Aligneurs transparents (Invisalign…)</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Bagues"> Bagues / appareils</label>
+      </div>
+      <div class="svc__cat"><b>Confort &amp; spécifiques</b>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Pédodontie"> Dentisterie de l’enfant (pédodontie)</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Urgences"> Urgences dentaires</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Sédation MEOPA"> Gestion de l’anxiété / sédation (MEOPA)</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Apnée du sommeil"> Ronflement &amp; apnée du sommeil</label>
+        <label class="opt"><input type="checkbox" name="Soins[]" value="Imagerie 3D"> Radiologie / imagerie 3D (cone beam)</label>
+      </div>
+    </div>
+    <div class="field full" style="margin-top:12px"><label>Autres soins / précisions</label><input name="Autres soins"></div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">5</span><h2>Logo &amp; identité visuelle</h2></div>
+    <div class="choices" style="margin-bottom:12px">
+      <span style="font-size:.9rem;color:var(--soft)">Avez-vous déjà un logo ?</span>
+      <label class="pick"><input type="radio" name="Logo existant" value="Oui"> Oui (joignez-le ci-dessous)</label>
+      <label class="pick"><input type="radio" name="Logo existant" value="Non - à créer"> Non — créez-le pour moi</label>
+    </div>
+    <div class="file" style="margin-bottom:12px">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+      <div><div style="font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)">Votre logo (si existant)</div>
+        <input type="file" name="Logo" accept="image/*,.pdf,.ai,.svg"></div>
+    </div>
+    <div class="grid">
+      <div class="field"><label>Couleurs souhaitées</label><input name="Couleurs" placeholder="ex : bleu, blanc, or…"></div>
+      <div class="field"><label>Sites / cabinets dont vous aimez le style</label><input name="Inspirations"></div>
+    </div>
+    <div class="choices" style="margin-top:12px">
+      <span style="font-size:.9rem;color:var(--soft)">Style :</span>
+      <label class="pick"><input type="checkbox" name="Style[]" value="Moderne"> Moderne</label>
+      <label class="pick"><input type="checkbox" name="Style[]" value="Classique"> Classique / élégant</label>
+      <label class="pick"><input type="checkbox" name="Style[]" value="Chaleureux"> Chaleureux</label>
+      <label class="pick"><input type="checkbox" name="Style[]" value="Minimaliste"> Minimaliste</label>
+      <label class="pick"><input type="checkbox" name="Style[]" value="Luxe"> Luxe</label>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">6</span><h2>Photos &amp; présentation</h2></div>
+    <div class="file" style="margin-bottom:12px">
+      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5L5 19"/></svg>
+      <div><div style="font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)">Photos du cabinet &amp; de l’équipe</div>
+        <input type="file" name="Photos" accept="image/*" multiple></div>
+    </div>
+    <div class="field full"><label>Texte de présentation « À propos » — histoire, valeurs, année d’ouverture</label><textarea name="A propos"></textarea></div>
+    <div class="note">★ Des <b>photos réelles</b> rendent votre site unique et fidèle. Nous les intégrons à la place des images génériques.</div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">7</span><h2>Rendez-vous &amp; options</h2></div>
+    <div class="choices" style="margin-bottom:12px">
+      <span style="font-size:.9rem;color:var(--soft)">Formulaire de rendez-vous en ligne ?</span>
+      <label class="pick"><input type="radio" name="Formulaire RDV" value="Oui"> Oui</label>
+      <label class="pick"><input type="radio" name="Formulaire RDV" value="Non"> Non</label>
+    </div>
+    <div class="grid"><div class="field full"><label>E-mail de réception des demandes de RDV <span class="star">★</span></label><input name="Email reception RDV" type="email"></div></div>
+    <div class="choices" style="margin-top:12px"><span style="font-size:.9rem;color:var(--soft)">Prise en charge :</span>
+      <label class="pick"><input type="checkbox" name="Prise en charge[]" value="Tiers payant"> Carte Vitale / tiers payant</label>
+      <label class="pick"><input type="checkbox" name="Prise en charge[]" value="Mutuelles"> Mutuelles</label>
+      <label class="pick"><input type="checkbox" name="Prise en charge[]" value="CMU"> CMU</label>
+    </div>
+    <div class="choices" style="margin-top:10px"><span style="font-size:.9rem;color:var(--soft)">Accès :</span>
+      <label class="pick"><input type="checkbox" name="Acces[]" value="PMR"> Accès PMR</label>
+      <label class="pick"><input type="checkbox" name="Acces[]" value="Parking"> Parking</label>
+      <label class="pick"><input type="checkbox" name="Acces[]" value="Transports"> Transports à proximité</label>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">8</span><h2>Réseaux &amp; nom de domaine</h2></div>
+    <div class="grid">
+      <div class="field"><label>Instagram</label><input name="Instagram"></div>
+      <div class="field"><label>Facebook</label><input name="Facebook"></div>
+      <div class="field"><label>Autres réseaux</label><input name="Autres reseaux"></div>
+      <div class="field"><label>Nom de domaine souhaité</label><input name="Nom de domaine" placeholder="ex : cabinet-xxx.fr"></div>
+    </div>
+    <div class="choices" style="margin-top:10px"><span style="font-size:.9rem;color:var(--soft)">Domaine :</span>
+      <label class="pick"><input type="radio" name="Statut domaine" value="Déjà"> J’en ai déjà un</label>
+      <label class="pick"><input type="radio" name="Statut domaine" value="A réserver"> À réserver pour moi</label>
+    </div>
+  </div>
+
+  <div class="sec">
+    <div class="sec__h"><span class="sec__n">9</span><h2>Remarques &amp; demandes particulières</h2></div>
+    <div class="field full"><textarea name="Remarques" style="min-height:80px"></textarea></div>
+  </div>
+
+  <div class="actions">
+    <button type="submit" class="send">Envoyer à DentWebPro ↗</button>
+    <button type="button" class="send2" onclick="window.print()">Enregistrer en PDF</button>
+    <small>En envoyant, vous acceptez d’être recontacté·e pour votre projet.</small>
+  </div>
+
+  <div class="foot">
+    <span>Merci ! Nous préparons votre site dès réception.</span>
+    <span><b>contact@dentwebpro.site</b> · dentwebpro.site</span>
+  </div>
+
+</div></div>
+</form>

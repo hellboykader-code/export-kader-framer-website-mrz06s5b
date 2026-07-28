@@ -665,8 +665,13 @@ section{position:relative}
 
   /* ---- Booking submit ---- */
   var form=$('#bookForm'),thanks=$('#thanks');
+  var RDV_EMAIL='kaderhb33@gmail.com'; // e-mail du praticien (reçoit les demandes de RDV)
   $('#bookBtn').addEventListener('click',function(){
     if(!form.checkValidity()){form.reportValidity();return;}
+    var data={site:'sereine',_subject:'Nouvelle demande de rendez-vous — Sereine',
+      Prénom:$('#fn').value,Nom:$('#ln').value,Téléphone:$('#ph').value,'E-mail':$('#em').value,
+      Jour:$('#dj').value,Heure:$('#hr').value,Soin:$('#so').value,Message:$('#ms').value};
+    try{fetch('https://dentwebpro.site/send.php',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)}).catch(function(){});}catch(e){}
     $('#thName').textContent=($('#fn').value||'').trim()||'c’est noté';
     thanks.classList.add('show');
   });
