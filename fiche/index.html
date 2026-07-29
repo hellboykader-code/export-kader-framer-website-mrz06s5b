@@ -1,7 +1,7 @@
 <title>DentWebPro — Fiche de renseignements</title>
 <style>
 :root{
-  --ink:#17171B; --dark:#1B1B1F; --accent:#F14E30; --accent-d:#D33E22;
+  --ink:#17171B; --dark:#1B1B1F; --accent:#f55733; --accent-d:#d8431f;
   --paper:#FFFFFF; --bg:#FBFBFC; --panel:#F4F4F6; --line:#E7E7EC; --line-2:#F0F0F3; --soft:#6C6C74; --gold:#C77B2E;
   --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
   --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
@@ -100,10 +100,9 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
 }
 </style>
 
-<form id="fiche" action="https://formsubmit.co/contact@dentwebpro.site" method="POST" enctype="multipart/form-data">
+<form id="fiche" action="https://dentwebpro.site/send.php" method="POST" enctype="multipart/form-data">
+<input type="hidden" name="site" value="fiche">
 <input type="hidden" name="_subject" value="Nouvelle fiche cabinet — DentWebPro">
-<input type="hidden" name="_template" value="table">
-<input type="hidden" name="_captcha" value="false">
 <input type="text" name="_honey" class="hide" tabindex="-1" autocomplete="off">
 
 <div class="bar">
@@ -119,8 +118,8 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
 
   <div class="hd">
     <div class="brand">
-      <div class="mark">D<span>.</span></div>
-      <div><div class="nm">Dent<span>WebPro</span></div><div class="bl">Studio web pour cabinets dentaires</div></div>
+      <div class="mark"><svg viewBox="0 0 64 64" width="24" height="24" fill="none" style="display:block"><path d="M18 20 L46 20 L32 44 Z" stroke="#fff" stroke-width="4" stroke-linejoin="round"/><line x1="18" y1="20" x2="32" y2="44" stroke="#fff" stroke-width="4"/><circle cx="18" cy="20" r="6" fill="#f55733"/><circle cx="46" cy="20" r="6" fill="#fff"/><circle cx="32" cy="44" r="6" fill="#f55733"/></svg></div>
+      <div><div class="nm">Dent<span>Web</span>Pro</div><div class="bl">Studio web pour cabinets dentaires</div></div>
     </div>
     <div class="doc"><h1>Fiche de renseignements</h1><p>Création de votre site web · à remplir par le cabinet</p></div>
   </div>
@@ -302,3 +301,40 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
 
 </div></div>
 </form>
+
+<div id="fiche-thanks" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(20,20,26,.55);align-items:center;justify-content:center;padding:20px">
+  <div style="max-width:460px;width:100%;background:#fff;border-radius:16px;padding:38px 34px;text-align:center;box-shadow:0 30px 70px -24px rgba(20,20,30,.5)">
+    <div style="width:66px;height:66px;border-radius:50%;background:#e9f8ef;display:grid;place-items:center;margin:0 auto 18px">
+      <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="#1a9e54" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <h2 style="margin:0 0 8px;font-size:1.4rem;color:#17171B">Fiche envoyée, merci !</h2>
+    <p style="margin:0 0 22px;color:#6C6C74;font-size:.96rem;line-height:1.55">Nous avons bien reçu votre fiche et vos fichiers. Nous vous recontactons rapidement pour lancer votre site.</p>
+    <a href="/" class="pbtn" style="display:inline-block;text-decoration:none">Retour à l’accueil</a>
+  </div>
+</div>
+
+<script>
+(function(){
+  var f=document.getElementById('fiche');
+  var thanks=document.getElementById('fiche-thanks');
+  if(!f) return;
+  f.addEventListener('submit',function(ev){
+    ev.preventDefault();
+    var btns=f.querySelectorAll('button[type="submit"],.send');
+    var labels=[];
+    btns.forEach(function(b,i){ labels[i]=b.textContent; b.disabled=true; if(b.classList.contains('send')) b.textContent='Envoi en cours…'; });
+    var fd=new FormData(f); // inclut les fichiers (logo, photos)
+    fd.set('site','fiche');
+    fetch('https://dentwebpro.site/send.php',{method:'POST',body:fd})
+      .then(function(r){return r.json();})
+      .then(function(j){
+        if(j&&j.success){ thanks.style.display='flex'; try{ f.reset(); }catch(_){} window.scrollTo({top:0,behavior:'smooth'}); }
+        else { throw new Error('fail'); }
+      })
+      .catch(function(){
+        alert('L’envoi n’a pas abouti. Vérifiez votre connexion et réessayez, ou écrivez-nous à contact@dentwebpro.site.');
+      })
+      .finally(function(){ btns.forEach(function(b,i){ b.disabled=false; b.textContent=labels[i]; }); });
+  });
+})();
+</script>
