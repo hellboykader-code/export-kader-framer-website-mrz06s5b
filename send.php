@@ -248,5 +248,49 @@ $headers .= "X-Mailer: PHP\r\n";
 $subjectEnc = '=?UTF-8?B?'.base64_encode($subject).'?=';
 $ok = @mail($to, $subjectEnc, $body, $headers, '-f'.$FROM);
 
+/* ---------- e-mail de confirmation AU CABINET (fiche uniquement) ---------- */
+/* Accusé de réception automatique envoyé à l'adresse e-mail du cabinet, pour
+   rassurer le praticien : « Nous avons bien reçu votre fiche. » */
+if ($site === 'fiche' && !empty($cabEmail) && filter_var($cabEmail, FILTER_VALIDATE_EMAIL)) {
+  $cName = $cabinet ?: 'votre cabinet';
+  $cSubject = 'Nous avons bien reçu votre fiche — '.$BRAND;
+
+  $cText = "Bonjour,\r\n\r\n"
+    ."Merci ! Nous avons bien reçu la fiche de renseignements".($cabinet ? " de $cabinet" : "").".\r\n"
+    ."Notre équipe étudie vos informations et revient vers vous très vite pour lancer la conception de votre site.\r\n\r\n"
+    ."Si vous souhaitez ajouter un détail ou une photo, répondez simplement à cet e-mail.\r\n\r\n"
+    ."À très bientôt,\r\nL'équipe $BRAND\r\ncontact@dentwebpro.site — dentwebpro.site\r\n";
+
+  $cHtml = '<!doctype html><html><body style="margin:0;padding:0;background:#f4f5f7">'
+    .'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f7;padding:28px 12px"><tr><td align="center">'
+    .'<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(20,20,30,.06)">'
+    .'<tr><td style="background:'.$ACCENT.';padding:22px 30px;font:700 18px Arial,sans-serif;color:#fff">DentWebPro</td></tr>'
+    .'<tr><td style="padding:30px 30px 6px">'
+    .'<div style="font:700 22px Arial,sans-serif;color:#15171b">Votre fiche est bien reçue ✅</div>'
+    .'<div style="font:15px/1.6 Arial,sans-serif;color:#3a3a42;margin-top:14px">Bonjour,<br><br>'
+    .'Merci d\'avoir rempli la fiche de renseignements'.($cabinet ? ' de <strong style="color:#15171b">'.e($cabinet).'</strong>' : '').'. '
+    .'Notre équipe étudie vos informations et revient vers vous très vite pour lancer la conception de votre site.</div>'
+    .'</td></tr>'
+    .'<tr><td style="padding:18px 30px 4px"><div style="background:#fff6f3;border:1px solid #ffd9cf;border-radius:10px;padding:16px 18px;font:14px/1.6 Arial,sans-serif;color:#15171b">'
+    .'Une question, un détail ou une photo à ajouter ? <strong>Répondez simplement à cet e-mail.</strong></div></td></tr>'
+    .'<tr><td style="padding:24px 30px 30px"><div style="border-top:1px solid #eef0f3;padding-top:16px;font:13px Arial,sans-serif;color:#9aa0a6">'
+    .'À très bientôt,<br>L\'équipe DentWebPro — <a href="https://dentwebpro.site" style="color:'.$ACCENT.';text-decoration:none">dentwebpro.site</a>'
+    .'</div></td></tr>'
+    .'</table></td></tr></table></body></html>';
+
+  $cAlt = 'alt_'.md5(uniqid('', true));
+  $cBody  = "--$cAlt\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n$cText\r\n\r\n";
+  $cBody .= "--$cAlt\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n$cHtml\r\n\r\n";
+  $cBody .= "--$cAlt--\r\n";
+
+  $cHeaders  = "MIME-Version: 1.0\r\n";
+  $cHeaders .= "Content-Type: multipart/alternative; boundary=\"$cAlt\"\r\n";
+  $cHeaders .= "From: $BRAND <$FROM>\r\n";
+  $cHeaders .= "Reply-To: $FROM\r\n";
+  $cHeaders .= "X-Mailer: PHP\r\n";
+
+  @mail($cabEmail, '=?UTF-8?B?'.base64_encode($cSubject).'?=', $cBody, $cHeaders, '-f'.$FROM);
+}
+
 echo json_encode($ok ? ['success'=>true] : ['success'=>false,'message'=>"L'envoi a échoué, réessayez."]);
 if (!$ok) http_response_code(500);
