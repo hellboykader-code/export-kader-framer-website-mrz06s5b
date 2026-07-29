@@ -6,349 +6,333 @@
 <title>DentWebPro — Fiche de renseignements</title>
 <style>
 :root{
-  --ink:#17171B; --dark:#1B1B1F; --accent:#f55733; --accent-d:#d8431f;
-  --paper:#FFFFFF; --bg:#FBFBFC; --panel:#F4F4F6; --line:#E7E7EC; --line-2:#F0F0F3; --soft:#6C6C74; --gold:#C77B2E;
+  --ink:#17171B; --accent:#f55733; --accent-d:#d8431f; --soft:#6c6c74;
+  --line:#e7ded2; --line2:#efe7db; --card:#fff;
   --sans:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;
-  --serif:'Iowan Old Style','Palatino Linotype',Palatino,Georgia,serif;
 }
 *{box-sizing:border-box}
-body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-size:14.5px;line-height:1.5;-webkit-font-smoothing:antialiased}
-.page{max-width:820px;margin:26px auto;background:var(--paper);box-shadow:0 20px 50px -24px rgba(20,20,30,.4);border-radius:6px;overflow:hidden}
-.pad{padding:clamp(24px,5vw,52px)}
+html,body{height:100%}
+body{margin:0;color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;
+  background:radial-gradient(120% 80% at 50% -10%,#ffffff 0%,#f7f0e6 60%,#f2e9db 100%);}
+.fx{min-height:100%;display:flex;flex-direction:column}
 
-.bar{position:sticky;top:0;z-index:10;background:var(--ink);color:#F0F0F2;display:flex;align-items:center;gap:12px;padding:12px clamp(16px,4vw,26px)}
-.bar b{font-weight:600}
-.bar .sp{margin-left:auto}
-.pbtn{font-family:var(--sans);font-weight:600;font-size:.9rem;border:0;border-radius:6px;padding:.6em 1.1em;cursor:pointer;background:var(--accent);color:#fff;transition:background .2s}
-.pbtn:hover{background:var(--accent-d)}
-.pbtn.ghost{background:transparent;border:1px solid rgba(255,255,255,.3);color:#F0F0F2}
+/* top bar */
+.fx-top{display:flex;align-items:center;gap:16px;padding:18px clamp(18px,4vw,40px)}
+.fx-brand{display:flex;align-items:center;gap:11px}
+.fx-brand .mk{width:36px;height:36px;border-radius:10px;background:var(--ink);display:grid;place-items:center;flex:none}
+.fx-brand .wm{font-weight:800;font-size:19px;letter-spacing:-.02em;color:var(--ink)}
+.fx-brand .wm span{color:var(--accent)}
+.fx-dots{display:flex;gap:7px;margin:0 auto}
+.fx-dots i{width:9px;height:9px;border-radius:50%;background:#e0d6c6;transition:.3s}
+.fx-dots i.done{background:#c9a06a}
+.fx-dots i.a{background:var(--accent);width:26px;border-radius:100px}
+.fx-reset{background:none;border:1.5px solid var(--line);color:var(--soft);font-weight:600;font-size:.85rem;border-radius:100px;padding:8px 16px;cursor:pointer;font-family:var(--sans)}
+.fx-reset:hover{color:var(--ink);border-color:#d8ccbb}
 
-.hd{display:flex;justify-content:space-between;align-items:flex-start;gap:20px;border-bottom:2px solid var(--ink);padding-bottom:22px}
-.brand{display:flex;align-items:center;gap:11px}
-.mark{width:34px;height:34px;border-radius:8px;background:var(--ink);display:grid;place-items:center;color:#fff;font-weight:800;font-size:1.05rem;flex:none}
-.mark span{color:var(--accent)}
-.brand .nm{font-weight:800;font-size:1.25rem;letter-spacing:-.01em}
-.brand .nm span{color:var(--accent)}
-.brand .bl{font-size:.66rem;letter-spacing:.18em;text-transform:uppercase;color:var(--soft);margin-top:2px}
-.hd .doc{text-align:right}
-.hd .doc h1{font-family:var(--serif);font-size:1.5rem;margin:0;font-weight:600;line-height:1.15}
-.hd .doc p{color:var(--soft);font-size:.82rem;margin:4px 0 0}
+/* main scroll + centered column */
+.fx-main{flex:1;overflow-y:auto}
+.fx-scroll{min-height:100%;display:flex;align-items:center;justify-content:center;padding:34px clamp(18px,4vw,40px) 40px}
+.fx-col{width:100%;max-width:680px}
 
-.intro{background:var(--panel);border:1px solid var(--line-2);border-radius:8px;padding:14px 16px;margin:22px 0 6px;font-size:.9rem;color:var(--soft)}
-.intro b{color:var(--ink)}
+/* step head (question) */
+.sec{display:none}
+.sec.is-active{display:block;animation:fxIn .42s cubic-bezier(.2,.7,.2,1)}
+@keyframes fxIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.fx-q{text-align:center;margin-bottom:30px}
+.fx-ey{color:var(--accent);font-weight:700;font-size:12.5px;letter-spacing:.13em;text-transform:uppercase}
+.fx-q h2{font-size:clamp(1.9rem,4.4vw,2.5rem);letter-spacing:-.03em;margin:9px 0 8px;line-height:1.12}
+.fx-lead{color:var(--soft);font-size:15.5px;margin:0 auto;max-width:46ch}
 
-.sec{margin-top:26px;break-inside:avoid}
-.sec__h{display:flex;align-items:center;gap:11px;margin-bottom:14px}
-.sec__n{width:26px;height:26px;flex:none;border-radius:6px;background:var(--ink);color:#fff;display:grid;place-items:center;font-weight:700;font-size:.85rem}
-.sec__h h2{font-size:1.05rem;margin:0;font-weight:700;letter-spacing:.01em}
-.sec__h .hint{margin-left:auto;font-size:.72rem;color:var(--soft)}
-
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px}
-.field{display:flex;flex-direction:column;gap:3px}
+/* fields */
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px 18px}
+.field{display:flex;flex-direction:column;gap:7px}
 .field.full{grid-column:1/-1}
-.field label{font-size:.72rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)}
+.field label{font-size:12.5px;font-weight:600;color:#40404a}
 .field label .star{color:var(--accent)}
-.field input,.field textarea{font-family:var(--sans);font-size:.95rem;color:var(--ink);border:0;border-bottom:1.5px solid var(--line);background:transparent;padding:6px 2px;transition:border-color .2s}
-.field textarea{resize:vertical;min-height:52px;border:1.5px solid var(--line);border-radius:6px;padding:8px}
-.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent)}
+.field input,.field textarea{font-family:var(--sans);font-size:15px;color:var(--ink);border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:13px 15px;transition:border-color .2s,box-shadow .2s}
+.field textarea{resize:vertical;min-height:96px}
+.field input:focus,.field textarea:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px rgba(245,87,51,.13)}
+.field--err label{color:var(--accent)}
+.field--err input,.field--err textarea{border-color:var(--accent)!important}
 
-.hours{width:100%;border-collapse:collapse;font-size:.9rem}
-.hours th,.hours td{border:1px solid var(--line);padding:7px 9px;text-align:left}
-.hours th{background:var(--panel);font-weight:600;font-size:.78rem;letter-spacing:.03em}
-.hours td:first-child{font-weight:500}
-.hours td input{border:0;width:100%;font-family:var(--sans);font-size:.9rem;padding:2px;background:transparent}
-.hours td input:focus{outline:1px solid var(--accent);border-radius:3px}
+/* horaires */
+.hours{width:100%;border-collapse:separate;border-spacing:0 6px;font-size:.92rem}
+.hours th{text-align:left;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase;color:var(--soft);font-weight:700;padding:0 8px 4px}
+.hours td{padding:0 6px}
+.hours td:first-child{font-weight:600;white-space:nowrap;color:#40404a}
+.hours td input{width:100%;border:1.5px solid var(--line);background:#fff;border-radius:9px;padding:9px 11px;font-family:var(--sans);font-size:.92rem}
+.hours td input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,87,51,.12)}
 
-.svc{display:grid;grid-template-columns:1fr 1fr;gap:18px 26px}
-@media(max-width:560px){.svc,.grid{grid-template-columns:1fr}}
-.svc__cat > b{display:block;font-size:.82rem;color:var(--accent-d);letter-spacing:.04em;text-transform:uppercase;border-bottom:1px solid var(--line-2);padding-bottom:5px;margin-bottom:8px}
-.opt{display:flex;align-items:center;gap:9px;padding:3.5px 0;font-size:.9rem}
-.opt input{appearance:none;-webkit-appearance:none;width:17px;height:17px;flex:none;border:1.6px solid var(--soft);border-radius:4px;cursor:pointer;position:relative;transition:.15s}
+/* soins cards */
+.svc{display:grid;grid-template-columns:1fr 1fr;gap:20px 26px;text-align:left}
+.svc__cat > b{display:block;font-size:.72rem;color:var(--accent);letter-spacing:.06em;text-transform:uppercase;font-weight:800;margin-bottom:9px}
+.opt{display:flex;align-items:center;gap:10px;padding:8px 11px;font-size:.92rem;border:1.5px solid var(--line);border-radius:10px;background:#fff;cursor:pointer;margin-bottom:7px;transition:.15s}
+.opt:hover{border-color:#e0cbb4}
+.opt input{appearance:none;-webkit-appearance:none;width:18px;height:18px;flex:none;border:1.6px solid #c9bda9;border-radius:5px;cursor:pointer;position:relative;transition:.15s}
 .opt input:checked{background:var(--accent);border-color:var(--accent)}
 .opt input:checked::after{content:"";position:absolute;left:5px;top:1.5px;width:4px;height:9px;border:solid #fff;border-width:0 2.4px 2.4px 0;transform:rotate(45deg)}
-.opt input:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.opt:has(input:checked){border-color:var(--accent);background:#fff6f3}
 
-.choices{display:flex;flex-wrap:wrap;gap:8px 16px;align-items:center}
-.pick{display:inline-flex;align-items:center;gap:7px;font-size:.9rem;cursor:pointer}
-.pick input{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:1.6px solid var(--soft);border-radius:50%;position:relative;cursor:pointer}
-.pick input[type=checkbox]{border-radius:4px}
+/* choices (radios/checkboxes en ligne) */
+.choices{display:flex;flex-wrap:wrap;gap:9px 12px;align-items:center;text-align:left}
+.choices > span{font-size:.92rem;color:var(--soft);width:100%}
+.pick{display:inline-flex;align-items:center;gap:8px;font-size:.92rem;cursor:pointer;border:1.5px solid var(--line);background:#fff;border-radius:100px;padding:8px 14px;transition:.15s}
+.pick:hover{border-color:#e0cbb4}
+.pick input{appearance:none;-webkit-appearance:none;width:16px;height:16px;border:1.6px solid #c9bda9;border-radius:50%;position:relative;cursor:pointer}
+.pick input[type=checkbox]{border-radius:5px}
 .pick input:checked{border-color:var(--accent)}
 .pick input:checked::after{content:"";position:absolute;inset:3px;border-radius:50%;background:var(--accent)}
 .pick input[type=checkbox]:checked::after{inset:0;border-radius:0;left:4.5px;top:1px;width:4px;height:8px;border:solid var(--accent);border-width:0 2.2px 2.2px 0;transform:rotate(45deg);background:none}
+.pick:has(input:checked){border-color:var(--accent);background:#fff6f3}
 
-.file{display:flex;align-items:center;gap:12px;border:1.5px dashed var(--line);border-radius:8px;padding:12px 14px;background:var(--bg)}
+/* file */
+.file{display:flex;align-items:center;gap:13px;border:1.5px dashed var(--line);border-radius:12px;padding:15px 16px;background:#fffdf9}
 .file .ic{width:30px;height:30px;color:var(--accent);flex:none}
 .file input[type=file]{font-size:.85rem;color:var(--soft)}
-.file input[type=file]::file-selector-button{font-family:var(--sans);font-weight:600;font-size:.82rem;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:6px;padding:.5em .9em;margin-right:10px;cursor:pointer}
+.file input[type=file]::file-selector-button{font-family:var(--sans);font-weight:600;font-size:.82rem;border:1px solid var(--line);background:#fff;color:var(--ink);border-radius:8px;padding:.55em 1em;margin-right:10px;cursor:pointer}
+.note{margin-top:12px;font-size:.83rem;color:var(--soft);background:#fff6f3;border-left:3px solid var(--accent);padding:10px 13px;border-radius:0 8px 8px 0;text-align:left}
+.note b{color:var(--ink)}
+.mt{margin-top:14px}
 
-.note{margin-top:8px;font-size:.8rem;color:var(--soft);background:#FFF3EE;border-left:3px solid var(--accent);padding:8px 12px;border-radius:0 6px 6px 0}
-
-.actions{margin-top:30px;display:flex;gap:12px;flex-wrap:wrap;align-items:center;border-top:1px solid var(--line);padding-top:22px}
-.send{font-family:var(--sans);font-weight:700;font-size:1rem;border:0;border-radius:8px;padding:.9em 1.8em;cursor:pointer;background:var(--accent);color:#fff;transition:background .2s,transform .2s}
-.send:hover{background:var(--accent-d);transform:translateY(-1px)}
-.send2{background:transparent;border:1.5px solid var(--line);color:var(--ink);font-weight:600;border-radius:8px;padding:.85em 1.4em;cursor:pointer}
-.actions small{color:var(--soft);font-size:.78rem}
-
-.foot{margin-top:22px;border-top:1px solid var(--line);padding-top:16px;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;font-size:.8rem;color:var(--soft)}
-.foot b{color:var(--ink)}
+/* nav */
+.fx-nav{display:flex;align-items:center;gap:14px;margin-top:34px}
+.fx-nav .sp{margin-left:auto}
+.fx-btn{font-family:var(--sans);font-weight:700;font-size:15.5px;border:0;border-radius:13px;padding:15px 34px;cursor:pointer;transition:background .2s,transform .15s,border-color .2s;display:inline-flex;align-items:center;gap:9px}
+.fx-btn--primary{background:var(--accent);color:#fff;box-shadow:0 14px 30px -12px rgba(245,87,51,.7)}
+.fx-btn--primary:hover{background:var(--accent-d);transform:translateY(-2px)}
+.fx-btn--ghost{background:#fff;border:1.5px solid var(--line);color:var(--ink)}
+.fx-btn--ghost:hover{border-color:#d8ccbb}
+.fx-btn[hidden]{display:none}
+.fx-pdf{background:none;border:0;color:var(--soft);font-size:.83rem;text-decoration:underline;cursor:pointer;padding:6px;font-family:var(--sans)}
 .hide{position:absolute;left:-9999px}
 
-/* ===== Assistant multi-étapes (wizard) ===== */
-.wz-progress{margin:22px 0 10px}
-.wz-progress__bar{height:6px;background:var(--line);border-radius:100px;overflow:hidden}
-.wz-progress__fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:100px;width:11%;transition:width .38s cubic-bezier(.2,.7,.2,1)}
-.wz-progress__meta{display:flex;justify-content:space-between;align-items:center;margin-top:11px}
-.wz-progress__step{font-size:.82rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--accent)}
-.wz-progress__count{font-size:.82rem;color:var(--soft);font-weight:600}
-.sec{margin-top:10px;display:none}
-.sec.is-active{display:block;animation:wzIn .4s cubic-bezier(.2,.7,.2,1)}
-@keyframes wzIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
-.field--err label{color:var(--accent)}
-.field--err input,.field--err textarea{border-color:var(--accent)!important}
-.wz-nav{display:flex;align-items:center;gap:12px;margin-top:30px;border-top:1px solid var(--line);padding-top:22px;flex-wrap:wrap}
-.wz-nav .sp{margin-left:auto}
-.wz-btn{font-family:var(--sans);font-weight:700;font-size:1rem;border:0;border-radius:10px;padding:.85em 1.7em;cursor:pointer;transition:background .2s,transform .15s,border-color .2s;display:inline-flex;align-items:center;gap:8px}
-.wz-btn--primary{background:var(--accent);color:#fff}
-.wz-btn--primary:hover{background:var(--accent-d);transform:translateY(-1px)}
-.wz-btn--ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
-.wz-btn--ghost:hover{border-color:var(--soft)}
-.wz-btn[hidden]{display:none}
-.wz-pdf{background:none;border:0;color:var(--soft);font-size:.82rem;text-decoration:underline;cursor:pointer;padding:6px}
-.wz-hint{margin-top:14px;font-size:.78rem;color:var(--soft)}
+@media(max-width:600px){
+  .grid,.svc{grid-template-columns:1fr}
+  .fx-dots i:not(.a){width:7px;height:7px}
+  .fx-btn{padding:14px 22px;font-size:15px}
+}
 
+/* impression : tout afficher */
 @media print{
-  @page{size:A4;margin:14mm 14mm}
-  body{background:#fff;font-size:11.4px}
-  .page{box-shadow:none;margin:0;max-width:none;border-radius:0}
-  .pad{padding:0}
-  .bar,.wz-progress,.wz-nav,.file .ic{display:none!important}
-  .sec{display:block!important;margin-top:20px}
-  .sec,.svc__cat,.field,.opt{break-inside:avoid}
-  .intro,.sec__n,.mark,.opt input:checked,.svc__cat>b{-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  input,textarea{border-color:#b3b3ba!important}
+  @page{size:A4;margin:13mm}
+  body{background:#fff}
+  .fx-top,.fx-nav,.fx-dots{display:none!important}
+  .fx-main{overflow:visible}
+  .fx-scroll{display:block;padding:0}
+  .fx-col{max-width:none}
+  .sec{display:block!important;margin-bottom:22px;break-inside:avoid}
+  .fx-q{text-align:left}
+  .opt,.pick,.field input,.field textarea{-webkit-print-color-adjust:exact;print-color-adjust:exact}
 }
 </style>
 </head>
 <body>
+<div class="fx">
 
-<form id="fiche" action="https://dentwebpro.site/send.php" method="POST" enctype="multipart/form-data">
-<input type="hidden" name="site" value="fiche">
-<input type="hidden" name="_subject" value="Nouvelle fiche cabinet — DentWebPro">
-<input type="text" name="_honey" class="hide" tabindex="-1" autocomplete="off">
+  <header class="fx-top">
+    <div class="fx-brand">
+      <div class="mk"><svg viewBox="0 0 44 44" width="24" height="24" fill="none"><rect x="10" y="12" width="24" height="17" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M17 33h10M22 29v4" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 19 Q22 26 28 19" fill="none" stroke="#f55733" stroke-width="2.8" stroke-linecap="round"/></svg></div>
+      <div class="wm">Dent<span>Web</span>Pro</div>
+    </div>
+    <div class="fx-dots" id="fxDots"></div>
+    <button type="button" class="fx-reset" id="wzReset">Recommencer</button>
+  </header>
 
-<div class="bar">
-  <b>Fiche de renseignements</b>
-  <span style="opacity:.7;font-size:.85rem">— étape par étape, en quelques minutes</span>
-  <span class="sp"></span>
-  <button type="button" class="pbtn ghost" id="wzReset">Recommencer</button>
+  <form id="fiche" action="https://dentwebpro.site/send.php" method="POST" enctype="multipart/form-data">
+  <input type="hidden" name="site" value="fiche">
+  <input type="hidden" name="_subject" value="Nouvelle fiche cabinet — DentWebPro">
+  <input type="text" name="_honey" class="hide" tabindex="-1" autocomplete="off">
+
+  <div class="fx-main"><div class="fx-scroll"><div class="fx-col">
+
+    <!-- 1 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 1 · Votre cabinet</span><h2>Comment s’appelle votre cabinet ?</h2><p class="fx-lead">Ces informations apparaîtront sur votre site.</p></div>
+      <div class="grid">
+        <div class="field full"><label>Nom du cabinet <span class="star">★</span></label><input name="Nom du cabinet"></div>
+        <div class="field"><label>Praticien principal (Dr…)</label><input name="Praticien principal"></div>
+        <div class="field"><label>Autres praticiens (nom + spécialité)</label><input name="Autres praticiens"></div>
+        <div class="field full"><label>Slogan / phrase d’accroche</label><input name="Slogan"></div>
+      </div>
+    </section>
+
+    <!-- 2 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 2 · Coordonnées</span><h2>Où vous trouve-t-on ?</h2><p class="fx-lead">Vos coordonnées, telles qu’elles s’afficheront sur le site.</p></div>
+      <div class="grid">
+        <div class="field full"><label>Adresse <span class="star">★</span></label><input name="Adresse"></div>
+        <div class="field"><label>Code postal &amp; ville <span class="star">★</span></label><input name="Code postal et ville"></div>
+        <div class="field"><label>Téléphone <span class="star">★</span></label><input name="Telephone" type="tel"></div>
+        <div class="field"><label>E-mail du cabinet <span class="star">★</span></label><input name="Email du cabinet" type="email"></div>
+        <div class="field"><label>Site web actuel</label><input name="Site actuel"></div>
+        <div class="field"><label>Lien Doctolib / prise de RDV</label><input name="Doctolib"></div>
+      </div>
+    </section>
+
+    <!-- 3 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 3 · Horaires</span><h2>Quels sont vos horaires ?</h2><p class="fx-lead">Laissez vide les créneaux de fermeture.</p></div>
+      <table class="hours">
+        <tr><th style="width:26%">Jour</th><th>Matin</th><th>Après-midi</th></tr>
+        <tr><td>Lundi</td><td><input name="Lundi matin" placeholder="ex : 9h – 12h"></td><td><input name="Lundi apres-midi" placeholder="ex : 14h – 19h"></td></tr>
+        <tr><td>Mardi</td><td><input name="Mardi matin"></td><td><input name="Mardi apres-midi"></td></tr>
+        <tr><td>Mercredi</td><td><input name="Mercredi matin"></td><td><input name="Mercredi apres-midi"></td></tr>
+        <tr><td>Jeudi</td><td><input name="Jeudi matin"></td><td><input name="Jeudi apres-midi"></td></tr>
+        <tr><td>Vendredi</td><td><input name="Vendredi matin"></td><td><input name="Vendredi apres-midi"></td></tr>
+        <tr><td>Samedi</td><td><input name="Samedi matin"></td><td><input name="Samedi apres-midi"></td></tr>
+        <tr><td>Dimanche</td><td><input name="Dimanche matin" placeholder="Fermé"></td><td><input name="Dimanche apres-midi"></td></tr>
+      </table>
+    </section>
+
+    <!-- 4 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 4 · Vos soins</span><h2>Quels soins proposez-vous ?</h2><p class="fx-lead">Cochez tout ce que vous proposez — cela construit votre page « Soins ».</p></div>
+      <div class="svc">
+        <div class="svc__cat"><b>Soins généraux</b>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Consultation & bilan"> Consultation &amp; bilan bucco-dentaire</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Détartrage"> Détartrage / nettoyage</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Soin des caries"> Soin des caries (composite)</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Endodontie"> Dévitalisation (endodontie)</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Extraction"> Extraction dentaire</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Parodontologie"> Traitement des gencives (parodontologie)</label>
+        </div>
+        <div class="svc__cat"><b>Esthétique du sourire</b>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Blanchiment"> Blanchiment dentaire</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Facettes"> Facettes céramiques</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Composite esthétique"> Composite esthétique</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Smile design"> Design du sourire</label>
+        </div>
+        <div class="svc__cat"><b>Prothèses</b>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Couronnes & bridges"> Couronnes &amp; bridges</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Inlays/Onlays"> Inlays / Onlays</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Prothèses amovibles"> Prothèses amovibles (dentiers)</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Prothèses sur implants"> Prothèses sur implants</label>
+        </div>
+        <div class="svc__cat"><b>Chirurgie &amp; implantologie</b>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Implants"> Implants dentaires</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Greffe osseuse"> Greffe osseuse / sinus lift</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Dents de sagesse"> Extraction dents de sagesse</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Chirurgie parodontale"> Chirurgie parodontale</label>
+        </div>
+        <div class="svc__cat"><b>Orthodontie</b>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Ortho enfant"> Orthodontie enfant / adolescent</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Ortho adulte"> Orthodontie adulte</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Aligneurs"> Aligneurs transparents (Invisalign…)</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Bagues"> Bagues / appareils</label>
+        </div>
+        <div class="svc__cat"><b>Confort &amp; spécifiques</b>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Pédodontie"> Dentisterie de l’enfant (pédodontie)</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Urgences"> Urgences dentaires</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Sédation MEOPA"> Gestion de l’anxiété / sédation (MEOPA)</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Apnée du sommeil"> Ronflement &amp; apnée du sommeil</label>
+          <label class="opt"><input type="checkbox" name="Soins[]" value="Imagerie 3D"> Radiologie / imagerie 3D (cone beam)</label>
+        </div>
+      </div>
+      <div class="field full mt"><label>Autres soins / précisions</label><input name="Autres soins"></div>
+    </section>
+
+    <!-- 5 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 5 · Identité</span><h2>Votre logo &amp; vos couleurs</h2><p class="fx-lead">Un logo existant ? Des couleurs ? Un style ?</p></div>
+      <div class="choices" style="margin-bottom:14px">
+        <span>Avez-vous déjà un logo ?</span>
+        <label class="pick"><input type="radio" name="Logo existant" value="Oui"> Oui (joignez-le ci-dessous)</label>
+        <label class="pick"><input type="radio" name="Logo existant" value="Non - à créer"> Non — créez-le pour moi</label>
+      </div>
+      <div class="file" style="margin-bottom:14px">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
+        <div><div style="font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)">Votre logo (si existant)</div>
+          <input type="file" name="Logo" accept="image/*,.pdf,.ai,.svg"></div>
+      </div>
+      <div class="grid">
+        <div class="field"><label>Couleurs souhaitées</label><input name="Couleurs" placeholder="ex : bleu, blanc, or…"></div>
+        <div class="field"><label>Sites dont vous aimez le style</label><input name="Inspirations"></div>
+      </div>
+      <div class="choices mt">
+        <span>Style souhaité :</span>
+        <label class="pick"><input type="checkbox" name="Style[]" value="Moderne"> Moderne</label>
+        <label class="pick"><input type="checkbox" name="Style[]" value="Classique"> Classique / élégant</label>
+        <label class="pick"><input type="checkbox" name="Style[]" value="Chaleureux"> Chaleureux</label>
+        <label class="pick"><input type="checkbox" name="Style[]" value="Minimaliste"> Minimaliste</label>
+        <label class="pick"><input type="checkbox" name="Style[]" value="Luxe"> Luxe</label>
+      </div>
+    </section>
+
+    <!-- 6 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 6 · Photos</span><h2>Ajoutez vos photos</h2><p class="fx-lead">De vraies photos rendent votre site unique et fidèle.</p></div>
+      <div class="file" style="margin-bottom:14px">
+        <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5L5 19"/></svg>
+        <div><div style="font-size:.72rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)">Photos du cabinet &amp; de l’équipe</div>
+          <input type="file" name="Photos" accept="image/*" multiple></div>
+      </div>
+      <div class="field full"><label>Texte de présentation « À propos » — histoire, valeurs, année d’ouverture</label><textarea name="A propos"></textarea></div>
+      <div class="note">★ Nous intégrons vos photos réelles à la place des images génériques.</div>
+    </section>
+
+    <!-- 7 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 7 · Rendez-vous</span><h2>La prise de rendez-vous</h2><p class="fx-lead">Comment vos patients vous contactent.</p></div>
+      <div class="choices" style="margin-bottom:14px">
+        <span>Formulaire de rendez-vous en ligne ?</span>
+        <label class="pick"><input type="radio" name="Formulaire RDV" value="Oui"> Oui</label>
+        <label class="pick"><input type="radio" name="Formulaire RDV" value="Non"> Non</label>
+      </div>
+      <div class="grid"><div class="field full"><label>E-mail de réception des demandes de RDV <span class="star">★</span></label><input name="Email reception RDV" type="email"></div></div>
+      <div class="choices mt"><span>Prise en charge :</span>
+        <label class="pick"><input type="checkbox" name="Prise en charge[]" value="Tiers payant"> Carte Vitale / tiers payant</label>
+        <label class="pick"><input type="checkbox" name="Prise en charge[]" value="Mutuelles"> Mutuelles</label>
+        <label class="pick"><input type="checkbox" name="Prise en charge[]" value="CMU"> CMU</label>
+      </div>
+      <div class="choices mt"><span>Accès :</span>
+        <label class="pick"><input type="checkbox" name="Acces[]" value="PMR"> Accès PMR</label>
+        <label class="pick"><input type="checkbox" name="Acces[]" value="Parking"> Parking</label>
+        <label class="pick"><input type="checkbox" name="Acces[]" value="Transports"> Transports à proximité</label>
+      </div>
+    </section>
+
+    <!-- 8 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 8 · En ligne</span><h2>Domaine &amp; réseaux sociaux</h2><p class="fx-lead">Pour votre présence en ligne.</p></div>
+      <div class="grid">
+        <div class="field"><label>Instagram</label><input name="Instagram"></div>
+        <div class="field"><label>Facebook</label><input name="Facebook"></div>
+        <div class="field"><label>Autres réseaux</label><input name="Autres reseaux"></div>
+        <div class="field"><label>Nom de domaine souhaité</label><input name="Nom de domaine" placeholder="ex : cabinet-xxx.fr"></div>
+      </div>
+      <div class="choices mt"><span>Nom de domaine :</span>
+        <label class="pick"><input type="radio" name="Statut domaine" value="Déjà"> J’en ai déjà un</label>
+        <label class="pick"><input type="radio" name="Statut domaine" value="A réserver"> À réserver pour moi</label>
+      </div>
+    </section>
+
+    <!-- 9 -->
+    <section class="sec">
+      <div class="fx-q"><span class="fx-ey">Étape 9 · Derniers mots</span><h2>Une dernière remarque ?</h2><p class="fx-lead">Un détail à ne pas oublier ? C’est le moment.</p></div>
+      <div class="field full"><textarea name="Remarques" style="min-height:120px"></textarea></div>
+    </section>
+
+    <!-- navigation -->
+    <div class="fx-nav">
+      <button type="button" class="fx-btn fx-btn--ghost" id="wzPrev" hidden>← Précédent</button>
+      <button type="button" class="fx-pdf" onclick="window.print()">Enregistrer en PDF</button>
+      <span class="sp"></span>
+      <button type="button" class="fx-btn fx-btn--primary" id="wzNext">Continuer →</button>
+      <button type="submit" class="fx-btn fx-btn--primary send" id="wzSend" hidden>Envoyer →</button>
+    </div>
+
+  </div></div></div>
+  </form>
 </div>
 
-<div class="page"><div class="pad">
-
-  <div class="hd">
-    <div class="brand">
-      <div class="mark"><svg viewBox="0 0 44 44" width="26" height="26" fill="none" style="display:block"><rect x="10" y="12" width="24" height="17" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M17 33h10M22 29v4" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 19 Q22 26 28 19" fill="none" stroke="#f55733" stroke-width="2.8" stroke-linecap="round"/></svg></div>
-      <div><div class="nm">Dent<span>Web</span>Pro</div><div class="bl">Studio web pour cabinets dentaires</div></div>
-    </div>
-    <div class="doc"><h1>Fiche de renseignements</h1><p>Création de votre site web · à remplir par le cabinet</p></div>
-  </div>
-
-  <div class="intro">
-    Répondez étape par étape — cela nous permet de concevoir un site <b>fidèle à votre cabinet</b>.
-    Les champs marqués <b style="color:var(--accent)">★</b> sont essentiels. Tout est envoyé à la fin, pièces jointes comprises.
-  </div>
-
-  <div class="wz-progress">
-    <div class="wz-progress__bar"><div class="wz-progress__fill" id="wzFill"></div></div>
-    <div class="wz-progress__meta">
-      <span class="wz-progress__step" id="wzStep">Étape 1 — Le cabinet</span>
-      <span class="wz-progress__count" id="wzCount">1 / 9</span>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">1</span><h2>Le cabinet</h2></div>
-    <div class="grid">
-      <div class="field"><label>Nom du cabinet <span class="star">★</span></label><input name="Nom du cabinet"></div>
-      <div class="field"><label>Praticien principal (Dr…)</label><input name="Praticien principal"></div>
-      <div class="field full"><label>Autres praticiens (nom + spécialité)</label><input name="Autres praticiens"></div>
-      <div class="field full"><label>Slogan / phrase d’accroche</label><input name="Slogan"></div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">2</span><h2>Coordonnées</h2><span class="hint">affichées sur le site</span></div>
-    <div class="grid">
-      <div class="field full"><label>Adresse <span class="star">★</span></label><input name="Adresse"></div>
-      <div class="field"><label>Code postal &amp; ville <span class="star">★</span></label><input name="Code postal et ville"></div>
-      <div class="field"><label>Téléphone <span class="star">★</span></label><input name="Telephone" type="tel"></div>
-      <div class="field"><label>E-mail du cabinet <span class="star">★</span></label><input name="Email du cabinet" type="email"></div>
-      <div class="field"><label>Site web actuel</label><input name="Site actuel"></div>
-      <div class="field"><label>Lien Doctolib / prise de RDV</label><input name="Doctolib"></div>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">3</span><h2>Horaires d’ouverture</h2></div>
-    <table class="hours">
-      <tr><th style="width:26%">Jour</th><th>Matin</th><th>Après-midi</th></tr>
-      <tr><td>Lundi</td><td><input name="Lundi matin" placeholder="ex : 9h – 12h"></td><td><input name="Lundi apres-midi" placeholder="ex : 14h – 19h"></td></tr>
-      <tr><td>Mardi</td><td><input name="Mardi matin"></td><td><input name="Mardi apres-midi"></td></tr>
-      <tr><td>Mercredi</td><td><input name="Mercredi matin"></td><td><input name="Mercredi apres-midi"></td></tr>
-      <tr><td>Jeudi</td><td><input name="Jeudi matin"></td><td><input name="Jeudi apres-midi"></td></tr>
-      <tr><td>Vendredi</td><td><input name="Vendredi matin"></td><td><input name="Vendredi apres-midi"></td></tr>
-      <tr><td>Samedi</td><td><input name="Samedi matin"></td><td><input name="Samedi apres-midi"></td></tr>
-      <tr><td>Dimanche</td><td><input name="Dimanche matin" placeholder="Fermé"></td><td><input name="Dimanche apres-midi"></td></tr>
-    </table>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">4</span><h2>Vos soins &amp; spécialités</h2><span class="hint">cochez ce que vous proposez</span></div>
-    <div class="svc">
-      <div class="svc__cat"><b>Soins généraux</b>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Consultation & bilan"> Consultation &amp; bilan bucco-dentaire</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Détartrage"> Détartrage / nettoyage</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Soin des caries"> Soin des caries (composite)</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Endodontie"> Dévitalisation (endodontie)</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Extraction"> Extraction dentaire</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Parodontologie"> Traitement des gencives (parodontologie)</label>
-      </div>
-      <div class="svc__cat"><b>Esthétique du sourire</b>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Blanchiment"> Blanchiment dentaire</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Facettes"> Facettes céramiques</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Composite esthétique"> Composite esthétique</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Smile design"> Design du sourire</label>
-      </div>
-      <div class="svc__cat"><b>Prothèses</b>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Couronnes & bridges"> Couronnes &amp; bridges</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Inlays/Onlays"> Inlays / Onlays</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Prothèses amovibles"> Prothèses amovibles (dentiers)</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Prothèses sur implants"> Prothèses sur implants</label>
-      </div>
-      <div class="svc__cat"><b>Chirurgie &amp; implantologie</b>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Implants"> Implants dentaires</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Greffe osseuse"> Greffe osseuse / sinus lift</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Dents de sagesse"> Extraction dents de sagesse</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Chirurgie parodontale"> Chirurgie parodontale</label>
-      </div>
-      <div class="svc__cat"><b>Orthodontie</b>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Ortho enfant"> Orthodontie enfant / adolescent</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Ortho adulte"> Orthodontie adulte</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Aligneurs"> Aligneurs transparents (Invisalign…)</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Bagues"> Bagues / appareils</label>
-      </div>
-      <div class="svc__cat"><b>Confort &amp; spécifiques</b>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Pédodontie"> Dentisterie de l’enfant (pédodontie)</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Urgences"> Urgences dentaires</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Sédation MEOPA"> Gestion de l’anxiété / sédation (MEOPA)</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Apnée du sommeil"> Ronflement &amp; apnée du sommeil</label>
-        <label class="opt"><input type="checkbox" name="Soins[]" value="Imagerie 3D"> Radiologie / imagerie 3D (cone beam)</label>
-      </div>
-    </div>
-    <div class="field full" style="margin-top:12px"><label>Autres soins / précisions</label><input name="Autres soins"></div>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">5</span><h2>Logo &amp; identité visuelle</h2></div>
-    <div class="choices" style="margin-bottom:12px">
-      <span style="font-size:.9rem;color:var(--soft)">Avez-vous déjà un logo ?</span>
-      <label class="pick"><input type="radio" name="Logo existant" value="Oui"> Oui (joignez-le ci-dessous)</label>
-      <label class="pick"><input type="radio" name="Logo existant" value="Non - à créer"> Non — créez-le pour moi</label>
-    </div>
-    <div class="file" style="margin-bottom:12px">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 16V4m0 0L8 8m4-4l4 4"/><path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2"/></svg>
-      <div><div style="font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)">Votre logo (si existant)</div>
-        <input type="file" name="Logo" accept="image/*,.pdf,.ai,.svg"></div>
-    </div>
-    <div class="grid">
-      <div class="field"><label>Couleurs souhaitées</label><input name="Couleurs" placeholder="ex : bleu, blanc, or…"></div>
-      <div class="field"><label>Sites / cabinets dont vous aimez le style</label><input name="Inspirations"></div>
-    </div>
-    <div class="choices" style="margin-top:12px">
-      <span style="font-size:.9rem;color:var(--soft)">Style :</span>
-      <label class="pick"><input type="checkbox" name="Style[]" value="Moderne"> Moderne</label>
-      <label class="pick"><input type="checkbox" name="Style[]" value="Classique"> Classique / élégant</label>
-      <label class="pick"><input type="checkbox" name="Style[]" value="Chaleureux"> Chaleureux</label>
-      <label class="pick"><input type="checkbox" name="Style[]" value="Minimaliste"> Minimaliste</label>
-      <label class="pick"><input type="checkbox" name="Style[]" value="Luxe"> Luxe</label>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">6</span><h2>Photos &amp; présentation</h2></div>
-    <div class="file" style="margin-bottom:12px">
-      <svg class="ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="5" width="18" height="14" rx="2"/><circle cx="8.5" cy="10" r="1.5"/><path d="M21 16l-5-5L5 19"/></svg>
-      <div><div style="font-size:.78rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--soft)">Photos du cabinet &amp; de l’équipe</div>
-        <input type="file" name="Photos" accept="image/*" multiple></div>
-    </div>
-    <div class="field full"><label>Texte de présentation « À propos » — histoire, valeurs, année d’ouverture</label><textarea name="A propos"></textarea></div>
-    <div class="note">★ Des <b>photos réelles</b> rendent votre site unique et fidèle. Nous les intégrons à la place des images génériques.</div>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">7</span><h2>Rendez-vous &amp; options</h2></div>
-    <div class="choices" style="margin-bottom:12px">
-      <span style="font-size:.9rem;color:var(--soft)">Formulaire de rendez-vous en ligne ?</span>
-      <label class="pick"><input type="radio" name="Formulaire RDV" value="Oui"> Oui</label>
-      <label class="pick"><input type="radio" name="Formulaire RDV" value="Non"> Non</label>
-    </div>
-    <div class="grid"><div class="field full"><label>E-mail de réception des demandes de RDV <span class="star">★</span></label><input name="Email reception RDV" type="email"></div></div>
-    <div class="choices" style="margin-top:12px"><span style="font-size:.9rem;color:var(--soft)">Prise en charge :</span>
-      <label class="pick"><input type="checkbox" name="Prise en charge[]" value="Tiers payant"> Carte Vitale / tiers payant</label>
-      <label class="pick"><input type="checkbox" name="Prise en charge[]" value="Mutuelles"> Mutuelles</label>
-      <label class="pick"><input type="checkbox" name="Prise en charge[]" value="CMU"> CMU</label>
-    </div>
-    <div class="choices" style="margin-top:10px"><span style="font-size:.9rem;color:var(--soft)">Accès :</span>
-      <label class="pick"><input type="checkbox" name="Acces[]" value="PMR"> Accès PMR</label>
-      <label class="pick"><input type="checkbox" name="Acces[]" value="Parking"> Parking</label>
-      <label class="pick"><input type="checkbox" name="Acces[]" value="Transports"> Transports à proximité</label>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">8</span><h2>Réseaux &amp; nom de domaine</h2></div>
-    <div class="grid">
-      <div class="field"><label>Instagram</label><input name="Instagram"></div>
-      <div class="field"><label>Facebook</label><input name="Facebook"></div>
-      <div class="field"><label>Autres réseaux</label><input name="Autres reseaux"></div>
-      <div class="field"><label>Nom de domaine souhaité</label><input name="Nom de domaine" placeholder="ex : cabinet-xxx.fr"></div>
-    </div>
-    <div class="choices" style="margin-top:10px"><span style="font-size:.9rem;color:var(--soft)">Domaine :</span>
-      <label class="pick"><input type="radio" name="Statut domaine" value="Déjà"> J’en ai déjà un</label>
-      <label class="pick"><input type="radio" name="Statut domaine" value="A réserver"> À réserver pour moi</label>
-    </div>
-  </div>
-
-  <div class="sec">
-    <div class="sec__h"><span class="sec__n">9</span><h2>Remarques &amp; demandes particulières</h2></div>
-    <div class="field full"><textarea name="Remarques" style="min-height:80px"></textarea></div>
-  </div>
-
-  <div class="wz-nav">
-    <button type="button" class="wz-btn wz-btn--ghost" id="wzPrev" hidden>← Précédent</button>
-    <button type="button" class="wz-pdf" onclick="window.print()">Enregistrer en PDF</button>
-    <span class="sp"></span>
-    <button type="button" class="wz-btn wz-btn--primary" id="wzNext">Suivant →</button>
-    <button type="submit" class="wz-btn wz-btn--primary send" id="wzSend" hidden>Envoyer à DentWebPro ↗</button>
-  </div>
-  <div class="wz-hint" id="wzHint">Étape 1 sur 9 — commençons par votre cabinet.</div>
-
-  <div class="foot">
-    <span>Merci ! Nous préparons votre site dès réception.</span>
-    <span><b>contact@dentwebpro.site</b> · dentwebpro.site</span>
-  </div>
-
-</div></div>
-</form>
-
-<div id="fiche-thanks" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(20,20,26,.55);align-items:center;justify-content:center;padding:20px">
-  <div style="max-width:460px;width:100%;background:#fff;border-radius:16px;padding:38px 34px;text-align:center;box-shadow:0 30px 70px -24px rgba(20,20,30,.5)">
-    <div style="width:66px;height:66px;border-radius:50%;background:#e9f8ef;display:grid;place-items:center;margin:0 auto 18px">
+<div id="fiche-thanks" style="display:none;position:fixed;inset:0;z-index:100;background:rgba(20,20,26,.6);align-items:center;justify-content:center;padding:20px">
+  <div style="max-width:460px;width:100%;background:#fff;border-radius:18px;padding:40px 34px;text-align:center;box-shadow:0 30px 70px -24px rgba(20,20,30,.5)">
+    <div style="width:68px;height:68px;border-radius:50%;background:#e9f8ef;display:grid;place-items:center;margin:0 auto 18px">
       <svg width="34" height="34" viewBox="0 0 24 24" fill="none"><path d="m5 13 4 4L19 7" stroke="#1a9e54" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </div>
-    <h2 style="margin:0 0 8px;font-size:1.4rem;color:#17171B">Fiche envoyée, merci !</h2>
-    <p style="margin:0 0 22px;color:#6C6C74;font-size:.96rem;line-height:1.55">Nous avons bien reçu votre fiche et vos fichiers. Nous vous recontactons rapidement pour lancer votre site.</p>
-    <a href="/" class="pbtn" style="display:inline-block;text-decoration:none">Retour à l’accueil</a>
+    <h2 style="margin:0 0 8px;font-size:1.5rem;color:#17171B">Fiche envoyée, merci !</h2>
+    <p style="margin:0 0 24px;color:#6C6C74;font-size:.98rem;line-height:1.55">Nous avons bien reçu votre fiche et vos fichiers. Nous vous recontactons rapidement pour lancer votre site.</p>
+    <a href="/" class="fx-btn fx-btn--primary" style="display:inline-block;text-decoration:none">Retour à l’accueil</a>
   </div>
 </div>
 
@@ -357,13 +341,16 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
   var f=document.getElementById('fiche');
   var thanks=document.getElementById('fiche-thanks');
   if(!f) return;
-
-  /* ---- Assistant multi-étapes (une section = une étape) ---- */
   var steps=[].slice.call(f.querySelectorAll('.sec'));
-  var titles=steps.map(function(s){ var h=s.querySelector('.sec__h h2'); return h?h.textContent.trim():''; });
   var prevB=document.getElementById('wzPrev'), nextB=document.getElementById('wzNext'), sendB=document.getElementById('wzSend');
-  var fill=document.getElementById('wzFill'), stepL=document.getElementById('wzStep'), countL=document.getElementById('wzCount'), hint=document.getElementById('wzHint');
+  var dotsWrap=document.getElementById('fxDots');
+  var main=f.querySelector('.fx-main');
   var cur=0;
+
+  // points de progression
+  steps.forEach(function(){ var d=document.createElement('i'); dotsWrap.appendChild(d); });
+  var dots=[].slice.call(dotsWrap.children);
+
   function clearErr(step){ [].forEach.call(step.querySelectorAll('.field--err'),function(el){el.classList.remove('field--err');}); }
   function validate(step){
     var ok=true, first=null;
@@ -377,25 +364,28 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
   }
   function render(){
     steps.forEach(function(s,i){ s.classList.toggle('is-active',i===cur); });
-    fill.style.width=((cur+1)/steps.length*100)+'%';
-    stepL.textContent='Étape '+(cur+1)+' — '+titles[cur];
-    countL.textContent=(cur+1)+' / '+steps.length;
+    dots.forEach(function(d,i){ d.className = i===cur ? 'a' : (i<cur ? 'done' : ''); });
     prevB.hidden=(cur===0);
     var last=(cur===steps.length-1);
     nextB.hidden=last; sendB.hidden=!last;
-    hint.textContent = last ? 'Dernière étape — cliquez sur « Envoyer » pour nous transmettre votre fiche.' : ('Étape '+(cur+1)+' sur '+steps.length+'.');
-    var card=document.querySelector('.page'); if(card){ card.scrollIntoView({behavior:'smooth',block:'start'}); }
+    if(main) main.scrollTop=0;
   }
   nextB.addEventListener('click',function(){ if(validate(steps[cur])){ cur=Math.min(cur+1,steps.length-1); render(); } });
   prevB.addEventListener('click',function(){ clearErr(steps[cur]); cur=Math.max(cur-1,0); render(); });
   var reset=document.getElementById('wzReset');
   if(reset) reset.addEventListener('click',function(){ f.reset(); steps.forEach(clearErr); cur=0; render(); });
+  // Entrée = Continuer / Envoyer (sauf dans un textarea)
+  f.addEventListener('keydown',function(e){
+    if(e.key!=='Enter' || e.target.tagName==='TEXTAREA') return;
+    e.preventDefault();
+    if(sendB.hidden) nextB.click(); else sendB.click();
+  });
   render();
 
-  /* ---- Envoi (send.php, pièces jointes comprises) ---- */
+  /* envoi (send.php, pièces jointes comprises) */
   f.addEventListener('submit',function(ev){
     ev.preventDefault();
-    for(var i=0;i<steps.length;i++){ if(!validate(steps[i])){ cur=i; render(); return; } } // saute à la 1re étape incomplète
+    for(var i=0;i<steps.length;i++){ if(!validate(steps[i])){ cur=i; render(); return; } }
     var btns=f.querySelectorAll('button[type="submit"],.send');
     var labels=[];
     btns.forEach(function(b,i){ labels[i]=b.textContent; b.disabled=true; if(b.classList.contains('send')) b.textContent='Envoi en cours…'; });
