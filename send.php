@@ -140,7 +140,7 @@ $html = '<!doctype html><html><body style="margin:0;padding:0;background:#f4f5f7
 . ($replyBtn ? '<tr><td style="padding:22px 30px 4px">'.$replyBtn.'</td></tr>' : '')
         // footer
 .       '<tr><td style="padding:24px 30px 30px"><div style="border-top:1px solid #eef0f3;padding-top:16px;font:12px Arial,sans-serif;color:#9aa0a6">'
-.         'Message envoyé automatiquement depuis le formulaire de votre site.<br>Propulsé par <a href="https://dentwebpro.site" style="color:'.$ACCENT.';text-decoration:none">DentWebPro</a>.'
+.         'Message envoyé automatiquement depuis le formulaire de votre site — DentWebPro.'
 .       '</div></td></tr>'
 .     '</table>'
 .   '</td></tr>'
@@ -155,8 +155,8 @@ $body .= "--$boundary--\r\n";
 $headers  = "MIME-Version: 1.0\r\n";
 $headers .= "Content-Type: multipart/alternative; boundary=\"$boundary\"\r\n";
 $headers .= "From: $BRAND <$FROM>\r\n";
-$headers .= "Reply-To: $replyTo\r\n";
-$headers .= "X-Mailer: DentWebPro-Mailer\r\n";
+$headers .= "Reply-To: $FROM\r\n"; // même domaine = évite le motif "phishing" (From domaine / Reply-To gmail) filtré en spam
+$headers .= "X-Mailer: PHP\r\n";
 
 $subjectEnc = '=?UTF-8?B?'.base64_encode($subject).'?=';
 $ok = @mail($to, $subjectEnc, $body, $headers, '-f'.$FROM);
