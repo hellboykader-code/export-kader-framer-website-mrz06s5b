@@ -37,6 +37,8 @@ $RECIPIENTS = [
   'reddent'   => 'kaderhb33@gmail.com',
   'dentitive' => 'kaderhb33@gmail.com',
   'fiche'     => 'contact@dentwebpro.site',  // la fiche de renseignements revient au studio
+  'demo'      => 'contact@dentwebpro.site',  // formulaires des sites-modèles (galerie)
+  'studio'    => 'contact@dentwebpro.site',  // formulaire de contact du studio DentWebPro
   'test'      => 'kaderhb33@gmail.com',
 ];
 

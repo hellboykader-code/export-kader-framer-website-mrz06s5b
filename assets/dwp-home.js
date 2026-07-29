@@ -317,7 +317,30 @@
     });
   }
 
+  // message de retour du formulaire de contact studio
+  function studioMsg(f,ok){
+    var b=f.parentNode&&f.parentNode.querySelector('.dwp-cmsg');
+    if(!b){ b=document.createElement('div'); b.className='dwp-cmsg'; if(f.parentNode) f.parentNode.appendChild(b); }
+    b.style.cssText='margin-top:14px;padding:13px 16px;border-radius:10px;font-weight:600;font-family:inherit;'+(ok?'background:#e7f6ec;color:#137a3a':'background:#fdecea;color:#b3261e');
+    b.textContent=ok?'Merci ! Votre message a bien été envoyé — nous vous recontactons vite.':'Une erreur est survenue. Réessayez ou écrivez à contact@dentwebpro.site.';
+    if(ok){ try{ f.reset(); }catch(_){ } }
+  }
+
   function boot(){
+    // formulaire de contact du studio : le <form> Framer natif échoue en statique
+    // -> on intercepte l'envoi (phase capture) et on poste vers send.php.
+    document.addEventListener('submit',function(e){
+      var f=e.target; if(!f||!f.querySelector) return;
+      if(!(f.querySelector('input[name="Name"]') && f.querySelector('select[name="Service"]'))) return;
+      e.preventDefault(); e.stopImmediatePropagation();
+      var v=function(s){ var el=f.querySelector(s); return el?el.value:''; };
+      var data={ site:'studio', _subject:'Nouveau message — Contact DentWebPro',
+        'Nom':v('[name="Name"]'), 'E-mail':v('[name="Email"]'),
+        'Service':v('[name="Service"]'), 'Message':v('[name="Text Area"]') };
+      fetch('https://dentwebpro.site/send.php',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)})
+        .then(function(r){return r.json();}).then(function(j){ studioMsg(f,j&&j.success); }).catch(function(){ studioMsg(f,false); });
+    },true);
+
     apply();
     [200,400,800,1200,2000,2800,4000,6000].forEach(function(t){ setTimeout(apply,t); });
     // arrivée sur l'accueil avec #dwp-gallery (depuis une autre page) : descendre vers

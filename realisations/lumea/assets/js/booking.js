@@ -57,6 +57,19 @@ function handleBookingSubmit(form) {
 }
 
 function sendBookingEmail(data) {
+  var payload = {
+    site: 'demo',
+    _subject: 'Demande de rendez-vous (démo) — DentWebPro',
+    'Prénom': data.patient_name, 'Nom': data.patient_lastname,
+    'E-mail': data.patient_email, 'Téléphone': data.patient_phone,
+    'Soin': data.service, 'Jour': data.date, 'Heure': data.time, 'Message': data.message
+  };
+  return fetch('https://dentwebpro.site/send.php', {
+    method: 'POST', headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+    body: JSON.stringify(payload)
+  }).then(function (r) { return r.json(); }).then(function (j) { if (!j || !j.success) throw new Error('fail'); });
+}
+function __sendBookingEmail_old(data) {
   var isConfigured =
     window.emailjs &&
     EMAILJS_PUBLIC_KEY.indexOf('YOUR_') !== 0 &&
