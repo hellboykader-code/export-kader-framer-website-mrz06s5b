@@ -93,12 +93,36 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
 .foot b{color:var(--ink)}
 .hide{position:absolute;left:-9999px}
 
+/* ===== Assistant multi-étapes (wizard) ===== */
+.wz-progress{margin:22px 0 10px}
+.wz-progress__bar{height:6px;background:var(--line);border-radius:100px;overflow:hidden}
+.wz-progress__fill{height:100%;background:linear-gradient(90deg,var(--accent),var(--gold));border-radius:100px;width:11%;transition:width .38s cubic-bezier(.2,.7,.2,1)}
+.wz-progress__meta{display:flex;justify-content:space-between;align-items:center;margin-top:11px}
+.wz-progress__step{font-size:.82rem;font-weight:700;letter-spacing:.03em;text-transform:uppercase;color:var(--accent)}
+.wz-progress__count{font-size:.82rem;color:var(--soft);font-weight:600}
+.sec{margin-top:10px;display:none}
+.sec.is-active{display:block;animation:wzIn .4s cubic-bezier(.2,.7,.2,1)}
+@keyframes wzIn{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.field--err label{color:var(--accent)}
+.field--err input,.field--err textarea{border-color:var(--accent)!important}
+.wz-nav{display:flex;align-items:center;gap:12px;margin-top:30px;border-top:1px solid var(--line);padding-top:22px;flex-wrap:wrap}
+.wz-nav .sp{margin-left:auto}
+.wz-btn{font-family:var(--sans);font-weight:700;font-size:1rem;border:0;border-radius:10px;padding:.85em 1.7em;cursor:pointer;transition:background .2s,transform .15s,border-color .2s;display:inline-flex;align-items:center;gap:8px}
+.wz-btn--primary{background:var(--accent);color:#fff}
+.wz-btn--primary:hover{background:var(--accent-d);transform:translateY(-1px)}
+.wz-btn--ghost{background:transparent;border:1.5px solid var(--line);color:var(--ink)}
+.wz-btn--ghost:hover{border-color:var(--soft)}
+.wz-btn[hidden]{display:none}
+.wz-pdf{background:none;border:0;color:var(--soft);font-size:.82rem;text-decoration:underline;cursor:pointer;padding:6px}
+.wz-hint{margin-top:14px;font-size:.78rem;color:var(--soft)}
+
 @media print{
   @page{size:A4;margin:14mm 14mm}
   body{background:#fff;font-size:11.4px}
   .page{box-shadow:none;margin:0;max-width:none;border-radius:0}
   .pad{padding:0}
-  .bar,.actions,.file .ic{display:none}
+  .bar,.wz-progress,.wz-nav,.file .ic{display:none!important}
+  .sec{display:block!important;margin-top:20px}
   .sec,.svc__cat,.field,.opt{break-inside:avoid}
   .intro,.sec__n,.mark,.opt input:checked,.svc__cat>b{-webkit-print-color-adjust:exact;print-color-adjust:exact}
   input,textarea{border-color:#b3b3ba!important}
@@ -114,11 +138,9 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
 
 <div class="bar">
   <b>Fiche de renseignements</b>
-  <span style="opacity:.7;font-size:.85rem">— remplissez, puis envoyez (ou enregistrez en PDF)</span>
+  <span style="opacity:.7;font-size:.85rem">— étape par étape, en quelques minutes</span>
   <span class="sp"></span>
-  <button type="button" class="pbtn ghost" onclick="document.getElementById('fiche').reset()">Réinitialiser</button>
-  <button type="button" class="pbtn ghost" onclick="window.print()">PDF</button>
-  <button type="submit" class="pbtn">Envoyer</button>
+  <button type="button" class="pbtn ghost" id="wzReset">Recommencer</button>
 </div>
 
 <div class="page"><div class="pad">
@@ -132,9 +154,16 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
   </div>
 
   <div class="intro">
-    Ce document nous permet de concevoir un site <b>fidèle à votre cabinet</b>. Remplissez-le à l’écran puis cliquez sur
-    <b>Envoyer</b> — nous recevons tout par e-mail, pièces jointes comprises. Vous pouvez aussi l’<b>enregistrer en PDF</b>.
-    Les champs marqués <b style="color:var(--accent)">★</b> sont essentiels.
+    Répondez étape par étape — cela nous permet de concevoir un site <b>fidèle à votre cabinet</b>.
+    Les champs marqués <b style="color:var(--accent)">★</b> sont essentiels. Tout est envoyé à la fin, pièces jointes comprises.
+  </div>
+
+  <div class="wz-progress">
+    <div class="wz-progress__bar"><div class="wz-progress__fill" id="wzFill"></div></div>
+    <div class="wz-progress__meta">
+      <span class="wz-progress__step" id="wzStep">Étape 1 — Le cabinet</span>
+      <span class="wz-progress__count" id="wzCount">1 / 9</span>
+    </div>
   </div>
 
   <div class="sec">
@@ -295,11 +324,14 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
     <div class="field full"><textarea name="Remarques" style="min-height:80px"></textarea></div>
   </div>
 
-  <div class="actions">
-    <button type="submit" class="send">Envoyer à DentWebPro ↗</button>
-    <button type="button" class="send2" onclick="window.print()">Enregistrer en PDF</button>
-    <small>En envoyant, vous acceptez d’être recontacté·e pour votre projet.</small>
+  <div class="wz-nav">
+    <button type="button" class="wz-btn wz-btn--ghost" id="wzPrev" hidden>← Précédent</button>
+    <button type="button" class="wz-pdf" onclick="window.print()">Enregistrer en PDF</button>
+    <span class="sp"></span>
+    <button type="button" class="wz-btn wz-btn--primary" id="wzNext">Suivant →</button>
+    <button type="submit" class="wz-btn wz-btn--primary send" id="wzSend" hidden>Envoyer à DentWebPro ↗</button>
   </div>
+  <div class="wz-hint" id="wzHint">Étape 1 sur 9 — commençons par votre cabinet.</div>
 
   <div class="foot">
     <span>Merci ! Nous préparons votre site dès réception.</span>
@@ -325,12 +357,49 @@ body{margin:0;background:#E6E6EA;color:var(--ink);font-family:var(--sans);font-s
   var f=document.getElementById('fiche');
   var thanks=document.getElementById('fiche-thanks');
   if(!f) return;
+
+  /* ---- Assistant multi-étapes (une section = une étape) ---- */
+  var steps=[].slice.call(f.querySelectorAll('.sec'));
+  var titles=steps.map(function(s){ var h=s.querySelector('.sec__h h2'); return h?h.textContent.trim():''; });
+  var prevB=document.getElementById('wzPrev'), nextB=document.getElementById('wzNext'), sendB=document.getElementById('wzSend');
+  var fill=document.getElementById('wzFill'), stepL=document.getElementById('wzStep'), countL=document.getElementById('wzCount'), hint=document.getElementById('wzHint');
+  var cur=0;
+  function clearErr(step){ [].forEach.call(step.querySelectorAll('.field--err'),function(el){el.classList.remove('field--err');}); }
+  function validate(step){
+    var ok=true, first=null;
+    [].forEach.call(step.querySelectorAll('.field'),function(fl){
+      var lab=fl.querySelector('label'), inp=fl.querySelector('input,textarea');
+      if(lab && lab.querySelector('.star') && inp && !inp.value.trim()){ fl.classList.add('field--err'); ok=false; if(!first) first=inp; }
+      else fl.classList.remove('field--err');
+    });
+    if(first){ try{ first.focus(); }catch(_){} }
+    return ok;
+  }
+  function render(){
+    steps.forEach(function(s,i){ s.classList.toggle('is-active',i===cur); });
+    fill.style.width=((cur+1)/steps.length*100)+'%';
+    stepL.textContent='Étape '+(cur+1)+' — '+titles[cur];
+    countL.textContent=(cur+1)+' / '+steps.length;
+    prevB.hidden=(cur===0);
+    var last=(cur===steps.length-1);
+    nextB.hidden=last; sendB.hidden=!last;
+    hint.textContent = last ? 'Dernière étape — cliquez sur « Envoyer » pour nous transmettre votre fiche.' : ('Étape '+(cur+1)+' sur '+steps.length+'.');
+    var card=document.querySelector('.page'); if(card){ card.scrollIntoView({behavior:'smooth',block:'start'}); }
+  }
+  nextB.addEventListener('click',function(){ if(validate(steps[cur])){ cur=Math.min(cur+1,steps.length-1); render(); } });
+  prevB.addEventListener('click',function(){ clearErr(steps[cur]); cur=Math.max(cur-1,0); render(); });
+  var reset=document.getElementById('wzReset');
+  if(reset) reset.addEventListener('click',function(){ f.reset(); steps.forEach(clearErr); cur=0; render(); });
+  render();
+
+  /* ---- Envoi (send.php, pièces jointes comprises) ---- */
   f.addEventListener('submit',function(ev){
     ev.preventDefault();
+    for(var i=0;i<steps.length;i++){ if(!validate(steps[i])){ cur=i; render(); return; } } // saute à la 1re étape incomplète
     var btns=f.querySelectorAll('button[type="submit"],.send');
     var labels=[];
     btns.forEach(function(b,i){ labels[i]=b.textContent; b.disabled=true; if(b.classList.contains('send')) b.textContent='Envoi en cours…'; });
-    var fd=new FormData(f); // inclut les fichiers (logo, photos)
+    var fd=new FormData(f);
     fd.set('site','fiche');
     fetch('https://dentwebpro.site/send.php',{method:'POST',body:fd})
       .then(function(r){return r.json();})
