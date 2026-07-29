@@ -17,16 +17,15 @@
 
   // Sites réels déjà livrés & en ligne (clic -> ouverture du site en direct, nouvel onglet)
   var LIVE=[
-    // Modèles haut de gamme (démos récentes) — ouverture de la page locale
+    // Modèle haut de gamme (démo récente) — ouverture de la page locale
     {name:"Sereine", city:"Modèle", url:"/realisations/sereine/index.html", img:"sereine.jpg", brand:"#14332c", accent:"#c99a4e"},
-    {name:"Blanche", city:"Modèle", url:"/realisations/blanche/index.html", img:"blanche.jpg", brand:"#2b2320", accent:"#d9c3a0"},
     {name:"Oléa",  city:"Marseille", url:"https://hellboykader-code.github.io/export-kader1-framer-website-ms074a1w/",  vid:"olea",  brand:"#0d1b15", accent:"#d1fc71"},
     {name:"Novéo", city:"Lyon",      url:"https://hellboykader-code.github.io/export-kader9-framer-website-mrzfoouq/",  vid:"noveo", brand:"#33231a", accent:"#e8853b"},
     {name:"Zenta", city:"Paris",     url:"https://hellboykader-code.github.io/export-kader10-framer-website-mrzfwfoi/", vid:"zenta", brand:"#2f2e5c", accent:"#b9b7f0"},
     // Modèles livrés — image (capture) pour l'instant, vidéos à venir
     {name:"Éclat",     city:"Modèle", url:"https://hellboykader-code.github.io/Oral/",                                     img:"eclat.jpg",     brand:"#0d1b15", accent:"#d1fc71"},
     {name:"Dentitive", city:"Modèle", url:"https://hellboykader-code.github.io/export-dentitive1-framer-website-ms0t5u8s/", img:"dentitive.jpg", brand:"#0f2733", accent:"#37b3a3"},
-    {name:"RedDent",   city:"Modèle", url:"https://hellboykader-code.github.io/export-reddent1-framer-website-ms1xnfft/",  img:"reddent.jpg",   brand:"#0b1e17", accent:"#d0fc6d"}
+    {name:"RedDent",   city:"Modèle", url:"https://hellboykader-code.github.io/export-reddent1-framer-website-ms1xnfft/",  img:"reddent.jpg?v=2",   brand:"#0b1e17", accent:"#d0fc6d"}
   ];
   // carte « site réel en ligne » : vidéo (survol) si dispo, sinon tuile de marque
   function liveCard(c){
