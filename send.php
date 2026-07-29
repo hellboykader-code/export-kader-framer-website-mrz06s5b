@@ -118,11 +118,8 @@ $html = '<!doctype html><html><body style="margin:0;padding:0;background:#f4f5f7
 .   '<tr><td align="center">'
 .     '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(20,20,30,.06)">'
         // header
-.       '<tr><td style="background:'.$ACCENT.';padding:22px 30px">'
-.         '<table role="presentation" width="100%"><tr>'
-.           '<td style="font:800 20px Arial,sans-serif;color:#ffffff;letter-spacing:-.3px">Dent<span style="color:#ffe1d8">WebPro</span></td>'
-.           '<td align="right" style="font:600 12px Arial,sans-serif;color:#ffd9cf;text-transform:uppercase;letter-spacing:1px">Nouvelle demande</td>'
-.         '</tr></table>'
+.       '<tr><td bgcolor="'.$ACCENT.'" style="background:'.$ACCENT.';line-height:0;font-size:0">'
+.         '<img src="https://dentwebpro.site/assets/email/header.gif" width="600" alt="DentWebPro — Nouvelle demande" style="display:block;width:100%;max-width:600px;height:auto;border:0;outline:none;text-decoration:none">'
 .       '</td></tr>'
         // title
 .       '<tr><td style="padding:30px 30px 6px">'
