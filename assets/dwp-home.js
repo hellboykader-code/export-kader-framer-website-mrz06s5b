@@ -109,53 +109,138 @@
     return sec;
   }
 
-  // ─── Section « Tarifs / Offre » : 390€ tout compris, payé à la livraison ───
+  var FICHE=BASE+"/fiche/";
+  var WA_NUM="33745929520"; // +33 7 45 92 95 20
+  var WA_URL="https://wa.me/"+WA_NUM+"?text="+encodeURIComponent("Bonjour, je souhaite un site pour mon cabinet dentaire.");
+  var ARROW='<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h11M11 5.5L15.5 10 11 14.5" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+  var CHK='<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#f14e30"/><path d="M6 10.2l2.6 2.6L14 7.5" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+
+  // ─── « Comment ça marche » (4 étapes) ───
+  function buildSteps(){
+    var sec=document.createElement("section");
+    sec.id="dwp-steps"; sec.setAttribute("data-dwp","1");
+    var steps=[
+      {t:"Vous remplissez la fiche",d:"Décrivez votre cabinet, vos soins, vos couleurs et vos préférences. Simple et rapide, en 5 minutes."},
+      {t:"Nous concevons votre site",d:"Nous créons votre site sur mesure — logo professionnel, pages, photos et formulaire de rendez-vous compris."},
+      {t:"Vous validez",d:"Vous relisez tranquillement. On ajuste autant qu’il faut jusqu’à ce que le résultat vous plaise vraiment.",tag:null},
+      {t:"Mise en ligne",d:"Votre site est publié, sécurisé (SSL) et référencé sur Google. Prêt à recevoir vos patients.",tag:"Livré en 3 jours"}
+    ].map(function(s,i){
+      return '<div class="dwp-step"><div class="dwp-step__n">'+(i+1)+'</div>'+
+        '<h3>'+s.t+'</h3><p>'+s.d+'</p>'+(s.tag?'<span class="dwp-step__tag">'+s.tag+'</span>':'')+'</div>';
+    }).join("");
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<div class="dwp-thead">'+
+        '<span class="dwp-eyebrow2">{ Comment ça marche }</span>'+
+        '<h2>Votre site en 4 étapes simples</h2>'+
+        '<p class="dwp-sub">De la première idée à la mise en ligne, on s’occupe de tout. Vous n’avez qu’à valider.</p>'+
+      '</div>'+
+      '<div class="dwp-steps-grid">'+steps+'</div>'+
+      '<div class="dwp-steps-cta"><a class="dwp-btn-primary" href="'+FICHE+'">Demander un devis gratuit '+ARROW+'</a></div>'+
+    '</div>';
+    return sec;
+  }
+
+  // ─── « Tarifs » : 3 formules (Essentiel / Pro / Premium) ───
   function buildTarifs(){
     var sec=document.createElement("section");
     sec.id="dwp-tarifs"; sec.setAttribute("data-dwp","1");
-    var chk='<svg width="19" height="19" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#f14e30"/><path d="M6 10.2l2.6 2.6L14 7.5" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    var incl=[
-      "Site <b>5 pages</b> sur mesure","Logo professionnel <b>offert</b>",
-      "100% adapté mobile &amp; tablette","Formulaire de <b>rendez-vous</b>",
+    var feats=function(arr){ return arr.map(function(f){return '<li class="dwp-formule__feat">'+CHK+'<span>'+f+'</span></li>';}).join(""); };
+    var essentiel=feats([
+      "Site <b>3 pages</b> (Accueil, Soins, Contact)","Logo professionnel <b>offert</b>",
+      "100% mobile &amp; tablette","Formulaire de <b>rendez-vous</b>",
+      "Certificat <b>SSL</b>","Nom de domaine <b>1ʳᵉ année offert</b>",
+      "<b>Hébergement gratuit à vie</b>","Mise en ligne clé en main"
+    ]);
+    var pro=feats([
+      "Site <b>5 pages</b> complet","<b>Tout</b> ce qu’il y a dans Essentiel",
       "Référencement <b>Google</b> (SEO)","Adresse <b>e-mail pro</b>",
-      "Certificat <b>SSL</b> (site sécurisé)","Nom de domaine <b>1ʳᵉ année offert</b>",
-      "<b>Hébergement gratuit à vie</b>","Mise en ligne clé en main",
-      "Modifications incluses","Support &amp; accompagnement"
-    ].map(function(t){return '<li>'+chk+'<span>'+t+'</span></li>';}).join("");
-    var shield='<svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M10 1.7l6.5 2.4v5c0 4.2-2.8 7.2-6.5 9-3.7-1.8-6.5-4.8-6.5-9v-5L10 1.7z" stroke="#4a4a52" stroke-width="1.4" stroke-linejoin="round"/><path d="M6.7 10l2.1 2.1 4.4-4.5" stroke="#f14e30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    var infinity='<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.5 8.5a3.5 3.5 0 100 7c2 0 3.2-1.7 5-3.5 1.8-1.8 3-3.5 5-3.5a3.5 3.5 0 110 7c-2 0-3.2-1.7-5-3.5-1.8-1.8-3-3.5-5-3.5z" stroke="#4a4a52" stroke-width="1.4"/></svg>';
-    var nosub='<svg width="17" height="17" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.2" stroke="#4a4a52" stroke-width="1.4"/><path d="M5 15L15 5" stroke="#4a4a52" stroke-width="1.4" stroke-linecap="round"/></svg>';
+      "Comparateur <b>avant / après</b>","Modifications incluses",
+      "Support &amp; accompagnement"
+    ]);
+    var premium=feats([
+      "<b>Tout</b> ce qu’il y a dans Pro","Fiche <b>Google Business</b> (Maps)",
+      "Galerie <b>photos &amp; vidéos</b>","<b>5 modifications</b> / an",
+      "Optimisation vitesse avancée","<b>Support prioritaire</b>"
+    ]);
+    var card=function(o){
+      return '<div class="dwp-formule'+(o.pro?' is-pro':'')+'">'+
+        (o.pro?'<span class="dwp-formule__badge">★ Recommandé</span>':'')+
+        '<div class="dwp-formule__name">'+o.name+'</div>'+
+        '<div class="dwp-formule__tag">'+o.tag+'</div>'+
+        '<div class="dwp-formule__price"><b>'+o.price+'€</b><span>une seule fois</span></div>'+
+        '<div class="dwp-formule__once">✓ Payé à la réception du site</div>'+
+        '<ul class="dwp-formule__list">'+o.feats+'</ul>'+
+        '<a class="dwp-btn-primary dwp-formule__cta" href="'+FICHE+'">'+o.cta+' '+ARROW+'</a>'+
+      '</div>';
+    };
     sec.innerHTML='<div class="dwp-wrap">'+
       '<div class="dwp-thead">'+
-        '<span class="dwp-eyebrow2">{ Notre offre }</span>'+
-        '<h2>Un site complet, un seul prix.</h2>'+
-        '<p class="dwp-sub">Tout est compris, sans abonnement ni frais cachés. Et vous ne payez qu’une fois votre site livré et en ligne.</p>'+
+        '<span class="dwp-eyebrow2">{ Nos formules }</span>'+
+        '<h2>Un prix clair, payé à la livraison</h2>'+
+        '<p class="dwp-sub">Trois formules tout compris, sans abonnement. Vous ne payez qu’une fois votre site livré et en ligne.</p>'+
       '</div>'+
-      '<div class="dwp-price-card">'+
-        '<div class="dwp-price-top">'+
-          '<span class="dwp-price-badge">Offre tout compris</span>'+
-          '<div class="dwp-price-row"><span class="dwp-price-amount">390€</span><span class="dwp-price-once">une seule fois</span></div>'+
-          '<div class="dwp-price-note">'+
-            '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#f4d9cf" stroke-width="1.5"/><path d="M6 10.2l2.6 2.6L14 7.5" stroke="#f4d9cf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
-            'Paiement uniquement à la réception de votre site</div>'+
-          '<div class="dwp-price-sub">Puis 50€/an pour le renouvellement du nom de domaine — c’est tout.</div>'+
-        '</div>'+
-        '<div class="dwp-price-body">'+
-          '<ul class="dwp-incl">'+incl+'</ul>'+
-          '<div class="dwp-price-cta">'+
-            '<a class="dwp-btn-primary" href="'+BASE+'/fiche/">Demander mon site '+
-              '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h11M11 5.5L15.5 10 11 14.5" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></a>'+
-            '<span class="dwp-price-reassure">Remplissez la fiche — nous vous recontactons sous 24h.</span>'+
-          '</div>'+
-        '</div>'+
-        '<div class="dwp-price-foot">'+
-          '<span>'+shield+'Payé à la livraison</span>'+
-          '<span>'+nosub+'Sans abonnement</span>'+
-          '<span>'+infinity+'Hébergement à vie</span>'+
-        '</div>'+
+      '<div class="dwp-formules">'+
+        card({name:"Essentiel",tag:"Le site vitrine idéal pour démarrer",price:"290",feats:essentiel,cta:"Choisir Essentiel"})+
+        card({name:"Pro",tag:"Le plus choisi — complet et référencé",price:"390",feats:pro,cta:"Choisir Pro",pro:true})+
+        card({name:"Premium",tag:"Pour aller plus loin en visibilité",price:"590",feats:premium,cta:"Choisir Premium"})+
       '</div>'+
+      '<p class="dwp-tarifs-note">Toutes les formules incluent l’<b>hébergement gratuit à vie</b>. Ensuite, seulement <b>50€/an</b> pour le renouvellement du nom de domaine — c’est tout.</p>'+
     '</div>';
     return sec;
+  }
+
+  // ─── Bandeau « Garanties » ───
+  function buildGaranties(){
+    var sec=document.createElement("section");
+    sec.id="dwp-garanties"; sec.setAttribute("data-dwp","1");
+    var clock='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.4" stroke="#f14e30" stroke-width="1.5"/><path d="M10 5.5V10l3 2" stroke="#f14e30" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var life='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 17s-6-3.7-6-8a3.5 3.5 0 016-2.4A3.5 3.5 0 0116 9c0 4.3-6 8-6 8z" stroke="#f14e30" stroke-width="1.5" stroke-linejoin="round"/></svg>';
+    var redo='<svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M15.5 6.5A6 6 0 104 10" stroke="#f14e30" stroke-width="1.5" stroke-linecap="round"/><path d="M15.5 3v3.5H12" stroke="#f14e30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<span class="dwp-gar">'+clock+'<span><b>Livré en 3 jours</b></span></span>'+
+      '<span class="dwp-gar">'+life+'<span>Support inclus</span></span>'+
+      '<span class="dwp-gar">'+redo+'<span>Satisfait ou refait</span></span>'+
+    '</div>';
+    return sec;
+  }
+
+  // ─── FAQ (accordéon) ───
+  function buildFaq(){
+    var sec=document.createElement("section");
+    sec.id="dwp-faq"; sec.setAttribute("data-dwp","1");
+    var plus='<span class="dwp-faq-ico"><svg width="13" height="13" viewBox="0 0 14 14"><line x1="7" y1="1.5" x2="7" y2="12.5" stroke="#17171b" stroke-width="1.8" stroke-linecap="round"/><line x1="1.5" y1="7" x2="12.5" y2="7" stroke="#17171b" stroke-width="1.8" stroke-linecap="round"/></svg></span>';
+    var qa=[
+      ["Quel est le délai de livraison ?","Votre site est livré en <b>3 jours</b> après réception de votre fiche complète. On vous tient informé à chaque étape."],
+      ["L’hébergement est-il vraiment gratuit ?","Oui. L’<b>hébergement est gratuit à vie</b> : votre site reste en ligne sans aucun frais mensuel, sur toutes les formules."],
+      ["Et le nom de domaine ?","La <b>1ʳᵉ année est offerte</b>. Ensuite, il faut seulement <b>50€/an</b> pour le renouvellement du domaine (ex. votre-cabinet.fr)."],
+      ["Puis-je modifier mon site plus tard ?","Bien sûr. Les <b>modifications sont incluses</b> dès la formule Pro, et jusqu’à <b>5 modifications par an</b> en Premium."],
+      ["Combien ça coûte ?","À partir de <b>290€</b>, une seule fois. Pas d’abonnement, pas de frais cachés — le prix affiché est le prix final."],
+      ["Quand dois-je payer ?","<b>Uniquement à la livraison</b>, une fois votre site en ligne et validé par vos soins. Aucun paiement avant."]
+    ].map(function(x){
+      return '<details class="dwp-faq-item"><summary>'+x[0]+plus+'</summary><div class="dwp-faq-a">'+x[1]+'</div></details>';
+    }).join("");
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<div class="dwp-thead">'+
+        '<span class="dwp-eyebrow2">{ Questions fréquentes }</span>'+
+        '<h2>Vous vous posez des questions ?</h2>'+
+      '</div>'+
+      qa+
+      '<div class="dwp-faq-cta"><a class="dwp-btn-primary" href="'+FICHE+'">Demander un devis gratuit '+ARROW+'</a></div>'+
+    '</div>';
+    return sec;
+  }
+
+  // ─── Bouton WhatsApp flottant (toutes les pages) ───
+  function addWhatsApp(){
+    if(document.getElementById("dwp-wa")) return;
+    var a=document.createElement("a");
+    a.id="dwp-wa"; a.href=WA_URL; a.target="_blank"; a.rel="noopener";
+    a.setAttribute("aria-label","Nous contacter sur WhatsApp");
+    a.innerHTML='<span class="dwp-wa-ico"><svg width="30" height="30" viewBox="0 0 32 32" fill="none">'+
+      '<path d="M16 3C8.8 3 3 8.8 3 16c0 2.5.7 4.8 1.9 6.8L3 29l6.4-1.8c1.9 1 4.1 1.6 6.6 1.6 7.2 0 13-5.8 13-13S23.2 3 16 3z" fill="#fff"/>'+
+      '<path d="M12.3 9.6c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9 0 1.7 1.2 3.4 1.4 3.6.2.2 2.4 3.8 6 5.2 3 1.2 3.6 1 4.3.9.7-.1 2.1-.9 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.4-.3-.8-.5-.4-.2-2.1-1-2.4-1.1-.3-.1-.6-.2-.8.2-.2.3-.9 1.1-1.1 1.3-.2.2-.4.3-.8.1-.4-.2-1.5-.6-2.9-1.8-1.1-1-1.8-2.2-2-2.5-.2-.4 0-.6.2-.7.2-.2.4-.4.5-.6.2-.2.2-.3.4-.6.1-.2.1-.4 0-.6-.1-.2-.8-2-1.1-2.7z" fill="#25d366"/>'+
+      '</svg></span><span class="dwp-wa-txt">Discutons sur WhatsApp</span>';
+    document.body.appendChild(a);
   }
 
   var TEAM=[
@@ -292,7 +377,8 @@
     // 2) retirer liens nav "Blog"/"Tarifs" ; repointer "Réalisations" vers la galerie
     document.querySelectorAll('nav a, header a, footer a, [data-framer-name*="Nav"] a, [data-framer-name*="Footer"] a').forEach(function(a){
       var t=(a.textContent||"").trim();
-      if(t==="Blog"||t==="Tarifs"){ a.style.display="none"; }
+      if(t==="Blog"){ a.style.display="none"; }
+      if(t==="Tarifs"){ a.style.display=""; a.setAttribute("href", BASE+"/#dwp-tarifs"); }
       if(t==="Réalisations"){ a.setAttribute("href", BASE+"/#dwp-gallery"); }
     });
     // 2b) TOUT lien vers la page "projects" (réalisations fictives du thème : VistaHaven,
@@ -335,13 +421,20 @@
       var gal=buildGallery();
       if(svc){ main.insertBefore(gal, svc); } else { main.insertBefore(gal, main.children[1]||null); }
     }
-    // section « Tarifs » — juste après la galerie (accueil uniquement)
-    if(isHome && !document.getElementById("dwp-tarifs")){
-      var g0=document.getElementById("dwp-gallery");
-      var tar=buildTarifs();
-      if(g0 && g0.parentNode){ g0.parentNode.insertBefore(tar, g0.nextSibling); }
-      else if(main){ main.insertBefore(tar, main.children[2]||null); }
+    // sections DentWebPro (accueil uniquement), dans l'ordre, juste après la galerie :
+    // Comment ça marche → Tarifs (3 formules) → Garanties → FAQ
+    if(isHome){
+      var anchor=document.getElementById("dwp-gallery");
+      [["dwp-steps",buildSteps],["dwp-tarifs",buildTarifs],["dwp-garanties",buildGaranties],["dwp-faq",buildFaq]].forEach(function(pair){
+        var ex=document.getElementById(pair[0]);
+        if(ex){ anchor=ex; return; }
+        var node=pair[1]();
+        if(anchor && anchor.parentNode){ anchor.parentNode.insertBefore(node, anchor.nextSibling); }
+        else if(main){ main.insertBefore(node, main.children[2]||null); }
+        anchor=node;
+      });
     }
+    addWhatsApp();
     wireVideos();
     revealCards();
     // 4) équipe DentWebPro sur TOUTE page ayant une "Team Section" (accueil ET À propos).
@@ -400,10 +493,12 @@
 
     apply();
     [200,400,800,1200,2000,2800,4000,6000].forEach(function(t){ setTimeout(apply,t); });
-    // arrivée sur l'accueil avec #dwp-gallery (depuis une autre page) : descendre vers
-    // la galerie une fois injectée (le scroll natif échoue car la galerie est injectée après).
-    if(location.hash==="#dwp-gallery"){
-      var gk=0, giv=setInterval(function(){ var g=document.getElementById("dwp-gallery");
+    // arrivée sur l'accueil avec un hash de section injectée (#dwp-gallery / #dwp-tarifs …)
+    // depuis une autre page : descendre une fois la section injectée (scroll natif échoue
+    // car ces sections sont ajoutées après l'hydratation).
+    if(/^#dwp-(gallery|tarifs|steps|faq)$/.test(location.hash)){
+      var hid=location.hash.slice(1);
+      var gk=0, giv=setInterval(function(){ var g=document.getElementById(hid);
         if(g){ g.scrollIntoView({behavior:"smooth"}); clearInterval(giv); } if(++gk>30) clearInterval(giv); }, 300);
     }
     // maintien du logo/avatars pendant que Framer s'hydrate
@@ -430,6 +525,16 @@
           else { window.location.assign(BASE+"/#dwp-gallery"); }
           return;
         }
+        // « Tarifs » : afficher la section des formules (accueil) ou y naviguer.
+        if(rt==="tarifs"){
+          e.preventDefault(); e.stopImmediatePropagation();
+          var tog2=document.querySelector('[data-framer-name="Variant 1"],[data-framer-name="Variant 2"]');
+          if(tog2){ try{ tog2.click(); }catch(_){ } }
+          var tt=document.getElementById("dwp-tarifs");
+          if(tt){ setTimeout(function(){ tt.scrollIntoView({behavior:"smooth"}); }, 340); }
+          else { window.location.assign(BASE+"/#dwp-tarifs"); }
+          return;
+        }
       }
       var a=e.target.closest("[data-dwp-site]");
       if(a){ e.preventDefault(); e.stopPropagation(); var u=a.getAttribute("data-dwp-site");
@@ -441,7 +546,7 @@
     // garde : ré-applique si Framer ré-hydrate
     var main=document.querySelector('main[data-framer-name="Main"]')||document.body;
     var obs=new MutationObserver(function(){
-      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")||!document.getElementById("dwp-tarifs")) apply();
+      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")||!document.getElementById("dwp-tarifs")||!document.getElementById("dwp-faq")||!document.getElementById("dwp-wa")) apply();
     });
     try{ obs.observe(main,{childList:true}); }catch(e){}
     // ⭐ garde PERMANENTE des photos « À propos » : React reconstruit ces <img> au
