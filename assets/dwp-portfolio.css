@@ -196,3 +196,52 @@ main [data-framer-name="Team Section"]{display:none !important}
 @keyframes dwpWaPulse{0%{box-shadow:0 0 0 0 rgba(37,211,102,.5)}70%{box-shadow:0 0 0 16px rgba(37,211,102,0)}100%{box-shadow:0 0 0 0 rgba(37,211,102,0)}}
 @media(prefers-reduced-motion:reduce){#dwp-wa::after{animation:none}}
 @media(max-width:560px){#dwp-wa{height:54px;max-width:54px}#dwp-wa .dwp-wa-ico{width:54px;height:54px}}
+
+/* ─── « Déjà en ligne » (preuve) ─────────────────────────────── */
+#dwp-proof{padding:22px 0;background:#fff;border-top:1px solid var(--dwp-line);border-bottom:1px solid var(--dwp-line)}
+#dwp-proof .dwp-wrap{max-width:1100px;margin:0 auto;padding:0 28px;display:flex;align-items:center;justify-content:center;gap:14px 22px;flex-wrap:wrap;text-align:center}
+.dwp-proof-dot{width:9px;height:9px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18);flex:none}
+.dwp-proof-txt{font-weight:700;font-size:1.08rem;color:var(--dwp-ink)}
+.dwp-proof-txt b{color:var(--dwp-accent)}
+.dwp-proof-link{color:var(--dwp-ink);font-weight:700;text-decoration:none;border-bottom:2px solid var(--dwp-accent);white-space:nowrap}
+.dwp-proof-link:hover{color:var(--dwp-accent)}
+
+/* ─── « Pourquoi DentWebPro » ────────────────────────────────── */
+#dwp-why{padding:88px 0;background:var(--dwp-bg)}
+#dwp-why .dwp-wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+.dwp-why-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:22px}
+.dwp-why-card{background:#fff;border:1px solid var(--dwp-line);border-radius:18px;padding:30px 26px}
+.dwp-why-ico{width:52px;height:52px;border-radius:14px;background:#fff2ee;display:grid;place-items:center;margin-bottom:18px}
+.dwp-why-card h3{font-size:1.18rem;letter-spacing:-.02em;margin:0 0 8px;color:var(--dwp-ink)}
+.dwp-why-card p{color:var(--dwp-muted);font-size:.98rem;line-height:1.5;margin:0}
+@media(max-width:900px){.dwp-why-grid{grid-template-columns:1fr 1fr}}
+@media(max-width:520px){.dwp-why-grid{grid-template-columns:1fr}}
+
+/* ─── Tableau comparatif ─────────────────────────────────────── */
+#dwp-compare{padding:88px 0;background:#fff}
+#dwp-compare .dwp-wrap{max-width:1040px;margin:0 auto;padding:0 28px}
+.dwp-compare-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.dwp-table{width:100%;border-collapse:separate;border-spacing:0;min-width:640px}
+.dwp-table th,.dwp-table td{padding:16px 18px;text-align:left;font-size:.98rem;border-bottom:1px solid var(--dwp-line);vertical-align:middle}
+.dwp-table thead th{font-size:.82rem;font-weight:700;letter-spacing:.04em;text-transform:uppercase;color:var(--dwp-muted);border-bottom:2px solid var(--dwp-line)}
+.dwp-table tbody th{font-weight:600;color:var(--dwp-ink)}
+.dwp-table .dwp-col-us{background:linear-gradient(180deg,#fff6f3,#fff);border-left:1px solid #ffd9cf;border-right:1px solid #ffd9cf}
+.dwp-table thead .dwp-col-us{color:#fff;background:var(--dwp-accent);border-color:var(--dwp-accent);border-top-left-radius:12px;border-top-right-radius:12px;font-size:1rem;text-transform:none;letter-spacing:-.01em}
+.dwp-table tbody-us{}
+.dwp-table td.dwp-col-us{font-weight:700;color:var(--dwp-ink)}
+.dwp-table tr:last-child td.dwp-col-us{border-bottom-left-radius:12px;border-bottom-right-radius:12px}
+.dwp-ck{color:#1a9e54;font-weight:700}
+.dwp-x{color:#c2410c;opacity:.65}
+.dwp-cell-muted{color:var(--dwp-muted)}
+.dwp-compare-note{text-align:center;color:var(--dwp-muted);font-size:.9rem;margin-top:18px}
+
+/* ─── Bandeau CTA final ──────────────────────────────────────── */
+#dwp-cta{padding:20px 0 6px;background:var(--dwp-bg)}
+#dwp-cta .dwp-wrap{max-width:1100px;margin:0 auto;padding:0 28px}
+.dwp-cta-box{position:relative;overflow:hidden;background:linear-gradient(150deg,#17171b 0%,#241c19 55%,#3a241c 100%);border-radius:26px;padding:56px 48px;text-align:center;color:#fff}
+.dwp-cta-box::after{content:"";position:absolute;top:-50%;right:-6%;width:340px;height:340px;border-radius:50%;background:radial-gradient(circle,color-mix(in srgb,var(--dwp-accent) 50%,transparent),transparent 66%);pointer-events:none}
+.dwp-cta-box h2{position:relative;font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-.03em;margin:0 0 12px;line-height:1.1}
+.dwp-cta-box p{position:relative;color:#cfcdd4;font-size:1.12rem;margin:0 auto 28px;max-width:52ch}
+.dwp-cta-box .dwp-btn-primary{position:relative;font-size:1.12rem;padding:17px 34px}
+.dwp-cta-sub{position:relative;margin-top:16px;color:#b9b9c2;font-size:.92rem}
+@media(max-width:560px){.dwp-cta-box{padding:44px 26px}}

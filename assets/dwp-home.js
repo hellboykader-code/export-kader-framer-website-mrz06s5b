@@ -239,6 +239,91 @@
     return sec;
   }
 
+  // ─── « Déjà en ligne » (preuve réelle) ───
+  function buildProof(){
+    var sec=document.createElement("section");
+    sec.id="dwp-proof"; sec.setAttribute("data-dwp","1");
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<span class="dwp-proof-dot"></span>'+
+      '<span class="dwp-proof-txt">Déjà <b>4 cabinets dentaires</b> en ligne avec DentWebPro</span>'+
+      '<a class="dwp-proof-link" href="'+BASE+'/#dwp-gallery">Découvrir leurs sites →</a>'+
+    '</div>';
+    return sec;
+  }
+
+  // ─── « Pourquoi DentWebPro » (différenciateurs) ───
+  function buildWhy(){
+    var sec=document.createElement("section");
+    sec.id="dwp-why"; sec.setAttribute("data-dwp","1");
+    var ico=function(p){ return '<span class="dwp-why-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none">'+p+'</svg></span>'; };
+    var tooth=ico('<path d="M12 3.5c-2.7 0-4.6 1.8-4.6 4.5 0 1.6.4 3.5 1 5.4.5 1.5.9 3 1.2 4.3.2 1 .4 2 .9 2 .6 0 .7-1.1.8-2.2.1-1 .2-2 .7-2s.6 1 .7 2c.1 1.1.2 2.2.8 2.2.5 0 .7-1 .9-2 .3-1.3.7-2.8 1.2-4.3.6-1.9 1-3.8 1-5.4 0-2.7-1.9-4.5-4.6-4.5z" stroke="#f55733" stroke-width="1.6" stroke-linejoin="round"/>');
+    var wallet=ico('<rect x="3" y="6" width="18" height="13" rx="2.5" stroke="#f55733" stroke-width="1.6"/><path d="M3 10h18" stroke="#f55733" stroke-width="1.6"/><circle cx="16.5" cy="14" r="1.3" fill="#f55733"/>');
+    var clock=ico('<circle cx="12" cy="12" r="8.4" stroke="#f55733" stroke-width="1.6"/><path d="M12 7v5l3.2 2" stroke="#f55733" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>');
+    var infinity=ico('<path d="M7 8.5a3.5 3.5 0 100 7c2 0 3.2-1.7 5-3.5 1.8-1.8 3-3.5 5-3.5a3.5 3.5 0 110 7c-2 0-3.2-1.7-5-3.5-1.8-1.8-3-3.5-5-3.5z" stroke="#f55733" stroke-width="1.6"/>');
+    var cards=[
+      {i:tooth,t:"100% spécialisé dentaire",d:"On ne conçoit que des sites pour cabinets dentaires. On connaît vos soins, vos patients, vos attentes."},
+      {i:wallet,t:"Payé à la livraison",d:"Vous ne réglez rien tant que votre site n’est pas terminé, validé et en ligne. Zéro risque."},
+      {i:clock,t:"Livré en 3 jours",d:"Un site complet, rapide et référencé sur Google, prêt en quelques jours seulement."},
+      {i:infinity,t:"Hébergement à vie",d:"Aucun abonnement, aucun frais mensuel. Votre site reste en ligne gratuitement, pour toujours."}
+    ].map(function(c){ return '<div class="dwp-why-card">'+c.i+'<h3>'+c.t+'</h3><p>'+c.d+'</p></div>'; }).join("");
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<div class="dwp-thead">'+
+        '<span class="dwp-eyebrow2">{ Pourquoi nous }</span>'+
+        '<h2>Pourquoi choisir DentWebPro ?</h2>'+
+        '<p class="dwp-sub">Un studio pensé pour les dentistes — simple, sans risque et sans frais cachés.</p>'+
+      '</div>'+
+      '<div class="dwp-why-grid">'+cards+'</div>'+
+    '</div>';
+    return sec;
+  }
+
+  // ─── Tableau comparatif (DentWebPro vs agence vs Wix) ───
+  function buildCompare(){
+    var sec=document.createElement("section");
+    sec.id="dwp-compare"; sec.setAttribute("data-dwp","1");
+    var ck='<span class="dwp-ck">✓</span>', x='<span class="dwp-x">✕</span>';
+    var rows=[
+      ["Prix","<b>590€ une seule fois</b>","1 500 – 3 000€","~200€/an + votre temps"],
+      ["Délai de livraison","<b>3 jours</b>","4 à 8 semaines","Plusieurs semaines"],
+      ["Spécialisé cabinets dentaires",ck,x,x],
+      ["Référencement Google",ck+" inclus","En option (payant)","À faire soi-même"],
+      ["Logo professionnel",ck+" offert","En option","✕ / à créer"],
+      ["Hébergement","<b>Gratuit à vie</b>","~20€/mois","~15€/mois"],
+      ["Paiement","<b>À la livraison</b>","Acompte d’avance","Abonnement mensuel"]
+    ].map(function(r){
+      return '<tr><th scope="row">'+r[0]+'</th>'+
+        '<td class="dwp-col-us">'+r[1]+'</td>'+
+        '<td class="dwp-cell-muted">'+r[2]+'</td>'+
+        '<td class="dwp-cell-muted">'+r[3]+'</td></tr>';
+    }).join("");
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<div class="dwp-thead">'+
+        '<span class="dwp-eyebrow2">{ Comparatif }</span>'+
+        '<h2>DentWebPro, le meilleur choix</h2>'+
+        '<p class="dwp-sub">Comparez par vous-même : un site pro, plus rapide et moins cher qu’une agence ou qu’un site « fait maison ».</p>'+
+      '</div>'+
+      '<div class="dwp-compare-scroll"><table class="dwp-table">'+
+        '<thead><tr><th></th><th class="dwp-col-us">DentWebPro</th><th>Agence web</th><th>Wix / soi-même</th></tr></thead>'+
+        '<tbody>'+rows+'</tbody>'+
+      '</table></div>'+
+      '<p class="dwp-compare-note">Tarifs indicatifs du marché, à titre de comparaison.</p>'+
+    '</div>';
+    return sec;
+  }
+
+  // ─── Bandeau CTA final ───
+  function buildCta(){
+    var sec=document.createElement("section");
+    sec.id="dwp-cta"; sec.setAttribute("data-dwp","1");
+    sec.innerHTML='<div class="dwp-wrap"><div class="dwp-cta-box">'+
+      '<h2>Prêt à lancer votre cabinet en ligne ?</h2>'+
+      '<p>Recevez votre devis gratuit et sans engagement. On s’occupe de tout — vous ne payez qu’à la livraison.</p>'+
+      '<a class="dwp-btn-primary" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a>'+
+      '<div class="dwp-cta-sub">Réponse sous 24h · Sans engagement · Payé à la livraison</div>'+
+    '</div></div>';
+    return sec;
+  }
+
   // ─── Bouton WhatsApp flottant (toutes les pages) ───
   function addWhatsApp(){
     if(document.getElementById("dwp-wa")) return;
@@ -439,7 +524,7 @@
     // Comment ça marche → Tarifs (3 formules) → Garanties → FAQ
     if(isHome){
       var anchor=document.getElementById("dwp-gallery");
-      [["dwp-steps",buildSteps],["dwp-tarifs",buildTarifs],["dwp-garanties",buildGaranties],["dwp-faq",buildFaq]].forEach(function(pair){
+      [["dwp-proof",buildProof],["dwp-why",buildWhy],["dwp-steps",buildSteps],["dwp-tarifs",buildTarifs],["dwp-compare",buildCompare],["dwp-garanties",buildGaranties],["dwp-faq",buildFaq],["dwp-cta",buildCta]].forEach(function(pair){
         var ex=document.getElementById(pair[0]);
         if(ex){ anchor=ex; return; }
         var node=pair[1]();
@@ -560,7 +645,7 @@
     // garde : ré-applique si Framer ré-hydrate
     var main=document.querySelector('main[data-framer-name="Main"]')||document.body;
     var obs=new MutationObserver(function(){
-      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")||!document.getElementById("dwp-tarifs")||!document.getElementById("dwp-faq")||!document.getElementById("dwp-wa")) apply();
+      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")||!document.getElementById("dwp-tarifs")||!document.getElementById("dwp-faq")||!document.getElementById("dwp-cta")||!document.getElementById("dwp-wa")) apply();
     });
     try{ obs.observe(main,{childList:true}); }catch(e){}
     // ⭐ garde PERMANENTE des photos « À propos » : React reconstruit ces <img> au
