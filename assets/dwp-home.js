@@ -109,6 +109,55 @@
     return sec;
   }
 
+  // ─── Section « Tarifs / Offre » : 390€ tout compris, payé à la livraison ───
+  function buildTarifs(){
+    var sec=document.createElement("section");
+    sec.id="dwp-tarifs"; sec.setAttribute("data-dwp","1");
+    var chk='<svg width="19" height="19" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="10" fill="#f14e30"/><path d="M6 10.2l2.6 2.6L14 7.5" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var incl=[
+      "Site <b>5 pages</b> sur mesure","Logo professionnel <b>offert</b>",
+      "100% adapté mobile &amp; tablette","Formulaire de <b>rendez-vous</b>",
+      "Référencement <b>Google</b> (SEO)","Adresse <b>e-mail pro</b>",
+      "Certificat <b>SSL</b> (site sécurisé)","Nom de domaine <b>1ʳᵉ année offert</b>",
+      "<b>Hébergement gratuit à vie</b>","Mise en ligne clé en main",
+      "Modifications incluses","Support &amp; accompagnement"
+    ].map(function(t){return '<li>'+chk+'<span>'+t+'</span></li>';}).join("");
+    var shield='<svg width="17" height="17" viewBox="0 0 20 20" fill="none"><path d="M10 1.7l6.5 2.4v5c0 4.2-2.8 7.2-6.5 9-3.7-1.8-6.5-4.8-6.5-9v-5L10 1.7z" stroke="#4a4a52" stroke-width="1.4" stroke-linejoin="round"/><path d="M6.7 10l2.1 2.1 4.4-4.5" stroke="#f14e30" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    var infinity='<svg width="18" height="18" viewBox="0 0 24 24" fill="none"><path d="M6.5 8.5a3.5 3.5 0 100 7c2 0 3.2-1.7 5-3.5 1.8-1.8 3-3.5 5-3.5a3.5 3.5 0 110 7c-2 0-3.2-1.7-5-3.5-1.8-1.8-3-3.5-5-3.5z" stroke="#4a4a52" stroke-width="1.4"/></svg>';
+    var nosub='<svg width="17" height="17" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="8.2" stroke="#4a4a52" stroke-width="1.4"/><path d="M5 15L15 5" stroke="#4a4a52" stroke-width="1.4" stroke-linecap="round"/></svg>';
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<div class="dwp-thead">'+
+        '<span class="dwp-eyebrow2">{ Notre offre }</span>'+
+        '<h2>Un site complet, un seul prix.</h2>'+
+        '<p class="dwp-sub">Tout est compris, sans abonnement ni frais cachés. Et vous ne payez qu’une fois votre site livré et en ligne.</p>'+
+      '</div>'+
+      '<div class="dwp-price-card">'+
+        '<div class="dwp-price-top">'+
+          '<span class="dwp-price-badge">Offre tout compris</span>'+
+          '<div class="dwp-price-row"><span class="dwp-price-amount">390€</span><span class="dwp-price-once">une seule fois</span></div>'+
+          '<div class="dwp-price-note">'+
+            '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><circle cx="10" cy="10" r="9" stroke="#f4d9cf" stroke-width="1.5"/><path d="M6 10.2l2.6 2.6L14 7.5" stroke="#f4d9cf" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>'+
+            'Paiement uniquement à la réception de votre site</div>'+
+          '<div class="dwp-price-sub">Puis 50€/an pour le renouvellement du nom de domaine — c’est tout.</div>'+
+        '</div>'+
+        '<div class="dwp-price-body">'+
+          '<ul class="dwp-incl">'+incl+'</ul>'+
+          '<div class="dwp-price-cta">'+
+            '<a class="dwp-btn-primary" href="'+BASE+'/fiche/">Demander mon site '+
+              '<svg width="18" height="18" viewBox="0 0 20 20" fill="none"><path d="M4 10h11M11 5.5L15.5 10 11 14.5" stroke="#fff" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"/></svg></a>'+
+            '<span class="dwp-price-reassure">Remplissez la fiche — nous vous recontactons sous 24h.</span>'+
+          '</div>'+
+        '</div>'+
+        '<div class="dwp-price-foot">'+
+          '<span>'+shield+'Payé à la livraison</span>'+
+          '<span>'+nosub+'Sans abonnement</span>'+
+          '<span>'+infinity+'Hébergement à vie</span>'+
+        '</div>'+
+      '</div>'+
+    '</div>';
+    return sec;
+  }
+
   var TEAM=[
     {slug:"kader",name:"Kader",role:"Fondateur · Designer & Développeur"},
     {slug:"amine",name:"Amine",role:"Co-fondateur · Relations & Marketing"},
@@ -213,7 +262,7 @@
     // (le calque ne contient pas « Logo »/« Brand » => non couvert ci-dessus ; c'était
     //  le logo « BrightEdge » du thème resté visible dans le footer).
     document.querySelectorAll('[data-framer-name="Footer / Top"] img').forEach(function(img){
-      var fh=BASE+"/assets/dwp-brand-horizontal.svg";
+      var fh=BASE+"/assets/dwp-brand-horizontal-white.svg";
       if(img.getAttribute("src")!==fh) img.setAttribute("src", fh);
       img.style.objectFit="contain"; img.style.objectPosition="left center";
     });
@@ -265,9 +314,10 @@
       hc.textContent='[data-framer-name="Team Section"]{display:none !important}[data-framer-name="Awards Section"]{display:none !important}'
         // masquer le bloc de chiffres fictifs (10 ans / 500 sites / 140 cabinets / 98%)
         +'[data-framer-name="About Achieve Numbers"]{display:none !important}'
-        // logo blanc + mix-blend-difference => visible sur TOUT fond (clair OU foncé),
-        // auto-contrasté (noir sur clair, blanc sur foncé). Résout header/vertical/footer.
-        +'[data-framer-name="Brand"] img,[data-framer-name="Logo / Vertical"] img,[data-framer-name="Footer / Top"] img{mix-blend-mode:difference}'
+        // logo « réseau/pixels » à variantes de couleur fixes : version encre dans
+        // l'en-tête (fond clair) via dwp-brand-vertical/horizontal.svg, version blanche
+        // dans le footer (fond foncé) via dwp-brand-horizontal-white.svg. Plus de
+        // mix-blend-difference : l'accent corail resterait corail (sinon viré cyan sur clair).
         // animation d'apparition des cartes du portfolio (image qui se révèle en zoom)
         +'#dwp-gallery .dwp-cardlink{opacity:0;transform:translateY(32px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}'
         +'#dwp-gallery .dwp-cardlink.dwp-in{opacity:1;transform:none}'
@@ -284,6 +334,13 @@
       var svc=main.querySelector('[data-framer-name="Service Section"]');
       var gal=buildGallery();
       if(svc){ main.insertBefore(gal, svc); } else { main.insertBefore(gal, main.children[1]||null); }
+    }
+    // section « Tarifs » — juste après la galerie (accueil uniquement)
+    if(isHome && !document.getElementById("dwp-tarifs")){
+      var g0=document.getElementById("dwp-gallery");
+      var tar=buildTarifs();
+      if(g0 && g0.parentNode){ g0.parentNode.insertBefore(tar, g0.nextSibling); }
+      else if(main){ main.insertBefore(tar, main.children[2]||null); }
     }
     wireVideos();
     revealCards();
@@ -384,7 +441,7 @@
     // garde : ré-applique si Framer ré-hydrate
     var main=document.querySelector('main[data-framer-name="Main"]')||document.body;
     var obs=new MutationObserver(function(){
-      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")) apply();
+      if(!document.getElementById("dwp-gallery")||!document.getElementById("dwp-team")||!document.getElementById("dwp-tarifs")) apply();
     });
     try{ obs.observe(main,{childList:true}); }catch(e){}
     // ⭐ garde PERMANENTE des photos « À propos » : React reconstruit ces <img> au
