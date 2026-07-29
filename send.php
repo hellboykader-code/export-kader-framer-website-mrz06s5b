@@ -1,12 +1,8 @@
 <?php
 /**
  * DentWebPro — récepteur des formulaires de rendez-vous / contact.
- *
- * Envoie l'e-mail DEPUIS contact@dentwebpro.site (domaine signé DKIM + SPF + DMARC
- * via cPanel « Email Deliverability ») vers le praticien. Format multipart
- * (texte + HTML) pour une meilleure délivrabilité (évite le spam). Aucun service externe.
- *
- * Chaque site poste un champ « site ». On associe ici site -> e-mail du praticien.
+ * Envoie un e-mail professionnel (multipart texte + HTML) DEPUIS
+ * contact@dentwebpro.site (DKIM/SPF/DMARC) vers le praticien.
  */
 
 header('Access-Control-Allow-Origin: *');
@@ -20,105 +16,150 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
   echo json_encode(['success' => false, 'message' => 'Méthode non autorisée']); exit;
 }
 
-$FROM  = 'contact@dentwebpro.site';   // expéditeur (domaine vérifié DKIM/SPF)
+$FROM  = 'contact@dentwebpro.site';
 $BRAND = 'DentWebPro';
+$ACCENT = '#f14e30';
 
-/* site  ->  e-mail du praticien destinataire. */
 $RECIPIENTS = [
-  'sereine'   => 'kaderhb33@gmail.com',
-  'blanche'   => 'kaderhb33@gmail.com',
-  'eclat'     => 'kaderhb33@gmail.com',
-  'olea'      => 'kaderhb33@gmail.com',
-  'noveo'     => 'kaderhb33@gmail.com',
-  'zenta'     => 'kaderhb33@gmail.com',
-  'reddent'   => 'kaderhb33@gmail.com',
-  'dentitive' => 'kaderhb33@gmail.com',
-  'fiche'     => 'contact@dentwebpro.site',
-  'demo'      => 'contact@dentwebpro.site',
-  'studio'    => 'contact@dentwebpro.site',
-  'test'      => 'kaderhb33@gmail.com',
+  'sereine'=>'kaderhb33@gmail.com','blanche'=>'kaderhb33@gmail.com','eclat'=>'kaderhb33@gmail.com',
+  'olea'=>'kaderhb33@gmail.com','noveo'=>'kaderhb33@gmail.com','zenta'=>'kaderhb33@gmail.com',
+  'reddent'=>'kaderhb33@gmail.com','dentitive'=>'kaderhb33@gmail.com',
+  'fiche'=>'contact@dentwebpro.site','demo'=>'contact@dentwebpro.site','studio'=>'contact@dentwebpro.site',
+  'test'=>'kaderhb33@gmail.com',
 ];
 
 $ctype = $_SERVER['CONTENT_TYPE'] ?? '';
-if (stripos($ctype, 'application/json') !== false) {
-  $data = json_decode(file_get_contents('php://input'), true) ?: [];
-} else {
-  $data = $_POST;
-}
+$data = (stripos($ctype, 'application/json') !== false)
+  ? (json_decode(file_get_contents('php://input'), true) ?: [])
+  : $_POST;
 
-/* honeypot */
-if (!empty($data['_honey']) || !empty($data['_gotcha'])) { echo json_encode(['success' => true]); exit; }
+if (!empty($data['_honey']) || !empty($data['_gotcha'])) { echo json_encode(['success'=>true]); exit; }
 
 $site = strtolower(trim($data['site'] ?? ''));
 if ($site === '' || !isset($RECIPIENTS[$site])) {
   http_response_code(400);
-  echo json_encode(['success' => false, 'message' => 'Site non reconnu']); exit;
+  echo json_encode(['success'=>false,'message'=>'Site non reconnu']); exit;
 }
 $to = $RECIPIENTS[$site];
 
-$skip = ['site', '_honey', '_gotcha', '_subject', '_captcha', '_template', '_next'];
-
-$replyTo = '';
-foreach ($data as $k => $v) {
-  if (is_string($v) && preg_match('/mail/i', $k) && filter_var($v, FILTER_VALIDATE_EMAIL)) { $replyTo = $v; break; }
+/* --- helpers --- */
+function pick($data, $names) {
+  foreach ($names as $n) {
+    if (isset($data[$n])) {
+      $v = is_array($data[$n]) ? implode(', ', $data[$n]) : $data[$n];
+      $v = trim((string)$v);
+      if ($v !== '') return $v;
+    }
+  }
+  return '';
+}
+function e($s){ return htmlspecialchars($s, ENT_QUOTES, 'UTF-8'); }
+function frDate($d){
+  if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $d, $m)) {
+    $mois = [1=>'janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+    return intval($m[3]).' '.$mois[intval($m[2])].' '.$m[1];
+  }
+  return $d;
 }
 
-/* construire texte + HTML à partir des champs remplis */
+$prenom  = pick($data, ['Prénom','Prenom','prenom','patient_name']);
+$nom     = pick($data, ['Nom','nom','patient_lastname']);
+$tel     = pick($data, ['Téléphone','Telephone','tel','Phone','patient_phone']);
+$email   = pick($data, ['E-mail','Email','email','Mail','patient_email']);
+$jour    = pick($data, ['Jour','Date','date']);
+$heure   = pick($data, ['Heure','Time','heure','time']);
+$soin    = pick($data, ['Soin','Soins','Service','Service souhaité','service']);
+$message = pick($data, ['Message','message','reason','Text Area']);
+
+$fullname = trim($prenom.' '.$nom);
+if ($fullname === '') $fullname = $email ?: 'Nouveau contact';
+$replyTo = filter_var($email, FILTER_VALIDATE_EMAIL) ? $email : $FROM;
+$cabinet = ucfirst($site);
+$subject = trim($data['_subject'] ?? '') ?: ('Nouvelle demande de rendez-vous — '.$cabinet);
+
+/* ---------- version TEXTE ---------- */
+$text  = "NOUVELLE DEMANDE DE RENDEZ-VOUS\r\nCabinet : $cabinet (via $BRAND)\r\n";
+$text .= str_repeat('-', 40)."\r\n";
+if ($fullname) $text .= "Patient   : $fullname\r\n";
+if ($tel)      $text .= "Téléphone : $tel\r\n";
+if ($email)    $text .= "E-mail    : $email\r\n";
+if ($jour||$heure) $text .= "Rendez-vous : ".frDate($jour).($heure?" à $heure":"")."\r\n";
+if ($soin)     $text .= "Soin      : $soin\r\n";
+if ($message)  $text .= "Message   : $message\r\n";
+$text .= str_repeat('-', 40)."\r\n";
+$text .= "Répondez à cet e-mail pour contacter le patient.\r\nEnvoyé via $BRAND — dentwebpro.site\r\n";
+
+/* ---------- version HTML (pro, compatible e-mail) ---------- */
 $rows = '';
-$text = "Nouvelle demande de rendez-vous\r\nCabinet : " . ucfirst($site) . " (via " . $BRAND . ")\r\n\r\n";
-$hasContent = false;
-foreach ($data as $k => $v) {
-  if (in_array($k, $skip, true)) continue;
-  if (is_array($v)) $v = implode(', ', $v);
-  $v = trim((string) $v);
-  if ($v === '') continue;
-  $hasContent = true;
-  $rows .= '<tr>'
-        . '<td style="padding:9px 13px;border:1px solid #e6e8ec;font-weight:600;color:#15171b;background:#f6f7f9;white-space:nowrap">' . htmlspecialchars($k) . '</td>'
-        . '<td style="padding:9px 13px;border:1px solid #e6e8ec;color:#333">' . nl2br(htmlspecialchars($v)) . '</td>'
-        . '</tr>';
-  $text .= $k . ' : ' . $v . "\r\n";
+$cell = function($label,$val,$link='') {
+  if ($val==='') return '';
+  $v = $link ? '<a href="'.$link.'" style="color:#15171b;text-decoration:none">'.e($val).'</a>' : e($val);
+  return '<tr>'
+    .'<td style="padding:11px 0;border-bottom:1px solid #eef0f3;font:600 12px Arial,sans-serif;letter-spacing:.5px;text-transform:uppercase;color:#9aa0a6;width:130px;vertical-align:top">'.e($label).'</td>'
+    .'<td style="padding:11px 0;border-bottom:1px solid #eef0f3;font:15px Arial,sans-serif;color:#15171b">'.$v.'</td></tr>';
+};
+$rows .= $cell('Patient', $fullname);
+$rows .= $cell('Téléphone', $tel, $tel?('tel:'.preg_replace('/[^\d+]/','',$tel)):'');
+$rows .= $cell('E-mail', $email, $email?('mailto:'.$email):'');
+$rows .= $cell('Soin souhaité', $soin);
+if ($message) {
+  $rows .= '<tr><td colspan="2" style="padding:14px 0 2px;font:600 12px Arial,sans-serif;letter-spacing:.5px;text-transform:uppercase;color:#9aa0a6">Message</td></tr>'
+        .'<tr><td colspan="2" style="padding:0 0 6px;font:15px/1.5 Arial,sans-serif;color:#3a3a42">'.nl2br(e($message)).'</td></tr>';
 }
-if (!$hasContent) {
-  http_response_code(400);
-  echo json_encode(['success' => false, 'message' => 'Formulaire vide']); exit;
-}
-if ($replyTo) $text .= "\r\nRépondez directement à cet e-mail pour contacter le patient.\r\n";
-$text .= "\r\n-- \r\nMessage envoyé automatiquement depuis le formulaire du site (" . $BRAND . ").\r\n";
 
-$subject = trim($data['_subject'] ?? '') ?: ('Nouvelle demande — ' . ucfirst($site));
+$rdvLine = trim(frDate($jour).($heure ? ' · '.$heure : ''));
+$replyBtn = filter_var($email, FILTER_VALIDATE_EMAIL)
+  ? '<a href="mailto:'.e($email).'?subject='.rawurlencode('Votre rendez-vous — '.$cabinet).'" style="display:inline-block;background:'.$ACCENT.';color:#ffffff;text-decoration:none;font:600 15px Arial,sans-serif;padding:13px 26px;border-radius:8px">Répondre à '.e($prenom ?: 'le patient').'</a>'
+  : '';
 
-$html = '<div style="font-family:Arial,Helvetica,sans-serif;max-width:600px;margin:auto;color:#15171b">'
-      . '<h2 style="color:#f14e30;margin:0 0 2px">Nouvelle demande de rendez-vous</h2>'
-      . '<p style="color:#6c6c74;margin:0 0 16px;font-size:14px">Cabinet : <strong>' . htmlspecialchars(ucfirst($site)) . '</strong> · via ' . $BRAND . '</p>'
-      . '<table style="border-collapse:collapse;width:100%;font-size:14px">' . $rows . '</table>'
-      . ($replyTo ? '<p style="margin-top:14px;font-size:13px;color:#6c6c74">Répondez directement à cet e-mail pour contacter le patient.</p>' : '')
-      . '<hr style="border:none;border-top:1px solid #eee;margin:18px 0">'
-      . '<p style="color:#9aa0a6;font-size:12px;margin:0">Message envoyé automatiquement depuis le formulaire du site — ' . $BRAND . '.</p>'
-      . '</div>';
+$html = '<!doctype html><html><body style="margin:0;padding:0;background:#f4f5f7">'
+. '<div style="display:none;max-height:0;overflow:hidden;opacity:0">Nouvelle demande de rendez-vous'.($fullname?' de '.e($fullname):'').($rdvLine?' — '.e($rdvLine):'').'</div>'
+. '<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f7;padding:28px 12px">'
+.   '<tr><td align="center">'
+.     '<table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(20,20,30,.06)">'
+        // header
+.       '<tr><td style="background:'.$ACCENT.';padding:22px 30px">'
+.         '<table role="presentation" width="100%"><tr>'
+.           '<td style="font:800 20px Arial,sans-serif;color:#ffffff;letter-spacing:-.3px">Dent<span style="color:#ffe1d8">WebPro</span></td>'
+.           '<td align="right" style="font:600 12px Arial,sans-serif;color:#ffd9cf;text-transform:uppercase;letter-spacing:1px">Nouvelle demande</td>'
+.         '</tr></table>'
+.       '</td></tr>'
+        // title
+.       '<tr><td style="padding:30px 30px 6px">'
+.         '<div style="font:700 22px Arial,sans-serif;color:#15171b">Demande de rendez-vous</div>'
+.         '<div style="font:14px Arial,sans-serif;color:#6c6c74;margin-top:4px">Cabinet <strong style="color:#15171b">'.e($cabinet).'</strong></div>'
+.       '</td></tr>'
+        // date/time callout
+. ($rdvLine ? '<tr><td style="padding:14px 30px 0"><table role="presentation" width="100%" style="background:#fff6f3;border:1px solid #ffd9cf;border-radius:10px"><tr>'
+.         '<td style="padding:16px 20px;font:600 12px Arial,sans-serif;color:'.$ACCENT.';text-transform:uppercase;letter-spacing:1px">Créneau souhaité</td>'
+.         '<td align="right" style="padding:16px 20px;font:700 18px Arial,sans-serif;color:#15171b">'.e($rdvLine).'</td>'
+.       '</tr></table></td></tr>' : '')
+        // details
+.       '<tr><td style="padding:16px 30px 4px"><table role="presentation" width="100%" cellpadding="0" cellspacing="0">'.$rows.'</table></td></tr>'
+        // reply button
+. ($replyBtn ? '<tr><td style="padding:22px 30px 4px">'.$replyBtn.'</td></tr>' : '')
+        // footer
+.       '<tr><td style="padding:24px 30px 30px"><div style="border-top:1px solid #eef0f3;padding-top:16px;font:12px Arial,sans-serif;color:#9aa0a6">'
+.         'Message envoyé automatiquement depuis le formulaire de votre site.<br>Propulsé par <a href="https://dentwebpro.site" style="color:'.$ACCENT.';text-decoration:none">DentWebPro</a>.'
+.       '</div></td></tr>'
+.     '</table>'
+.   '</td></tr>'
+. '</table></body></html>';
 
-/* corps multipart/alternative (texte + HTML) => meilleure délivrabilité */
-$boundary = 'dwp_' . md5(uniqid('', true));
-$body  = "--$boundary\r\n";
-$body .= "Content-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n" . $text . "\r\n\r\n";
-$body .= "--$boundary\r\n";
-$body .= "Content-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n" . $html . "\r\n\r\n";
+/* ---------- envoi multipart ---------- */
+$boundary = 'dwp_'.md5(uniqid('', true));
+$body  = "--$boundary\r\nContent-Type: text/plain; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n$text\r\n\r\n";
+$body .= "--$boundary\r\nContent-Type: text/html; charset=UTF-8\r\nContent-Transfer-Encoding: 8bit\r\n\r\n$html\r\n\r\n";
 $body .= "--$boundary--\r\n";
 
-$headers  = 'MIME-Version: 1.0' . "\r\n";
-$headers .= 'Content-Type: multipart/alternative; boundary="' . $boundary . '"' . "\r\n";
-$headers .= 'From: ' . $BRAND . ' <' . $FROM . '>' . "\r\n";
-$headers .= 'Reply-To: ' . ($replyTo ?: $FROM) . "\r\n";
-$headers .= 'X-Mailer: DentWebPro-Mailer' . "\r\n";
-$headers .= 'X-Auto-Response-Suppress: All' . "\r\n";
+$headers  = "MIME-Version: 1.0\r\n";
+$headers .= "Content-Type: multipart/alternative; boundary=\"$boundary\"\r\n";
+$headers .= "From: $BRAND <$FROM>\r\n";
+$headers .= "Reply-To: $replyTo\r\n";
+$headers .= "X-Mailer: DentWebPro-Mailer\r\n";
 
-$subjectEnc = '=?UTF-8?B?' . base64_encode($subject) . '?=';
+$subjectEnc = '=?UTF-8?B?'.base64_encode($subject).'?=';
+$ok = @mail($to, $subjectEnc, $body, $headers, '-f'.$FROM);
 
-$ok = @mail($to, $subjectEnc, $body, $headers, '-f' . $FROM);
-
-if ($ok) {
-  echo json_encode(['success' => true]);
-} else {
-  http_response_code(500);
-  echo json_encode(['success' => false, 'message' => "L'envoi a échoué, réessayez."]);
-}
+echo json_encode($ok ? ['success'=>true] : ['success'=>false,'message'=>"L'envoi a échoué, réessayez."]);
+if (!$ok) http_response_code(500);
