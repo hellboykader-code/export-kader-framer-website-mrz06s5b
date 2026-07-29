@@ -189,9 +189,9 @@
         '<p class="dwp-sub">Notre formule <b>Premium</b>, tout compris et sans abonnement. Vous ne payez qu’une fois votre site livré et en ligne.</p>'+
       '</div>'+
       '<div class="dwp-formules">'+
-        card({name:"Essentiel",tag:"Le site vitrine pour démarrer",price:"290",old:"350",feats:essentiel,off:true})+
-        card({name:"Premium",tag:"Notre formule complète — la plus demandée",price:"590",old:"890",feats:premium,cta:"Choisir Premium",pro:true})+
-        card({name:"Pro",tag:"Complet et référencé",price:"390",old:"890",feats:pro,off:true})+
+        card({name:"Essentiel",tag:"Le site vitrine pour démarrer",price:"290",old:"450",feats:essentiel,off:true})+
+        card({name:"Premium",tag:"Notre formule complète — la plus demandée",price:"590",old:"990",feats:premium,cta:"Choisir Premium",pro:true})+
+        card({name:"Pro",tag:"Complet et référencé",price:"390",old:"690",feats:pro,off:true})+
       '</div>'+
       '<p class="dwp-tarifs-note">Les formules Essentiel et Pro sont <b>actuellement complètes</b>. La formule <b>Premium</b> inclut l’<b>hébergement gratuit à vie</b> ; ensuite, seulement <b>50€/an</b> pour le renouvellement du nom de domaine.</p>'+
     '</div>';
