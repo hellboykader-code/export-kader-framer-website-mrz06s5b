@@ -1,8 +1,8 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="26.669" height="156.374" viewBox="0 0 27 158">
-  <!-- Marque : écran web + sourire — version encre (fond clair) -->
+  <!-- Marque : écran web + sourire — version BLANCHE (en-tête foncé) -->
   <g transform="translate(0.5 2) scale(0.59)"><rect width="44" height="44" rx="11" fill="#17171b"/><rect x="10" y="12" width="24" height="17" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M17 33h10M22 29v4" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 19 Q22 26 28 19" fill="none" stroke="#f55733" stroke-width="2.8" stroke-linecap="round"/></g>
   <text transform="translate(18.4 150) rotate(-90)" font-family="Arial, Helvetica, sans-serif"
         font-size="12.2" font-weight="700" letter-spacing="0.6">
-    <tspan fill="#17171b">Dent</tspan><tspan fill="#f55733">Web</tspan><tspan fill="#17171b">Pro</tspan>
+    <tspan fill="#FFFFFF">Dent</tspan><tspan fill="#f55733">Web</tspan><tspan fill="#FFFFFF">Pro</tspan>
   </text>
 </svg>

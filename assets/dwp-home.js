@@ -136,7 +136,7 @@
         '<p class="dwp-sub">De la première idée à la mise en ligne, on s’occupe de tout. Vous n’avez qu’à valider.</p>'+
       '</div>'+
       '<div class="dwp-steps-grid">'+steps+'</div>'+
-      '<div class="dwp-steps-cta"><a class="dwp-btn-primary" data-nav="'+CONTACT+'" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a></div>'+
+      '<div class="dwp-steps-cta"><span class="dwp-btn-primary" data-nav="'+CONTACT+'" role="link" tabindex="0">Demander un devis gratuit '+ARROW+'</span></div>'+
     '</div>';
     return sec;
   }
@@ -169,7 +169,7 @@
         +'<span>une seule fois</span></div>';
       var cta = o.off
         ? '<span class="dwp-btn-primary dwp-formule__cta is-disabled" aria-disabled="true">Non disponible</span>'
-        : '<a class="dwp-btn-primary dwp-formule__cta" data-nav="'+FICHE+'" href="'+FICHE+'">'+o.cta+' '+ARROW+'</a>';
+        : '<span class="dwp-btn-primary dwp-formule__cta" data-nav="'+FICHE+'" role="link" tabindex="0">'+o.cta+' '+ARROW+'</span>';
       var badge = o.pro ? '<span class="dwp-formule__badge">★ Recommandé</span>'
                 : (o.off ? '<span class="dwp-formule__ribbon">Complet</span>' : '');
       return '<div class="dwp-formule'+(o.pro?' is-pro':'')+(o.off?' is-off':'')+'">'+
@@ -234,7 +234,7 @@
         '<h2>Vous vous posez des questions ?</h2>'+
       '</div>'+
       qa+
-      '<div class="dwp-faq-cta"><a class="dwp-btn-primary" data-nav="'+CONTACT+'" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a></div>'+
+      '<div class="dwp-faq-cta"><span class="dwp-btn-primary" data-nav="'+CONTACT+'" role="link" tabindex="0">Demander un devis gratuit '+ARROW+'</span></div>'+
     '</div>';
     return sec;
   }
@@ -246,7 +246,7 @@
     sec.innerHTML='<div class="dwp-wrap">'+
       '<span class="dwp-proof-dot"></span>'+
       '<span class="dwp-proof-txt">Déjà <b>4 cabinets dentaires</b> en ligne avec DentWebPro</span>'+
-      '<a class="dwp-proof-link" data-nav="#dwp-gallery" href="'+BASE+'/#dwp-gallery">Découvrir leurs sites →</a>'+
+      '<span class="dwp-proof-link" data-nav="#dwp-gallery" role="link" tabindex="0">Découvrir leurs sites →</span>'+
     '</div>';
     return sec;
   }
@@ -318,7 +318,7 @@
     sec.innerHTML='<div class="dwp-wrap"><div class="dwp-cta-box">'+
       '<h2>Prêt à lancer votre cabinet en ligne ?</h2>'+
       '<p>Recevez votre devis gratuit et sans engagement. On s’occupe de tout — vous ne payez qu’à la livraison.</p>'+
-      '<a class="dwp-btn-primary" data-nav="'+CONTACT+'" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a>'+
+      '<span class="dwp-btn-primary" data-nav="'+CONTACT+'" role="link" tabindex="0">Demander un devis gratuit '+ARROW+'</span>'+
       '<div class="dwp-cta-sub">Réponse sous 24h · Sans engagement · Payé à la livraison</div>'+
     '</div></div>';
     return sec;
@@ -443,8 +443,9 @@
     // 0) forcer le logo DentWebPro. Sur mobile (<=810px) : version HORIZONTALE
     //    (le logo vertical se retrouve écrasé/minuscule dans la barre du header).
     var mobileLogo = window.innerWidth <= 810;
-    var LG = "?lg=4"; // cache-bust du logo (mêmes URLs dans le SSR -> pas de « flash » d'ancien logo)
-    var fresh = BASE + (mobileLogo ? "/assets/dwp-brand-horizontal.svg"+LG : "/assets/dwp-brand-vertical.svg"+LG);
+    var LG = "?lg=5"; // cache-bust du logo (mêmes URLs dans le SSR -> pas de « flash » d'ancien logo)
+    // En-tête = fond FONCÉ -> logo BLANC (vertical desktop + horizontal mobile). Footer = clair -> encre.
+    var fresh = BASE + (mobileLogo ? "/assets/dwp-brand-horizontal-white.svg"+LG : "/assets/dwp-brand-vertical.svg"+LG);
     // conteneur du logo : boîte horizontale sur mobile, réglages Framer d'origine sinon
     document.querySelectorAll('[data-framer-name="Brand"] a, [data-framer-name="Logo / Vertical"]').forEach(function(a){
       if(mobileLogo){ a.style.width="154px"; a.style.height="32px"; a.style.aspectRatio="auto"; a.style.flex="0 0 auto"; }
