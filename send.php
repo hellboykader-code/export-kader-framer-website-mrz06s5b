@@ -90,6 +90,24 @@ if ($site === 'fiche') {
   $subject  = 'Nouvelle fiche cabinet'.($cabinet ? ' — '.$cabinet : '').' — '.$BRAND;
   $replyTo  = $FROM; // rester sur le domaine (évite le filtre spam sortant Namecheap)
 
+  // ⭐ Enregistrer les fichiers sur le serveur et envoyer des LIENS (e-mail léger).
+  //    Les pièces jointes lourdes (logo + photos) faisaient filtrer/rejeter l'e-mail
+  //    comme spam. On sauvegarde dans /uploads/ et on met des liens de téléchargement.
+  $uploadLinks = [];
+  if (!empty($attachments)) {
+    $dir = __DIR__.'/uploads';
+    if (!is_dir($dir)) @mkdir($dir, 0755, true);
+    if (!file_exists($dir.'/index.html')) @file_put_contents($dir.'/index.html', '<!doctype html><title>.</title>');
+    foreach ($attachments as $a) {
+      $safe = preg_replace('/[^A-Za-z0-9._-]+/', '_', $a['name']);
+      $fn = date('Ymd-His').'-'.substr(md5(uniqid('', true)),0,6).'-'.$safe;
+      if (@file_put_contents($dir.'/'.$fn, $a['data']) !== false) {
+        $uploadLinks[] = ['name'=>$a['name'], 'url'=>'https://dentwebpro.site/uploads/'.$fn];
+      }
+    }
+    $attachments = []; // ne PAS joindre : e-mail léger, passe les filtres
+  }
+
   $text = "NOUVELLE FICHE CABINET".($cabinet ? " — $cabinet" : "")."\r\n".str_repeat('-',44)."\r\n";
   $rows = '';
   foreach ($data as $k => $v) {
@@ -103,15 +121,18 @@ if ($site === 'fiche') {
       .'<td style="padding:10px 0;border-bottom:1px solid #eef0f3;font:600 12px Arial,sans-serif;letter-spacing:.4px;color:#9aa0a6;width:200px;vertical-align:top">'.e($label).'</td>'
       .'<td style="padding:10px 0;border-bottom:1px solid #eef0f3;font:14px Arial,sans-serif;color:#15171b">'.nl2br(e($val)).'</td></tr>';
   }
-  if ($attachments) {
-    $names = array_map(function($a){ return $a['name']; }, $attachments);
-    $text .= "Pièces jointes : ".implode(', ', $names)."\r\n";
+  if (!empty($uploadLinks)) {
+    $text .= "Fichiers joints :\r\n";
+    foreach ($uploadLinks as $l) { $text .= '  - '.$l['name'].' : '.$l['url']."\r\n"; }
   }
   $text .= str_repeat('-',44)."\r\n".($cabEmail ? "Répondre au cabinet : $cabEmail\r\n" : "")."Envoyé via $BRAND — dentwebpro.site\r\n";
 
-  $attNote = $attachments
-    ? '<tr><td colspan="2" style="padding:16px 0 0"><div style="background:#fff6f3;border:1px solid #ffd9cf;border-radius:8px;padding:12px 14px;font:13px Arial,sans-serif;color:#15171b">📎 '.count($attachments).' pièce(s) jointe(s) : '.e(implode(', ', array_map(function($a){return $a['name'];},$attachments))).'</div></td></tr>'
-    : '';
+  $attNote = '';
+  if (!empty($uploadLinks)) {
+    $items = '';
+    foreach ($uploadLinks as $l) { $items .= '<div style="margin-top:6px">↳ <a href="'.e($l['url']).'" style="color:'.$ACCENT.';font-weight:600;text-decoration:none">'.e($l['name']).'</a></div>'; }
+    $attNote = '<tr><td colspan="2" style="padding:16px 0 0"><div style="background:#fff6f3;border:1px solid #ffd9cf;border-radius:8px;padding:13px 15px;font:13px Arial,sans-serif;color:#15171b"><b>📎 Fichiers joints (cliquez pour télécharger)</b>'.$items.'</div></td></tr>';
+  }
   $html = '<!doctype html><html><body style="margin:0;padding:0;background:#f4f5f7">'
     .'<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f7;padding:28px 12px"><tr><td align="center">'
     .'<table role="presentation" width="640" cellpadding="0" cellspacing="0" style="max-width:640px;width:100%;background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 6px 24px rgba(20,20,30,.06)">'
