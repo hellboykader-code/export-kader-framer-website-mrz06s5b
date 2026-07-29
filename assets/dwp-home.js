@@ -136,7 +136,7 @@
         '<p class="dwp-sub">De la première idée à la mise en ligne, on s’occupe de tout. Vous n’avez qu’à valider.</p>'+
       '</div>'+
       '<div class="dwp-steps-grid">'+steps+'</div>'+
-      '<div class="dwp-steps-cta"><a class="dwp-btn-primary" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a></div>'+
+      '<div class="dwp-steps-cta"><a class="dwp-btn-primary" data-nav="'+CONTACT+'" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a></div>'+
     '</div>';
     return sec;
   }
@@ -169,7 +169,7 @@
         +'<span>une seule fois</span></div>';
       var cta = o.off
         ? '<span class="dwp-btn-primary dwp-formule__cta is-disabled" aria-disabled="true">Non disponible</span>'
-        : '<a class="dwp-btn-primary dwp-formule__cta" href="'+FICHE+'">'+o.cta+' '+ARROW+'</a>';
+        : '<a class="dwp-btn-primary dwp-formule__cta" data-nav="'+FICHE+'" href="'+FICHE+'">'+o.cta+' '+ARROW+'</a>';
       var badge = o.pro ? '<span class="dwp-formule__badge">★ Recommandé</span>'
                 : (o.off ? '<span class="dwp-formule__ribbon">Complet</span>' : '');
       return '<div class="dwp-formule'+(o.pro?' is-pro':'')+(o.off?' is-off':'')+'">'+
@@ -190,8 +190,8 @@
       '</div>'+
       '<div class="dwp-formules">'+
         card({name:"Essentiel",tag:"Le site vitrine pour démarrer",price:"290",old:"450",feats:essentiel,off:true})+
-        card({name:"Premium",tag:"Notre formule complète — la plus demandée",price:"590",old:"990",feats:premium,cta:"Choisir Premium",pro:true})+
-        card({name:"Pro",tag:"Complet et référencé",price:"390",old:"690",feats:pro,off:true})+
+        card({name:"Premium",tag:"Notre formule complète — la plus demandée",price:"390",old:"990",feats:premium,cta:"Choisir Premium",pro:true})+
+        card({name:"Pro",tag:"Complet et référencé",price:"590",old:"690",feats:pro,off:true})+
       '</div>'+
       '<p class="dwp-tarifs-note">Les formules Essentiel et Pro sont <b>actuellement complètes</b>. La formule <b>Premium</b> inclut l’<b>hébergement gratuit à vie</b> ; ensuite, seulement <b>50€/an</b> pour le renouvellement du nom de domaine.</p>'+
     '</div>';
@@ -234,7 +234,7 @@
         '<h2>Vous vous posez des questions ?</h2>'+
       '</div>'+
       qa+
-      '<div class="dwp-faq-cta"><a class="dwp-btn-primary" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a></div>'+
+      '<div class="dwp-faq-cta"><a class="dwp-btn-primary" data-nav="'+CONTACT+'" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a></div>'+
     '</div>';
     return sec;
   }
@@ -246,7 +246,7 @@
     sec.innerHTML='<div class="dwp-wrap">'+
       '<span class="dwp-proof-dot"></span>'+
       '<span class="dwp-proof-txt">Déjà <b>4 cabinets dentaires</b> en ligne avec DentWebPro</span>'+
-      '<a class="dwp-proof-link" href="'+BASE+'/#dwp-gallery">Découvrir leurs sites →</a>'+
+      '<a class="dwp-proof-link" data-nav="#dwp-gallery" href="'+BASE+'/#dwp-gallery">Découvrir leurs sites →</a>'+
     '</div>';
     return sec;
   }
@@ -318,7 +318,7 @@
     sec.innerHTML='<div class="dwp-wrap"><div class="dwp-cta-box">'+
       '<h2>Prêt à lancer votre cabinet en ligne ?</h2>'+
       '<p>Recevez votre devis gratuit et sans engagement. On s’occupe de tout — vous ne payez qu’à la livraison.</p>'+
-      '<a class="dwp-btn-primary" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a>'+
+      '<a class="dwp-btn-primary" data-nav="'+CONTACT+'" href="'+CONTACT+'">Demander un devis gratuit '+ARROW+'</a>'+
       '<div class="dwp-cta-sub">Réponse sous 24h · Sans engagement · Payé à la livraison</div>'+
     '</div></div>';
     return sec;
@@ -335,6 +335,26 @@
       '<path d="M12.3 9.6c-.2-.5-.5-.5-.7-.5h-.6c-.2 0-.6.1-.9.4-.3.3-1.2 1.2-1.2 2.9 0 1.7 1.2 3.4 1.4 3.6.2.2 2.4 3.8 6 5.2 3 1.2 3.6 1 4.3.9.7-.1 2.1-.9 2.4-1.7.3-.8.3-1.6.2-1.7-.1-.2-.4-.3-.8-.5-.4-.2-2.1-1-2.4-1.1-.3-.1-.6-.2-.8.2-.2.3-.9 1.1-1.1 1.3-.2.2-.4.3-.8.1-.4-.2-1.5-.6-2.9-1.8-1.1-1-1.8-2.2-2-2.5-.2-.4 0-.6.2-.7.2-.2.4-.4.5-.6.2-.2.2-.3.4-.6.1-.2.1-.4 0-.6-.1-.2-.8-2-1.1-2.7z" fill="#25d366"/>'+
       '</svg></span><span class="dwp-wa-txt">Discutons sur WhatsApp</span>';
     document.body.appendChild(a);
+  }
+
+  // ─── masquer le sceau décoratif du thème (« SOLUTION · VISION · IDÉE · CRÉER »)
+  //    Construit par Framer à l'hydratation (arc-text) -> pas dans le SSR : on le
+  //    repère par son texte et on masque son conteneur. Auto-réparant (apply répété).
+  function hideSeal(){
+    var els=document.querySelectorAll('a,div,button,span');
+    for(var i=0;i<els.length;i++){ var el=els[i];
+      if(el.getAttribute && el.getAttribute('data-dwp-seal')) continue;
+      var t=(el.textContent||'').replace(/[^A-Za-zÀ-ÿ]/g,'').toUpperCase();
+      if(t.length<46 && t.indexOf('SOLUTION')>=0 && t.indexOf('VISION')>=0 &&
+        (t.indexOf('CR')>=0 && (t.indexOf('IDE')>=0||t.indexOf('IDÉE')>=0))){
+        var node=el;
+        for(var k=0;k<4;k++){ var p=node.parentElement; if(!p) break;
+          var pt=(p.textContent||'').replace(/[^A-Za-zÀ-ÿ]/g,'').toUpperCase();
+          if(pt===t) node=p; else break; }
+        node.setAttribute('data-dwp-seal','1');
+        node.style.setProperty('display','none','important');
+      }
+    }
   }
 
   var TEAM=[
@@ -550,6 +570,7 @@
     // 4c/4d) À propos — chronologie (textes) + photos = NOTRE parcours, auto-réparant.
     fixText();
     fixImgs();
+    hideSeal();
     // 5) retirer le crédit auteur du thème « Créé par Duncan Shen »
     document.querySelectorAll('footer *, [data-framer-name*="Footer"] *').forEach(function(el){
       if(el.children.length) return;
@@ -605,6 +626,16 @@
     // ouverture fiable des cartes (contourne le routeur Framer)
     document.addEventListener("click",function(e){
       if(!e.target.closest) return;
+      // ⭐ CTA injectés (Choisir Premium, Demander un devis, preuve…) : Framer vide leur
+      //    href en javascript:void(0). On lit data-nav (intact) et on navigue nous-mêmes.
+      var navEl=e.target.closest('[data-nav]');
+      if(navEl){
+        e.preventDefault(); e.stopImmediatePropagation();
+        var d=navEl.getAttribute('data-nav');
+        if(d.charAt(0)==='#'){ var t=document.querySelector(d); if(t){ t.scrollIntoView({behavior:'smooth'}); } else { window.location.assign(BASE+'/'+d); } }
+        else { window.location.assign(d); }
+        return;
+      }
       // ⭐ « Réalisations » : Framer vide le href et son routeur va vers /projects (thème).
       //    On intercepte AVANT le routeur (phase capture) -> ferme le menu + galerie.
       var rl=e.target.closest('a,[role="link"]');
@@ -653,10 +684,10 @@
     //    changement de src/srcset (observer) + filet interval léger. Le guard interne
     //    (ne réécrit que si différent) évite toute boucle.
     var fixT=null;
-    function healNow(){ fixT=null; fixImgs(); fixText(); }
+    function healNow(){ fixT=null; fixImgs(); fixText(); hideSeal(); }
     var imgObs=new MutationObserver(function(){ if(fixT) return; fixT=setTimeout(healNow,80); });
     try{ imgObs.observe(document.body,{subtree:true,childList:true,attributes:true,attributeFilter:["src","srcset"]}); }catch(e){}
-    setInterval(function(){ fixImgs(); fixText(); },1000);
+    setInterval(function(){ fixImgs(); fixText(); hideSeal(); },1000);
     // ré-appliquer au redimensionnement/rotation (bascule logo vertical <-> horizontal)
     var rt=null; window.addEventListener("resize",function(){ if(rt) clearTimeout(rt); rt=setTimeout(apply,150); });
   }
