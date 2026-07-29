@@ -443,7 +443,8 @@
     // 0) forcer le logo DentWebPro. Sur mobile (<=810px) : version HORIZONTALE
     //    (le logo vertical se retrouve écrasé/minuscule dans la barre du header).
     var mobileLogo = window.innerWidth <= 810;
-    var fresh = BASE + (mobileLogo ? "/assets/dwp-brand-horizontal.svg" : "/assets/dwp-brand-vertical.svg");
+    var LG = "?lg=4"; // cache-bust du logo (mêmes URLs dans le SSR -> pas de « flash » d'ancien logo)
+    var fresh = BASE + (mobileLogo ? "/assets/dwp-brand-horizontal.svg"+LG : "/assets/dwp-brand-vertical.svg"+LG);
     // conteneur du logo : boîte horizontale sur mobile, réglages Framer d'origine sinon
     document.querySelectorAll('[data-framer-name="Brand"] a, [data-framer-name="Logo / Vertical"]').forEach(function(a){
       if(mobileLogo){ a.style.width="154px"; a.style.height="32px"; a.style.aspectRatio="auto"; a.style.flex="0 0 auto"; }
@@ -466,7 +467,7 @@
     // (le calque ne contient pas « Logo »/« Brand » => non couvert ci-dessus ; c'était
     //  le logo « BrightEdge » du thème resté visible dans le footer).
     document.querySelectorAll('[data-framer-name="Footer / Top"] img').forEach(function(img){
-      var fh=BASE+"/assets/dwp-brand-horizontal.svg";
+      var fh=BASE+"/assets/dwp-brand-horizontal.svg"+LG;
       if(img.getAttribute("src")!==fh) img.setAttribute("src", fh);
       img.style.objectFit="contain"; img.style.objectPosition="left center";
     });

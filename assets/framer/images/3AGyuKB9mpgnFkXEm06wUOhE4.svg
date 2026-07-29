@@ -1,13 +1,7 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="210" height="40" viewBox="0 0 210 40">
-  <!-- Marque : réseau / pixels (triangle + nœuds) — version encre (fond clair) -->
-  <g transform="translate(2 2.2) scale(0.56)">
-    <path d="M18 20 L46 20 L32 44 Z" fill="none" stroke="#17171b" stroke-width="3.4" stroke-linejoin="round"/>
-    <line x1="18" y1="20" x2="32" y2="44" stroke="#17171b" stroke-width="3.4"/>
-    <circle cx="18" cy="20" r="6" fill="#f55733"/>
-    <circle cx="46" cy="20" r="6" fill="#17171b"/>
-    <circle cx="32" cy="44" r="6" fill="#f55733"/>
-  </g>
-  <text x="31" y="27" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="700" letter-spacing="0.2">
+<svg xmlns="http://www.w3.org/2000/svg" width="214" height="40" viewBox="0 0 214 40">
+  <!-- Marque : écran web + sourire — version encre (fond clair) -->
+  <g transform="translate(3 3) scale(0.773)"><rect width="44" height="44" rx="11" fill="#17171b"/><rect x="10" y="12" width="24" height="17" rx="3" fill="none" stroke="#fff" stroke-width="2.4"/><path d="M17 33h10M22 29v4" stroke="#fff" stroke-width="2.4" stroke-linecap="round"/><path d="M16 19 Q22 26 28 19" fill="none" stroke="#f55733" stroke-width="2.8" stroke-linecap="round"/></g>
+  <text x="44" y="27" font-family="Arial, Helvetica, sans-serif" font-size="20.5" font-weight="700" letter-spacing="0.2">
     <tspan fill="#17171b">Dent</tspan><tspan fill="#f55733">Web</tspan><tspan fill="#17171b">Pro</tspan>
   </text>
 </svg>
