@@ -3,12 +3,12 @@
   <g transform="translate(-5.5 2) scale(0.6)">
     <path d="M18 20 L46 20 L32 44 Z" fill="none" stroke="#17171b" stroke-width="3.4" stroke-linejoin="round"/>
     <line x1="18" y1="20" x2="32" y2="44" stroke="#17171b" stroke-width="3.4"/>
-    <circle cx="18" cy="20" r="6" fill="#f14e30"/>
+    <circle cx="18" cy="20" r="6" fill="#f55733"/>
     <circle cx="46" cy="20" r="6" fill="#17171b"/>
-    <circle cx="32" cy="44" r="6" fill="#f14e30"/>
+    <circle cx="32" cy="44" r="6" fill="#f55733"/>
   </g>
   <text transform="translate(18.4 150) rotate(-90)" font-family="Arial, Helvetica, sans-serif"
         font-size="12.2" font-weight="700" letter-spacing="0.6">
-    <tspan fill="#17171b">Dent</tspan><tspan fill="#f14e30">Web</tspan><tspan fill="#17171b">Pro</tspan>
+    <tspan fill="#17171b">Dent</tspan><tspan fill="#f55733">Web</tspan><tspan fill="#17171b">Pro</tspan>
   </text>
 </svg>

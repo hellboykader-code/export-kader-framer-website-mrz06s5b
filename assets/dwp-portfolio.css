@@ -1,7 +1,7 @@
 /* DentWebPro — styles portfolio (pages détail + galerie injectée) */
 :root{
   --dwp-ink:#17171b; --dwp-muted:#6c6c74; --dwp-bg:#fbfbfc; --dwp-line:#e9e9ee;
-  --dwp-dark:#1b1b1f; --dwp-accent:#f14e30; --dwp-card:#fff;
+  --dwp-dark:#1b1b1f; --dwp-accent:#f55733; --dwp-card:#fff;
   --dwp-radius:18px; --dwp-font:'Figtree','Inter',system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
 }
 .dwp,.dwp *{box-sizing:border-box}
@@ -109,7 +109,7 @@ main [data-framer-name="Team Section"]{display:none !important}
 
 /* ─── Boutons partagés ───────────────────────────────────────── */
 .dwp-btn-primary{display:inline-flex;align-items:center;gap:10px;background:var(--dwp-accent);color:#fff;font-weight:700;font-size:1.05rem;text-decoration:none;padding:15px 30px;border-radius:12px;transition:transform .15s,background .2s;cursor:pointer;border:0}
-.dwp-btn-primary:hover{background:#d33e22;transform:translateY(-2px)}
+.dwp-btn-primary:hover{background:#d8431f;transform:translateY(-2px)}
 .dwp-thead{text-align:center;max-width:660px;margin:0 auto 48px}
 .dwp-thead .dwp-eyebrow2{color:var(--dwp-accent);font-weight:700;letter-spacing:.14em;text-transform:uppercase;font-size:.8rem}
 .dwp-thead h2{font-size:clamp(2rem,4.4vw,3.3rem);letter-spacing:-.03em;margin:.25em 0 .12em;color:var(--dwp-ink)}
@@ -153,8 +153,17 @@ main [data-framer-name="Team Section"]{display:none !important}
 .dwp-formule__cta{margin-top:24px;justify-content:center;width:100%}
 .dwp-formule:not(.is-pro) .dwp-formule__cta{background:var(--dwp-ink)}
 .dwp-formule:not(.is-pro) .dwp-formule__cta:hover{background:#000}
-.dwp-tarifs-note{text-align:center;color:var(--dwp-muted);font-size:.95rem;margin:34px auto 0;max-width:60ch}
+.dwp-tarifs-note{text-align:center;color:var(--dwp-muted);font-size:.95rem;margin:34px auto 0;max-width:64ch}
 .dwp-tarifs-note b{color:var(--dwp-ink)}
+/* ancien prix barré */
+.dwp-formule__old{align-self:flex-end;padding-bottom:7px;color:#a6a6ae;font-weight:600;font-size:1.1rem;text-decoration:line-through;text-decoration-color:var(--dwp-accent);text-decoration-thickness:2px}
+.dwp-formule.is-pro .dwp-formule__old{color:#b7b5bf}
+/* formules indisponibles (Essentiel / Pro) : grisées + « Complet » */
+.dwp-formule.is-off{opacity:.7;filter:grayscale(.4)}
+.dwp-formule.is-off .dwp-formule__name,.dwp-formule.is-off .dwp-formule__price b{color:#7a7a82}
+.dwp-formule__ribbon{position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:#8a8a92;color:#fff;font-weight:700;font-size:.78rem;letter-spacing:.05em;padding:6px 16px;border-radius:100px;white-space:nowrap}
+.dwp-btn-primary.is-disabled{background:#dcdce1;color:#8a8a92;cursor:not-allowed;pointer-events:none;box-shadow:none}
+.dwp-btn-primary.is-disabled:hover{transform:none;background:#dcdce1}
 @media(max-width:900px){.dwp-formules{grid-template-columns:1fr;max-width:440px;margin:0 auto}.dwp-formule.is-pro{order:-1}}
 
 /* ─── Garanties (bandeau) ────────────────────────────────────── */
