@@ -133,6 +133,7 @@ if ($action !== '') {
       if ($p['id'] === $id && ($p['assignedTo'] ?? '') === $key) {
         foreach (['interesse', 'note', 'relance', 'statut'] as $fld)
           if (array_key_exists($fld, $in)) $p[$fld] = trim((string)$in[$fld]);
+        if (array_key_exists('statut', $in)) $p['interesse'] = ($p['statut'] === 'interesse') ? 'oui' : 'non';
         if (array_key_exists('vendu', $in)) { $p['vendu'] = ($in['vendu'] === '1' || $in['vendu'] === 'true'); }
         if (!empty($p['vendu']) && empty($p['prix'])) $p['prix'] = PRIX_DEFAUT;
         $p['updated'] = time(); $done = true;
@@ -198,6 +199,38 @@ if ($action !== '') {
     ];
     db_save($db);
     echo json_encode(['ok' => true, 'id' => $id]); exit;
+  }
+  if ($action === 'import_prospects') {
+    $raw  = (string)($in['raw'] ?? '');
+    $mode = $in['mode'] ?? 'auto';          // auto (répartir) | one (un seul) | none
+    $only = trim((string)($in['assignedTo'] ?? ''));
+    $coms = array_values(array_map(fn($e) => $e['key'],
+            array_filter($db['employees'], fn($e) => ($e['role'] ?? '') === 'commercial')));
+    // téléphones déjà présents → éviter les doublons à l'import
+    $existing = [];
+    foreach ($db['prospects'] as $p) { $t = preg_replace('/\D/', '', $p['tel'] ?? ''); if ($t) $existing[$t] = 1; }
+    $added = 0; $skipped = 0; $i = 0;
+    foreach (preg_split('/\r\n|\r|\n/', $raw) as $ln) {
+      $ln = trim($ln); if ($ln === '') continue;
+      $parts = preg_split('/\t|;|,/', $ln);
+      $cab = trim($parts[0] ?? ''); $ville = trim($parts[1] ?? '');
+      $tel = trim($parts[2] ?? ''); $email = trim($parts[3] ?? '');
+      if ($cab === '' && $tel === '') continue;
+      $tn = preg_replace('/\D/', '', $tel);
+      if ($tn !== '' && isset($existing[$tn])) { $skipped++; continue; }
+      if ($tn !== '') $existing[$tn] = 1;
+      if ($mode === 'one')      $assign = $only;
+      elseif ($mode === 'none') $assign = '';
+      else { $assign = $coms ? $coms[$i % count($coms)] : ''; $i++; }
+      $db['prospects'][] = [
+        'id' => $db['seq']++, 'cabinet' => $cab, 'ville' => $ville, 'tel' => $tel, 'email' => $email,
+        'source' => 'Import', 'assignedTo' => $assign, 'interesse' => 'non', 'statut' => 'nouveau',
+        'note' => '', 'relance' => '', 'vendu' => false, 'prix' => PRIX_DEFAUT, 'created' => time(), 'updated' => time(),
+      ];
+      $added++;
+    }
+    if ($added) db_save($db);
+    echo json_encode(['ok' => true, 'added' => $added, 'skipped' => $skipped]); exit;
   }
   if ($action === 'edit_prospect') {
     $id = (int)($in['id'] ?? 0); $done = false;
@@ -270,10 +303,12 @@ $A = ACCENT;
   .card .src{margin-left:auto;font-size:11px;font-weight:700;color:var(--soft);background:#f2f2f4;border-radius:100px;padding:3px 9px;white-space:nowrap}
   .call{display:flex;align-items:center;gap:10px;margin:13px 0;background:var(--ink);color:#fff;text-decoration:none;border-radius:11px;padding:12px 15px;font-weight:700;font-size:16px}
   .call .ph{margin-left:auto;font-weight:500;font-size:14px;color:#cfcfd6}
-  .seg{display:flex;gap:8px;margin:12px 0}
-  .seg button{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px;font-weight:700;font-size:14px;color:var(--soft);cursor:pointer}
+  .seg{display:flex;gap:8px;margin:12px 0;flex-wrap:wrap}
+  .seg button{flex:1;min-width:96px;border:1.5px solid var(--line);background:#fff;border-radius:10px;padding:11px 8px;font-weight:700;font-size:13.5px;color:var(--soft);cursor:pointer}
   .seg button.y.on{background:var(--ok);border-color:var(--ok);color:#fff}
   .seg button.n.on{background:#ececef;border-color:#d8d8dd;color:#333}
+  .seg button.r.on{background:#e5484d;border-color:#e5484d;color:#fff}
+  .card.no{opacity:.62}
   .row{display:flex;gap:10px;margin-top:10px;flex-wrap:wrap}
   .fld{flex:1;min-width:140px;display:flex;flex-direction:column;gap:5px}
   .fld label{font-size:11.5px;font-weight:700;color:var(--soft);text-transform:uppercase;letter-spacing:.04em}
@@ -302,6 +337,7 @@ $A = ACCENT;
   .tag{display:inline-block;font-size:11px;font-weight:700;border-radius:100px;padding:2px 9px}
   .tag.oui{background:#e3f7ec;color:#137a43}.tag.non{background:#f2f2f4;color:#777}
   .tag.vendu{background:#fff0d9;color:#a5680a}
+  .tag.new{background:#eef1f6;color:#5b6472}.tag.no{background:#fdecec;color:#c0342f}
   .warn{color:#d33;font-weight:700;font-size:11px}
   .emp{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 15px;margin-bottom:10px}
   .emp .lk{font-size:12.5px;color:var(--soft);word-break:break-all;background:#f7f7f8;border-radius:8px;padding:8px 10px;margin-top:8px;font-family:ui-monospace,Menlo,monospace}
@@ -367,37 +403,53 @@ function bindLogout(){ const b=document.getElementById('logout'); if(b)b.onclick
 
 /* ---------- vue COMMERCIAL ---------- */
 let FILTER='tous';
+const stOf = p => p.statut || (p.interesse==='oui'?'interesse':'nouveau');
+const today = () => new Date().toISOString().slice(0,10);
 async function commercialView(){
   const r = await api('my_list');
   const list = r.prospects||[];
-  const cAll=list.length, cRel=list.filter(p=>p.relance).length, cOui=list.filter(p=>p.interesse==='oui').length;
-  const shown = list.filter(p=> FILTER==='tous'?true : FILTER==='relance'?p.relance : FILTER==='oui'?p.interesse==='oui':true);
+  const cAll = list.filter(p=>stOf(p)!=='pas_interesse').length;
+  const cRel = list.filter(p=>stOf(p)!=='pas_interesse' && p.relance && p.relance<=today()).length;
+  const cOui = list.filter(p=>stOf(p)==='interesse').length;
+  const cNo  = list.filter(p=>stOf(p)==='pas_interesse').length;
+  const shown = list.filter(p=>{
+    const s=stOf(p);
+    if(FILTER==='tous')    return s!=='pas_interesse';
+    if(FILTER==='relance') return s!=='pas_interesse' && p.relance && p.relance<=today();
+    if(FILTER==='oui')     return s==='interesse';
+    if(FILTER==='no')      return s==='pas_interesse';
+    return true;
+  });
   root.innerHTML = header() + `
     <div class="chips">
       <div class="chip ${FILTER==='tous'?'on':''}" data-f="tous">Tous <span class="b">${cAll}</span></div>
       <div class="chip ${FILTER==='relance'?'on':''}" data-f="relance">À rappeler <span class="b">${cRel}</span></div>
       <div class="chip ${FILTER==='oui'?'on':''}" data-f="oui">Intéressés <span class="b">${cOui}</span></div>
+      <div class="chip ${FILTER==='no'?'on':''}" data-f="no">Pas intéressé <span class="b">${cNo}</span></div>
     </div>
-    <div id="cards">${ shown.length? shown.map(cardHTML).join('') : '<div class="empty">Aucun prospect ici pour le moment.</div>' }</div>`;
+    <div id="cards">${ shown.length? shown.map(cardHTML).join('') : '<div class="empty">Aucun prospect dans cette liste.</div>' }</div>`;
   bindLogout();
   document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{FILTER=c.dataset.f;commercialView();});
   shown.forEach(bindCard);
 }
 function cardHTML(p){
   const tel=(p.tel||'').replace(/[^\d+]/g,'');
-  return `<div class="card ${p.interesse==='oui'?'oui':''}" data-id="${p.id}">
+  const s=stOf(p);
+  const overdue = p.relance && p.relance<today();
+  return `<div class="card ${s==='interesse'?'oui':''} ${s==='pas_interesse'?'no':''}" data-id="${p.id}">
     <div class="top"><div><h3>${esc(p.cabinet)||'—'}</h3><div class="ville">${esc(p.ville)||''}</div></div>
       ${p.source?`<span class="src">${esc(p.source)}</span>`:''}</div>
     ${tel?`<a class="call" href="tel:${esc(tel)}">📞 Appeler <span class="ph">${esc(p.tel)}</span></a>`:''}
     <div class="seg">
-      <button class="y ${p.interesse==='oui'?'on':''}" data-v="oui">👍 Intéressé</button>
-      <button class="n ${p.interesse==='non'||!p.interesse?'on':''}" data-v="non">Pas maintenant</button>
+      <button class="y ${s==='interesse'?'on':''}" data-v="interesse">👍 Intéressé</button>
+      <button class="n ${s==='nouveau'?'on':''}" data-v="nouveau">Pas maintenant</button>
+      <button class="r ${s==='pas_interesse'?'on':''}" data-v="pas_interesse">✕ Pas intéressé</button>
     </div>
     <div class="row">
       <div class="fld" style="flex:2"><label>Note</label><textarea data-fld="note" placeholder="Ce qu'il a dit…">${esc(p.note)}</textarea></div>
     </div>
     <div class="row">
-      <div class="fld"><label>Rappeler le</label><input class="inp" type="date" data-fld="relance" value="${esc(p.relance)}"></div>
+      <div class="fld"><label>Rappeler le ${overdue?'<span style="color:#e5484d">(en retard)</span>':''}</label><input class="inp" type="date" data-fld="relance" value="${esc(p.relance)}"></div>
     </div>
     <div class="sold ${p.vendu?'on':''}" data-sold><span class="bx">${p.vendu?'✓':''}</span> Vendu ✅ (390€)</div>
     <div style="text-align:right"><span class="saved" data-saved>Enregistré ✓</span></div>
@@ -408,10 +460,8 @@ function bindCard(p){
   const flash=()=>{const s=el.querySelector('[data-saved]');s.classList.add('show');clearTimeout(s._t);s._t=setTimeout(()=>s.classList.remove('show'),1200);};
   const save=async(d)=>{ await api('save_prospect',{id:p.id,...d}); flash(); };
   el.querySelectorAll('.seg button').forEach(b=>b.onclick=async()=>{
-    const v=b.dataset.v; p.interesse=v;
-    el.querySelectorAll('.seg button').forEach(x=>x.classList.toggle('on', x.dataset.v===v));
-    el.classList.toggle('oui', v==='oui');
-    await save({interesse:v});
+    await api('save_prospect',{id:p.id, statut:b.dataset.v});
+    commercialView(); // re-render : la carte change de liste (ex. → Pas intéressé)
   });
   el.querySelectorAll('[data-fld]').forEach(f=>{
     f.addEventListener('change',()=>save({[f.dataset.fld]:f.value}));
@@ -433,6 +483,13 @@ async function adminView(){
   bindLogout();
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{ATAB=t.dataset.t;adminView();});
   ({prospects:adminProspects, equipe:adminEquipe, stats:adminStats}[ATAB])();
+}
+function statusTag(p){
+  if(p.vendu) return '<span class="tag vendu">Vendu</span>';
+  const s=stOf(p);
+  if(s==='interesse') return '<span class="tag oui">Intéressé</span>';
+  if(s==='pas_interesse') return '<span class="tag no">Pas intéressé</span>';
+  return '<span class="tag new">Nouveau</span>';
 }
 function comName(k){ const c=(ADATA.commerciaux||[]).find(x=>x.key===k); return c?c.name:'—'; }
 function comOptions(sel){ return '<option value="">— Non assigné —</option>'+(ADATA.commerciaux||[]).map(c=>`<option value="${c.key}" ${c.key===sel?'selected':''}>${esc(c.name)}</option>`).join(''); }
@@ -456,6 +513,19 @@ function adminProspects(){
       </div>
       <div style="margin-top:12px"><button class="btn sm" id="np_add">Ajouter</button></div>
     </div>
+    <div class="cardbox"><h4>📥 Importer une liste (en masse)</h4>
+      <div class="hint" style="margin-bottom:8px">Une ligne par cabinet : <b>Cabinet , Ville , Téléphone , Email</b> (séparés par virgule, point-virgule ou tabulation). Copiez-collez depuis Excel / Google Sheets. Les doublons de téléphone sont ignorés.</div>
+      <textarea id="imp_raw" style="min-height:120px" placeholder="Cabinet du Sourire, Lyon, 0612345678, contact@ex.fr&#10;Cabinet Dentaire, Paris, 0698765432,"></textarea>
+      <div class="row" style="margin-top:10px">
+        <div class="fld"><label>Répartition</label><select id="imp_mode">
+          <option value="auto">Répartir automatiquement entre les commerciaux</option>
+          <option value="one">Assigner à un seul commercial</option>
+          <option value="none">Ne pas assigner (plus tard)</option>
+        </select></div>
+        <div class="fld" id="imp_comwrap" style="display:none"><label>Commercial</label><select id="imp_com">${comOptions('')}</select></div>
+      </div>
+      <div style="margin-top:12px"><button class="btn sm" id="imp_go">Importer la liste</button></div>
+    </div>
     <div style="overflow-x:auto"><table>
       <tr><th>Cabinet</th><th>Téléphone</th><th class="hideSm">Commercial</th><th>Intéressé</th><th></th></tr>
       ${ps.length? ps.map(p=>{
@@ -464,7 +534,7 @@ function adminProspects(){
           <td><b>${esc(p.cabinet)||'—'}</b><div style="color:#888;font-size:12px">${esc(p.ville)||''}</div></td>
           <td>${esc(p.tel)||'—'} ${dup?'<div class="warn">⚠ doublon</div>':''}</td>
           <td class="hideSm">${esc(comName(p.assignedTo))}</td>
-          <td>${p.vendu?'<span class="tag vendu">Vendu</span>':(p.interesse==='oui'?'<span class="tag oui">Oui</span>':'<span class="tag non">—</span>')}</td>
+          <td>${statusTag(p)}</td>
           <td class="flex"><button class="copy" data-edit="${p.id}">Modifier</button><button class="copy" style="color:#c33" data-del="${p.id}">✕</button></td>
         </tr>`;}).join('') : '<tr><td colspan="5" style="text-align:center;color:#888;padding:30px">Aucun prospect. Ajoutez-en un ci-dessus.</td></tr>'}
     </table></div>`;
@@ -472,6 +542,17 @@ function adminProspects(){
     const d={cabinet:v('np_cab'),ville:v('np_ville'),tel:v('np_tel'),email:v('np_email'),assignedTo:v('np_com'),source:v('np_src')};
     if(!d.cabinet&&!d.tel){alert('Cabinet ou téléphone requis.');return;}
     const r=await api('add_prospect',d); if(r.ok)adminView();
+  };
+  const impMode=document.getElementById('imp_mode');
+  impMode.onchange=()=>{ document.getElementById('imp_comwrap').style.display = impMode.value==='one'?'':'none'; };
+  document.getElementById('imp_go').onclick=async()=>{
+    const raw=document.getElementById('imp_raw').value.trim();
+    if(!raw){alert('Collez une liste d\'abord.');return;}
+    const mode=impMode.value;
+    const assignedTo = mode==='one' ? document.getElementById('imp_com').value : '';
+    if(mode==='one' && !assignedTo){alert('Choisissez un commercial.');return;}
+    const r=await api('import_prospects',{raw,mode,assignedTo});
+    if(r.ok){ alert('Import terminé ✅\n'+r.added+' prospect(s) ajouté(s)'+(r.skipped?'\n'+r.skipped+' doublon(s) ignoré(s)':'')); adminView(); }
   };
   ac.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{ if(confirm('Supprimer ce prospect ?')){await api('del_prospect',{id:b.dataset.del});adminView();} });
   ac.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editProspect(+b.dataset.edit));
