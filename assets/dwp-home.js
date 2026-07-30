@@ -523,6 +523,10 @@
       hc.textContent='[data-framer-name="Team Section"]{display:none !important}[data-framer-name="Awards Section"]{display:none !important}'
         // masquer le bloc de chiffres fictifs (10 ans / 500 sites / 140 cabinets / 98%)
         +'[data-framer-name="About Achieve Numbers"]{display:none !important}'
+        // masquer la grille de prix NATIVE du thème (Essentiel/… « 20h/mois », « 8 articles »)
+        // qui ne correspond PAS à l'offre DentWebPro (390/590€ une fois) → on garde notre
+        // section #dwp-tarifs comme seule source de prix.
+        +'[data-framer-name="Pricing Section"]{display:none !important}'
         // logo « réseau/pixels » à variantes de couleur fixes : version encre dans
         // l'en-tête (fond clair) via dwp-brand-vertical/horizontal.svg, version blanche
         // dans le footer (fond foncé) via dwp-brand-horizontal-white.svg. Plus de
@@ -643,8 +647,17 @@
       // ⭐ « Réalisations » : Framer vide le href et son routeur va vers /projects (thème).
       //    On intercepte AVANT le routeur (phase capture) -> ferme le menu + galerie.
       var rl=e.target.closest('a,[role="link"]');
+      // menu MOBILE : les items ne sont pas des <a> mais des <div><p>Tarifs</p> → remonter
+      // jusqu'à un item de menu court (texte = un libellé de nav) pour le rattraper aussi.
+      if(!rl){ var pp=e.target;
+        for(var zi=0; zi<5 && pp && pp!==document.body; zi++){
+          var zt=(pp.textContent||'').replace(/[↗→»«{}]/g,'').replace(/\s+/g,' ').trim().toLowerCase();
+          if(zt==='tarifs' || /^r[ée]alisations?$/.test(zt)){ rl=pp; break; }
+          pp=pp.parentElement;
+        }
+      }
       if(rl){
-        var rt=(rl.textContent||'').replace(/[↗→»«]/g,'').replace(/\s+/g,' ').trim().toLowerCase();
+        var rt=(rl.textContent||'').replace(/[↗→»«{}]/g,'').replace(/\s+/g,' ').trim().toLowerCase();
         while(rt.length>1 && rt.length%2===0 && rt.slice(0,rt.length/2)===rt.slice(rt.length/2)) rt=rt.slice(0,rt.length/2);
         if(/^r[ée]alisation/.test(rt)){
           e.preventDefault(); e.stopImmediatePropagation();
