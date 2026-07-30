@@ -43,8 +43,8 @@
 .dwp-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:30px}
 .dwp-cardlink{text-decoration:none;color:inherit;display:block;transition:.25s;border-radius:16px;cursor:pointer}
 .dwp-cardlink:hover{transform:translateY(-6px)}
-.dwp-card-shot{border-radius:14px;overflow:hidden;background:#eef0f3}
-.dwp-card-shot img{width:100%;display:block;transition:.4s}
+.dwp-card-shot{border-radius:14px;overflow:hidden;background:#eef0f3;aspect-ratio:16/10}
+.dwp-card-shot img{width:100%;height:100%;object-fit:cover;object-position:top left;display:block;transition:.4s}
 .dwp-cardlink:hover .dwp-card-shot img{transform:scale(1.03)}
 .dwp-card-meta{display:flex;align-items:baseline;justify-content:space-between;margin-top:16px;gap:12px}
 .dwp-card-meta h3{font-size:1.25rem;letter-spacing:-.02em;margin:0}
@@ -60,7 +60,7 @@
 #dwp-live h2{font-size:clamp(2rem,4.4vw,3.4rem);letter-spacing:-.03em;margin:.25em 0 .1em;color:var(--dwp-ink)}
 #dwp-live .dwp-sub{color:var(--dwp-muted);font-size:1.1rem;margin-bottom:40px;max-width:60ch}
 .dwp-grid--3{grid-template-columns:repeat(3,1fr)}
-.dwp-live-shot{position:relative;aspect-ratio:4/3;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;padding:30px;color:#fff;
+.dwp-live-shot{position:relative;aspect-ratio:16/10;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;padding:30px;color:#fff;
   background:radial-gradient(120% 120% at 100% 0%, color-mix(in srgb, var(--accent) 26%, transparent), transparent 60%), var(--brand)}
 .dwp-live-name{font-family:'Bricolage Grotesque',var(--dwp-font);font-weight:800;font-size:2.4rem;line-height:1;letter-spacing:-.03em}
 .dwp-live-tag{color:rgba(255,255,255,.82);font-size:.95rem;font-weight:600}
