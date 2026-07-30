@@ -116,7 +116,9 @@ if ($action !== '') {
   }
   if ($action === 'add_emp') {
     $name = trim((string)($in['name'] ?? '')); if ($name === '') { echo json_encode(['ok' => false, 'msg' => 'Nom requis.']); exit; }
-    $k = gen_key($name); $pin = gen_pin();
+    $k = gen_key($name);
+    $pin = preg_replace('/\D/', '', (string)($in['pin'] ?? ''));   // code choisi par l'admin
+    if (strlen($pin) < 4) $pin = gen_pin();                        // sinon généré automatiquement
     $db['employees'][] = [
       'key' => $k, 'name' => $name, 'role' => 'commercial',
       'pin' => password_hash($pin, PASSWORD_DEFAULT), 'pinClear' => $pin, 'created' => time(),
@@ -125,7 +127,10 @@ if ($action !== '') {
     echo json_encode(['ok' => true, 'key' => $k, 'pin' => $pin]); exit;
   }
   if ($action === 'reset_pin') {
-    $k = $in['empKey'] ?? ''; $pin = gen_pin(); $done = false;
+    $k = $in['empKey'] ?? '';
+    $pin = preg_replace('/\D/', '', (string)($in['pin'] ?? ''));   // code choisi, sinon aléatoire
+    if (strlen($pin) < 4) $pin = gen_pin();
+    $done = false;
     foreach ($db['employees'] as &$e) if ($e['key'] === $k && $e['role'] === 'commercial') {
       $e['pin'] = password_hash($pin, PASSWORD_DEFAULT); $e['pinClear'] = $pin; $done = true;
     } unset($e);
@@ -583,20 +588,28 @@ function adminEquipe(){
   const cs=ADATA.commerciaux||[];
   ac.innerHTML=`
     <div class="cardbox"><h4>➕ Ajouter un commercial</h4>
-      <div class="flex"><input class="inp" id="ne_name" placeholder="Nom du commercial" style="flex:1;min-width:160px">
+      <div class="flex"><input class="inp" id="ne_name" placeholder="Nom du commercial" style="flex:1;min-width:150px">
+      <input class="inp" id="ne_pin" inputmode="numeric" maxlength="6" placeholder="Code (4 chiffres)" style="width:150px">
       <button class="btn sm" id="ne_add">Créer le lien</button></div>
-      <div class="hint" style="margin-top:8px">Un lien privé + un code à 4 chiffres seront générés. Envoyez-les au commercial.</div>
+      <div class="hint" style="margin-top:8px">Choisissez le code, ou laissez vide = généré automatiquement. Un lien privé sera créé.</div>
     </div>
     <div id="emps">${cs.length? cs.map(empHTML).join('') : '<div class="empty">Aucun commercial. Créez le premier ci-dessus.</div>'}</div>`;
   document.getElementById('ne_add').onclick=async()=>{
     const name=v('ne_name'); if(!name){alert('Entrez un nom.');return;}
-    const r=await api('add_emp',{name});
+    const pin=document.getElementById('ne_pin').value.replace(/\D/g,'');
+    if(pin && pin.length<4){alert('Le code doit avoir au moins 4 chiffres (ou laissez vide).');return;}
+    const r=await api('add_emp',{name,pin});
     if(r.ok){ adminView(); setTimeout(()=>alert('Commercial créé ✅\n\nLien : '+linkFor(r.key)+'\nCode : '+r.pin+'\n\nEnvoyez-les au commercial (ils sont aussi affichés dans la liste).'),100); }
   };
   cs.forEach(c=>{
     const box=document.querySelector(`[data-emp="${c.key}"]`); if(!box)return;
     box.querySelector('[data-copy]').onclick=()=>{navigator.clipboard.writeText(linkFor(c.key)+' — Code : '+(c.pinClear||'••••'));box.querySelector('[data-copy]').textContent='Copié ✓';};
-    box.querySelector('[data-reset]').onclick=async()=>{ if(confirm('Générer un nouveau code pour '+c.name+' ?')){const r=await api('reset_pin',{empKey:c.key});if(r.ok){adminView();setTimeout(()=>alert('Nouveau code : '+r.pin),100);}} };
+    box.querySelector('[data-setpin]').onclick=async()=>{
+      const pin=(prompt('Nouveau code pour '+c.name+' (4 chiffres) :')||'').replace(/\D/g,'');
+      if(!pin){return;} if(pin.length<4){alert('Au moins 4 chiffres.');return;}
+      const r=await api('reset_pin',{empKey:c.key,pin}); if(r.ok){adminView();setTimeout(()=>alert('Code défini : '+r.pin),100);}
+    };
+    box.querySelector('[data-reset]').onclick=async()=>{ if(confirm('Générer un code ALÉATOIRE pour '+c.name+' ?')){const r=await api('reset_pin',{empKey:c.key});if(r.ok){adminView();setTimeout(()=>alert('Nouveau code : '+r.pin),100);}} };
     box.querySelector('[data-delemp]').onclick=async()=>{ if(confirm('Supprimer '+c.name+' ? Ses prospects deviendront non assignés.')){await api('del_emp',{empKey:c.key});adminView();} };
   });
 }
@@ -607,7 +620,8 @@ function empHTML(c){
     <div class="lk">${esc(linkFor(c.key))}</div>
     <div class="flex" style="margin-top:10px">
       <button class="copy" data-copy>📋 Copier lien + code</button>
-      <button class="copy" data-reset>🔄 Nouveau code</button>
+      <button class="copy" data-setpin>✏️ Changer le code</button>
+      <button class="copy" data-reset>🔄 Aléatoire</button>
       <button class="copy" style="color:#c33" data-delemp>🗑 Supprimer</button>
     </div>
     ${c.pinClear?'':'<div class="hint" style="margin-top:6px">Code déjà transmis. Utilisez « Nouveau code » si oublié.</div>'}
