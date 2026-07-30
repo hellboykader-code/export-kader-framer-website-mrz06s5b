@@ -45,10 +45,13 @@ $to = $RECIPIENTS[$site];
 /* --- helpers --- */
 function pick($data, $names) {
   foreach ($names as $n) {
-    if (isset($data[$n])) {
-      $v = is_array($data[$n]) ? implode(', ', $data[$n]) : $data[$n];
-      $v = trim((string)$v);
-      if ($v !== '') return $v;
+    // PHP transforme les espaces des noms de champ en « _ » ($_POST) → tester les 2 variantes
+    foreach ([$n, str_replace(' ', '_', $n)] as $key) {
+      if (isset($data[$key])) {
+        $v = is_array($data[$key]) ? implode(', ', $data[$key]) : $data[$key];
+        $v = trim((string)$v);
+        if ($v !== '') return $v;
+      }
     }
   }
   return '';
@@ -115,7 +118,7 @@ if ($site === 'fiche') {
     $val = is_array($v) ? implode(', ', $v) : (string)$v;
     $val = trim($val);
     if ($val === '') continue;
-    $label = trim($k);
+    $label = str_replace('_', ' ', trim($k)); // ré-afficher les espaces (PHP les a remplacés par « _ »)
     $text .= $label.' : '.$val."\r\n";
     $rows .= '<tr>'
       .'<td style="padding:10px 0;border-bottom:1px solid #eef0f3;font:600 12px Arial,sans-serif;letter-spacing:.4px;color:#9aa0a6;width:200px;vertical-align:top">'.e($label).'</td>'
@@ -290,6 +293,37 @@ if ($site === 'fiche' && !empty($cabEmail) && filter_var($cabEmail, FILTER_VALID
   $cHeaders .= "X-Mailer: PHP\r\n";
 
   @mail($cabEmail, '=?UTF-8?B?'.base64_encode($cSubject).'?=', $cBody, $cHeaders, '-f'.$FROM);
+}
+
+/* ---------- Fiche → Espace commerciaux (prospect « Intéressé ») ---------- */
+/* Chaque fiche remplie sur le site crée automatiquement un prospect chaud dans
+   l'espace, visible dans l'onglet « Intéressés » de l'admin. Déduplication par
+   téléphone (add_prospect_row). N'échoue jamais l'envoi si l'espace n'est pas là. */
+if ($site === 'fiche' && is_file(__DIR__.'/espace/store.php')) {
+  require_once __DIR__.'/espace/store.php';
+  $skipF = ['site','_subject','_honey','_gotcha','_template','_captcha','_next','_replyto'];
+  $fiche = [];
+  foreach ($data as $fk => $fv) {
+    if (in_array($fk, $skipF, true)) continue;
+    $fval = is_array($fv) ? implode(', ', $fv) : (string)$fv;
+    $fval = trim($fval);
+    if ($fval !== '') $fiche[str_replace('_', ' ', $fk)] = $fval; // libellés lisibles
+  }
+  $telF = pick($data, ['Telephone','Téléphone','tel','Phone','telephone']);
+  $noteBits = [];
+  foreach (['Praticien principal','Praticien','Slogan / phrase d’accroche','Slogan','Soins','Soins proposés'] as $nk)
+    if (!empty($fiche[$nk])) $noteBits[] = $nk.' : '.$fiche[$nk];
+  @add_prospect_row([
+    'cabinet'   => $cabinet ?: 'Fiche cabinet',
+    'ville'     => pick($data, ['Ville','ville']),
+    'tel'       => $telF,
+    'email'     => $cabEmail,
+    'source'    => 'Fiche',
+    'interesse' => 'oui',
+    'statut'    => 'interesse',
+    'note'      => implode(' · ', $noteBits),
+    'fiche'     => $fiche,
+  ]);
 }
 
 echo json_encode($ok ? ['success'=>true] : ['success'=>false,'message'=>"L'envoi a échoué, réessayez."]);

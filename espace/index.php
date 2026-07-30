@@ -14,54 +14,9 @@
 session_set_cookie_params(60 * 60 * 24 * 30); // rester connecté ~30 jours (téléphone)
 session_start();
 
-define('ADMIN_KEY', 'admin-7q2k9m');      // "identifiant" admin (pas un secret — le code PIN protège)
-define('DATA_DIR', __DIR__ . '/data');
-define('DB_FILE',  DATA_DIR . '/db.json');
+require_once __DIR__ . '/store.php';   // ADMIN_KEY, DATA_DIR, DB_FILE, PRIX_DEFAUT + db_* helpers
 define('BRAND', 'DentWebPro');
 define('ACCENT', '#f55733');
-define('PRIX_DEFAUT', 390);
-
-/* ---------------- stockage (JSON + verrou) ---------------- */
-function db_boot() {
-  if (!is_dir(DATA_DIR)) @mkdir(DATA_DIR, 0755, true);
-  // bloquer l'accès web au dossier data
-  $ht = DATA_DIR . '/.htaccess';
-  if (!file_exists($ht)) @file_put_contents($ht, "Require all denied\nDeny from all\n");
-  if (!file_exists(DB_FILE)) {
-    $init = [
-      'employees' => [[
-        'key' => ADMIN_KEY, 'name' => 'Admin', 'role' => 'admin', 'pin' => '', 'created' => time(),
-      ]],
-      'prospects' => [],
-      'seq' => 1,
-      'fails' => new stdClass(),
-    ];
-    file_put_contents(DB_FILE, json_encode($init, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-  }
-}
-function db_load() {
-  db_boot();
-  $j = json_decode(file_get_contents(DB_FILE), true);
-  if (!is_array($j)) $j = [];
-  $j += ['employees' => [], 'prospects' => [], 'seq' => 1, 'fails' => []];
-  return $j;
-}
-function db_save($db) {
-  $fp = fopen(DB_FILE, 'c+');
-  if ($fp) { flock($fp, LOCK_EX); ftruncate($fp, 0); rewind($fp);
-    fwrite($fp, json_encode($db, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
-    fflush($fp); flock($fp, LOCK_UN); fclose($fp); }
-}
-function find_emp($db, $key) {
-  foreach ($db['employees'] as $e) if ($e['key'] === $key) return $e;
-  return null;
-}
-function gen_key($name) {
-  $slug = strtolower(preg_replace('/[^a-z0-9]+/i', '', $name)) ?: 'com';
-  $slug = substr($slug, 0, 12);
-  return $slug . '-' . substr(bin2hex(random_bytes(3)), 0, 5);
-}
-function gen_pin() { return str_pad((string)random_int(0, 9999), 4, '0', STR_PAD_LEFT); }
 
 /* ---------------- API JSON ---------------- */
 $action = $_REQUEST['action'] ?? '';
@@ -478,11 +433,12 @@ async function adminView(){
     <div class="tabs">
       <div class="tab ${ATAB==='prospects'?'on':''}" data-t="prospects">Prospects</div>
       <div class="tab ${ATAB==='equipe'?'on':''}" data-t="equipe">Commerciaux</div>
+      <div class="tab ${ATAB==='interesses'?'on':''}" data-t="interesses">Intéressés</div>
       <div class="tab ${ATAB==='stats'?'on':''}" data-t="stats">Stats</div>
     </div><div id="ac"></div>`;
   bindLogout();
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{ATAB=t.dataset.t;adminView();});
-  ({prospects:adminProspects, equipe:adminEquipe, stats:adminStats}[ATAB])();
+  ({prospects:adminProspects, equipe:adminEquipe, interesses:adminInteresses, stats:adminStats}[ATAB])();
 }
 function statusTag(p){
   if(p.vendu) return '<span class="tag vendu">Vendu</span>';
@@ -526,6 +482,10 @@ function adminProspects(){
       </div>
       <div style="margin-top:12px"><button class="btn sm" id="imp_go">Importer la liste</button></div>
     </div>
+    <div class="flex" style="justify-content:space-between;margin:4px 0 10px">
+      <div style="font-weight:700">${ps.length} prospect(s)</div>
+      <button class="btn sec sm" id="exp_all">⬇️ Export Excel</button>
+    </div>
     <div style="overflow-x:auto"><table>
       <tr><th>Cabinet</th><th>Téléphone</th><th class="hideSm">Commercial</th><th>Intéressé</th><th></th></tr>
       ${ps.length? ps.map(p=>{
@@ -554,6 +514,7 @@ function adminProspects(){
     const r=await api('import_prospects',{raw,mode,assignedTo});
     if(r.ok){ alert('Import terminé ✅\n'+r.added+' prospect(s) ajouté(s)'+(r.skipped?'\n'+r.skipped+' doublon(s) ignoré(s)':'')); adminView(); }
   };
+  document.getElementById('exp_all').onclick=()=>exportCSV(ADATA.prospects||[],'prospects');
   ac.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{ if(confirm('Supprimer ce prospect ?')){await api('del_prospect',{id:b.dataset.del});adminView();} });
   ac.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editProspect(+b.dataset.edit));
 }
@@ -632,6 +593,50 @@ function adminStats(){
     </table></div>`;
 }
 
+function adminInteresses(){
+  const ac=document.getElementById('ac');
+  const hot=(ADATA.prospects||[]).filter(p=>stOf(p)==='interesse');
+  ac.innerHTML=`
+    <div class="flex" style="justify-content:space-between;margin-bottom:12px">
+      <div style="font-weight:700">${hot.length} prospect(s) intéressé(s)</div>
+      <button class="btn sec sm" id="exp_int">⬇️ Export Excel</button>
+    </div>
+    ${hot.length? hot.map(intCard).join('') : '<div class="empty">Aucun prospect intéressé pour le moment.<br>Les fiches remplies sur le site apparaissent ici automatiquement, et les prospects marqués « Intéressé » par vos commerciaux.</div>'}`;
+  document.getElementById('exp_int').onclick=()=>exportCSV(hot,'interesses');
+  hot.forEach(p=>{ const b=document.querySelector(`[data-fiche="${p.id}"]`); if(b)b.onclick=()=>{const d=document.getElementById('fd-'+p.id);d.style.display=d.style.display==='none'?'block':'none';}; });
+}
+function intCard(p){
+  const tel=(p.tel||'').replace(/[^\d+]/g,'');
+  const isFiche = p.source==='Fiche' && p.fiche && Object.keys(p.fiche).length;
+  const details = isFiche? `<div id="fd-${p.id}" style="display:none;margin-top:10px;border-top:1px solid var(--line);padding-top:10px">
+    ${Object.entries(p.fiche).map(([kk,vv])=>`<div style="display:flex;gap:10px;padding:5px 0;font-size:13px"><b style="min-width:150px;color:#777">${esc(kk)}</b><span>${esc(vv)}</span></div>`).join('')}</div>`:'';
+  return `<div class="cardbox">
+    <div class="flex" style="justify-content:space-between;align-items:flex-start">
+      <div><b style="font-size:16px">${esc(p.cabinet)||'—'}</b> ${p.source==='Fiche'?'<span class="tag oui">Fiche site</span>':`<span class="src">${esc(p.source)}</span>`}
+        <div style="color:#888;font-size:13px;margin-top:2px">${esc(p.ville)||''}</div></div>
+      <div style="text-align:right;font-size:13px">
+        ${tel?`<a href="tel:${esc(tel)}" style="color:var(--ink);font-weight:700;text-decoration:none">📞 ${esc(p.tel)}</a>`:''}
+        ${p.email?`<div><a href="mailto:${esc(p.email)}" style="color:var(--soft);text-decoration:none">${esc(p.email)}</a></div>`:''}
+        <div style="color:#999;margin-top:2px">Commercial : ${esc(comName(p.assignedTo))}</div>
+      </div>
+    </div>
+    ${p.note?`<div style="margin-top:8px;font-size:13.5px;color:#444">${esc(p.note)}</div>`:''}
+    ${isFiche?`<button class="copy" data-fiche="${p.id}" style="margin-top:8px">📋 Voir la fiche complète</button>`:''}
+    ${details}
+  </div>`;
+}
+function exportCSV(rows, name){
+  const cols=[['Cabinet','cabinet'],['Ville','ville'],['Téléphone','tel'],['Email','email'],['Source','source'],
+    ['Commercial',p=>comName(p.assignedTo)],
+    ['Statut',p=>({nouveau:'Nouveau',interesse:'Intéressé',pas_interesse:'Pas intéressé'}[stOf(p)]||'')],
+    ['Vendu',p=>p.vendu?'Oui':'Non'],['Prix',p=>p.vendu?(p.prix||390):''],['Note','note'],['Relance','relance']];
+  const cell=s=>{s=(s==null?'':''+s);return /[";\n]/.test(s)?'"'+s.replace(/"/g,'""')+'"':s;};
+  const lines=[cols.map(c=>c[0]).join(';')];
+  rows.forEach(p=>lines.push(cols.map(c=>cell(typeof c[1]==='function'?c[1](p):p[c[1]])).join(';')));
+  const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
+  const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
+  a.download='dentwebpro-'+name+'-'+today()+'.csv'; a.click();
+}
 function linkFor(k){ return location.origin+location.pathname+'?k='+k; }
 function v(id){ return document.getElementById(id).value.trim(); }
 
