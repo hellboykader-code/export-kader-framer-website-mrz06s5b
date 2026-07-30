@@ -228,6 +228,19 @@ if ($action !== '') {
     db_save($db);
     echo json_encode(['ok' => true]); exit;
   }
+  if ($action === 'reassign_many') {   // réassigner les prospects sélectionnés
+    $ids = array_filter(array_map('intval', explode(',', (string)($in['ids'] ?? ''))));
+    $to = trim((string)($in['assignedTo'] ?? '')); $n = 0;
+    foreach ($db['prospects'] as &$p) if (in_array($p['id'], $ids, true)) { $p['assignedTo'] = $to; $p['updated'] = time(); $n++; }
+    unset($p); if ($n) db_save($db);
+    echo json_encode(['ok' => true, 'moved' => $n]); exit;
+  }
+  if ($action === 'transfer_all') {    // transférer TOUTE la liste d'un commercial à un autre
+    $from = trim((string)($in['fromKey'] ?? '')); $to = trim((string)($in['toKey'] ?? '')); $n = 0;
+    foreach ($db['prospects'] as &$p) if (($p['assignedTo'] ?? '') === $from) { $p['assignedTo'] = $to; $p['updated'] = time(); $n++; }
+    unset($p); if ($n) db_save($db);
+    echo json_encode(['ok' => true, 'moved' => $n]); exit;
+  }
   echo json_encode(['ok' => false, 'msg' => 'Action inconnue.']); exit;
 }
 
@@ -511,8 +524,10 @@ function adminProspects(){
     <div class="flex" style="justify-content:space-between;margin:4px 0 10px;gap:8px;flex-wrap:wrap">
       <div style="font-weight:700">${ps.length} prospect(s)</div>
       <div class="flex" style="gap:8px">
+        <select class="inp" id="reassign_to" style="width:auto;padding:8px 10px;font-size:13px">${comOptions('')}</select>
+        <button class="btn sec sm" id="reassign_sel">➡️ Assigner la sélection</button>
         <button class="btn sec sm" id="exp_all">⬇️ Export Excel</button>
-        <button class="btn sec sm" id="del_sel" style="color:#c33">🗑 Supprimer la sélection</button>
+        <button class="btn sec sm" id="del_sel" style="color:#c33">🗑 Supprimer</button>
         <button class="btn sec sm" id="del_all_btn" style="color:#c33">Tout supprimer</button>
       </div>
     </div>
@@ -553,6 +568,13 @@ function adminProspects(){
     rd.readAsText(f,'utf-8');
   };
   document.getElementById('exp_all').onclick=()=>exportCSV(ADATA.prospects||[],'prospects');
+  document.getElementById('reassign_sel').onclick=async()=>{
+    const ids=[...ac.querySelectorAll('.rowchk:checked')].map(c=>c.value);
+    if(!ids.length){alert('Cochez d\'abord des prospects.');return;}
+    const to=document.getElementById('reassign_to').value;
+    const r=await api('reassign_many',{ids:ids.join(','),assignedTo:to});
+    if(r.ok){ adminView(); }
+  };
   // sélection multiple
   const chkAll=document.getElementById('chkAll');
   if(chkAll) chkAll.onclick=()=>{ ac.querySelectorAll('.rowchk').forEach(c=>c.checked=chkAll.checked); };
@@ -598,7 +620,25 @@ function adminEquipe(){
       <button class="btn sm" id="ne_add">Créer le lien</button></div>
       <div class="hint" style="margin-top:8px">Choisissez le code, ou laissez vide = généré automatiquement. Un lien privé sera créé.</div>
     </div>
+    <div class="cardbox"><h4>🔄 Transférer toute une liste d'un commercial à un autre</h4>
+      <div class="flex" style="align-items:center">
+        <select class="inp" id="tr_from" style="flex:1;min-width:130px">${comOptions('')}</select>
+        <span style="font-weight:800;color:var(--accent)">→</span>
+        <select class="inp" id="tr_to" style="flex:1;min-width:130px">${comOptions('')}</select>
+        <button class="btn sm" id="tr_go">Transférer</button>
+      </div>
+      <div class="hint" style="margin-top:8px">Déplace TOUS les prospects du 1ᵉʳ commercial vers le 2ᵉ.</div>
+    </div>
     <div id="emps">${cs.length? cs.map(empHTML).join('') : '<div class="empty">Aucun commercial. Créez le premier ci-dessus.</div>'}</div>`;
+  document.getElementById('tr_go').onclick=async()=>{
+    const from=document.getElementById('tr_from').value, to=document.getElementById('tr_to').value;
+    if(from===to){alert('Choisissez deux commerciaux différents.');return;}
+    const fn=from?comName(from):'Non assigné', tn=to?comName(to):'Non assigné';
+    if(confirm('Transférer tous les prospects de « '+fn+' » vers « '+tn+' » ?')){
+      const r=await api('transfer_all',{fromKey:from,toKey:to});
+      if(r.ok){ adminView(); setTimeout(()=>alert(r.moved+' prospect(s) transféré(s).'),100); }
+    }
+  };
   document.getElementById('ne_add').onclick=async()=>{
     const name=v('ne_name'); if(!name){alert('Entrez un nom.');return;}
     const pin=document.getElementById('ne_pin').value.replace(/\D/g,'');
