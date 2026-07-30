@@ -170,10 +170,10 @@ if ($action !== '') {
       $parts = preg_split('/\t|;|,/', $ln);
       $cab = trim($parts[0] ?? ''); $ville = trim($parts[1] ?? '');
       $tel = trim($parts[2] ?? ''); $email = trim($parts[3] ?? '');
-      if ($cab === '' && $tel === '') continue;
       $tn = preg_replace('/\D/', '', $tel);
-      if ($tn !== '' && isset($existing[$tn])) { $skipped++; continue; }
-      if ($tn !== '') $existing[$tn] = 1;
+      if (strlen($tn) < 9) { $skipped++; continue; }        // besoin d'un vrai téléphone (évite noms/adresses parasites)
+      if (isset($existing[$tn])) { $skipped++; continue; }   // doublon
+      $existing[$tn] = 1;
       if ($mode === 'one')      $assign = $only;
       elseif ($mode === 'none') $assign = '';
       else { $assign = $coms ? $coms[$i % count($coms)] : ''; $i++; }
@@ -202,6 +202,19 @@ if ($action !== '') {
   if ($action === 'del_prospect') {
     $id = (int)($in['id'] ?? 0);
     $db['prospects'] = array_values(array_filter($db['prospects'], fn($p) => $p['id'] !== $id));
+    db_save($db);
+    echo json_encode(['ok' => true]); exit;
+  }
+  if ($action === 'del_many') {
+    $ids = array_filter(array_map('intval', explode(',', (string)($in['ids'] ?? ''))));
+    if ($ids) {
+      $db['prospects'] = array_values(array_filter($db['prospects'], fn($p) => !in_array($p['id'], $ids, true)));
+      db_save($db);
+    }
+    echo json_encode(['ok' => true, 'deleted' => count($ids)]); exit;
+  }
+  if ($action === 'del_all') {
+    $db['prospects'] = [];
     db_save($db);
     echo json_encode(['ok' => true]); exit;
   }
@@ -471,6 +484,9 @@ function adminProspects(){
     </div>
     <div class="cardbox"><h4>📥 Importer une liste (en masse)</h4>
       <div class="hint" style="margin-bottom:8px">Une ligne par cabinet : <b>Cabinet , Ville , Téléphone , Email</b> (séparés par virgule, point-virgule ou tabulation). Copiez-collez depuis Excel / Google Sheets. Les doublons de téléphone sont ignorés.</div>
+      <div style="margin-bottom:10px"><label class="btn sec sm" style="cursor:pointer;display:inline-block">📄 Choisir un fichier (.csv)<input type="file" id="imp_file" accept=".csv,.txt" style="display:none"></label>
+        <span id="imp_fname" style="font-size:12.5px;color:var(--soft);margin-left:8px"></span>
+        <div class="hint" style="margin-top:6px">Sélectionnez le fichier <b>…-import.csv</b> : il est lu automatiquement. (Ou collez le texte ci-dessous.)</div></div>
       <textarea id="imp_raw" style="min-height:120px" placeholder="Cabinet du Sourire, Lyon, 0612345678, contact@ex.fr&#10;Cabinet Dentaire, Paris, 0698765432,"></textarea>
       <div class="row" style="margin-top:10px">
         <div class="fld"><label>Répartition</label><select id="imp_mode">
@@ -482,21 +498,26 @@ function adminProspects(){
       </div>
       <div style="margin-top:12px"><button class="btn sm" id="imp_go">Importer la liste</button></div>
     </div>
-    <div class="flex" style="justify-content:space-between;margin:4px 0 10px">
+    <div class="flex" style="justify-content:space-between;margin:4px 0 10px;gap:8px;flex-wrap:wrap">
       <div style="font-weight:700">${ps.length} prospect(s)</div>
-      <button class="btn sec sm" id="exp_all">⬇️ Export Excel</button>
+      <div class="flex" style="gap:8px">
+        <button class="btn sec sm" id="exp_all">⬇️ Export Excel</button>
+        <button class="btn sec sm" id="del_sel" style="color:#c33">🗑 Supprimer la sélection</button>
+        <button class="btn sec sm" id="del_all_btn" style="color:#c33">Tout supprimer</button>
+      </div>
     </div>
     <div style="overflow-x:auto"><table>
-      <tr><th>Cabinet</th><th>Téléphone</th><th class="hideSm">Commercial</th><th>Intéressé</th><th></th></tr>
+      <tr><th style="width:34px"><input type="checkbox" id="chkAll" title="Tout sélectionner"></th><th>Cabinet</th><th>Téléphone</th><th class="hideSm">Commercial</th><th>Intéressé</th><th></th></tr>
       ${ps.length? ps.map(p=>{
         const dup = dups.includes((p.tel||'').replace(/\D/g,''));
         return `<tr class="${dup?'dup':''}">
+          <td><input type="checkbox" class="rowchk" value="${p.id}"></td>
           <td><b>${esc(p.cabinet)||'—'}</b><div style="color:#888;font-size:12px">${esc(p.ville)||''}</div></td>
           <td>${esc(p.tel)||'—'} ${dup?'<div class="warn">⚠ doublon</div>':''}</td>
           <td class="hideSm">${esc(comName(p.assignedTo))}</td>
           <td>${statusTag(p)}</td>
           <td class="flex"><button class="copy" data-edit="${p.id}">Modifier</button><button class="copy" style="color:#c33" data-del="${p.id}">✕</button></td>
-        </tr>`;}).join('') : '<tr><td colspan="5" style="text-align:center;color:#888;padding:30px">Aucun prospect. Ajoutez-en un ci-dessus.</td></tr>'}
+        </tr>`;}).join('') : '<tr><td colspan="6" style="text-align:center;color:#888;padding:30px">Aucun prospect. Ajoutez-en un ci-dessus.</td></tr>'}
     </table></div>`;
   document.getElementById('np_add').onclick=async()=>{
     const d={cabinet:v('np_cab'),ville:v('np_ville'),tel:v('np_tel'),email:v('np_email'),assignedTo:v('np_com'),source:v('np_src')};
@@ -514,7 +535,26 @@ function adminProspects(){
     const r=await api('import_prospects',{raw,mode,assignedTo});
     if(r.ok){ alert('Import terminé ✅\n'+r.added+' prospect(s) ajouté(s)'+(r.skipped?'\n'+r.skipped+' doublon(s) ignoré(s)':'')); adminView(); }
   };
+  // charger un fichier (.csv) → remplit la zone de texte automatiquement
+  document.getElementById('imp_file').onchange=function(){
+    const f=this.files[0]; if(!f)return;
+    const rd=new FileReader();
+    rd.onload=()=>{ document.getElementById('imp_raw').value=rd.result; document.getElementById('imp_fname').textContent=f.name+' chargé ✓ — cliquez « Importer la liste »'; };
+    rd.readAsText(f,'utf-8');
+  };
   document.getElementById('exp_all').onclick=()=>exportCSV(ADATA.prospects||[],'prospects');
+  // sélection multiple
+  const chkAll=document.getElementById('chkAll');
+  if(chkAll) chkAll.onclick=()=>{ ac.querySelectorAll('.rowchk').forEach(c=>c.checked=chkAll.checked); };
+  document.getElementById('del_sel').onclick=async()=>{
+    const ids=[...ac.querySelectorAll('.rowchk:checked')].map(c=>c.value);
+    if(!ids.length){alert('Cochez d\'abord des prospects (ou « tout sélectionner » en haut du tableau).');return;}
+    if(confirm('Supprimer '+ids.length+' prospect(s) sélectionné(s) ?')){ await api('del_many',{ids:ids.join(',')}); adminView(); }
+  };
+  document.getElementById('del_all_btn').onclick=async()=>{
+    if(!ps.length){return;}
+    if(confirm('⚠️ Supprimer TOUS les '+ps.length+' prospects ? Cette action est irréversible.')){ await api('del_all'); adminView(); }
+  };
   ac.querySelectorAll('[data-del]').forEach(b=>b.onclick=async()=>{ if(confirm('Supprimer ce prospect ?')){await api('del_prospect',{id:b.dataset.del});adminView();} });
   ac.querySelectorAll('[data-edit]').forEach(b=>b.onclick=()=>editProspect(+b.dataset.edit));
 }
