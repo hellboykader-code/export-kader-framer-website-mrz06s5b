@@ -137,6 +137,11 @@ if ($action !== '') {
     if ($done) db_save($db);
     echo json_encode(['ok' => $done, 'pin' => $pin]); exit;
   }
+  if ($action === 'rename_emp') {
+    $k = $in['empKey'] ?? ''; $name = trim((string)($in['name'] ?? '')); $done = false;
+    if ($name !== '') { foreach ($db['employees'] as &$e) if ($e['key'] === $k && $e['role'] === 'commercial') { $e['name'] = $name; $done = true; } unset($e); if ($done) db_save($db); }
+    echo json_encode(['ok' => $done]); exit;
+  }
   if ($action === 'del_emp') {
     $k = $in['empKey'] ?? '';
     $db['employees'] = array_values(array_filter($db['employees'], fn($e) => !($e['key'] === $k && $e['role'] === 'commercial')));
@@ -604,6 +609,11 @@ function adminEquipe(){
   cs.forEach(c=>{
     const box=document.querySelector(`[data-emp="${c.key}"]`); if(!box)return;
     box.querySelector('[data-copy]').onclick=()=>{navigator.clipboard.writeText(linkFor(c.key)+' — Code : '+(c.pinClear||'••••'));box.querySelector('[data-copy]').textContent='Copié ✓';};
+    box.querySelector('[data-rename]').onclick=async()=>{
+      const name=(prompt('Nouveau nom pour '+c.name+' :', c.name)||'').trim();
+      if(!name || name===c.name){return;}
+      const r=await api('rename_emp',{empKey:c.key,name}); if(r.ok){adminView();}
+    };
     box.querySelector('[data-setpin]').onclick=async()=>{
       const pin=(prompt('Nouveau code pour '+c.name+' (4 chiffres) :')||'').replace(/\D/g,'');
       if(!pin){return;} if(pin.length<4){alert('Au moins 4 chiffres.');return;}
@@ -620,7 +630,8 @@ function empHTML(c){
     <div class="lk">${esc(linkFor(c.key))}</div>
     <div class="flex" style="margin-top:10px">
       <button class="copy" data-copy>📋 Copier lien + code</button>
-      <button class="copy" data-setpin>✏️ Changer le code</button>
+      <button class="copy" data-rename>✏️ Renommer</button>
+      <button class="copy" data-setpin>🔑 Changer le code</button>
       <button class="copy" data-reset>🔄 Aléatoire</button>
       <button class="copy" style="color:#c33" data-delemp>🗑 Supprimer</button>
     </div>
