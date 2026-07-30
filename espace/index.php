@@ -77,6 +77,9 @@ if ($action !== '') {
 
   if ($action === 'me') { echo json_encode(['ok' => true, 'role' => $role, 'name' => $emp['name']]); exit; }
 
+  // -- script de vente : lecture pour TOUS (admin + commerciaux) --
+  if ($action === 'get_script') { echo json_encode(['ok' => true, 'script' => $db['script']]); exit; }
+
   /* ===== côté COMMERCIAL ===== */
   if ($action === 'my_list' && $role === 'commercial') {
     $mine = array_values(array_filter($db['prospects'], fn($p) => ($p['assignedTo'] ?? '') === $key));
@@ -113,6 +116,13 @@ if ($action !== '') {
     foreach ($db['prospects'] as $p) { $t = preg_replace('/\D/', '', $p['tel'] ?? ''); if ($t) $tels[$t] = ($tels[$t] ?? 0) + 1; }
     $dups = array_keys(array_filter($tels, fn($n) => $n > 1));
     echo json_encode(['ok' => true, 'commerciaux' => $coms, 'prospects' => $db['prospects'], 'dups' => $dups]); exit;
+  }
+  if ($action === 'save_script') {   // admin uniquement : éditer le script de vente
+    $s = $in['script'] ?? '';
+    if (is_string($s)) $s = json_decode($s, true);
+    if (is_array($s)) { $db['script'] = $s; db_save($db); echo json_encode(['ok' => true]); }
+    else echo json_encode(['ok' => false, 'msg' => 'Données invalides.']);
+    exit;
   }
   if ($action === 'add_emp') {
     $name = trim((string)($in['name'] ?? '')); if ($name === '') { echo json_encode(['ok' => false, 'msg' => 'Nom requis.']); exit; }
@@ -255,6 +265,8 @@ $A = ACCENT;
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="robots" content="noindex,nofollow">
 <title>Espace commercial — <?= BRAND ?></title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,500&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
   *{margin:0;box-sizing:border-box;font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif}
   :root{--ink:#17171b;--accent:<?= $A ?>;--soft:#6c6c74;--line:#e7e7ec;--bg:#f5f5f7;--ok:#15a35b}
@@ -313,8 +325,9 @@ $A = ACCENT;
   .saved.show{opacity:1}
   .empty{text-align:center;color:var(--soft);padding:50px 20px;font-size:15px}
   /* admin */
-  .tabs{display:flex;gap:8px;margin-bottom:14px}
-  .tab{flex:1;border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:11px;font-weight:700;font-size:14px;color:var(--soft);cursor:pointer;text-align:center}
+  .tabs{display:flex;gap:8px;margin-bottom:14px;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+  .tabs::-webkit-scrollbar{display:none}
+  .tab{flex:0 0 auto;border:1.5px solid var(--line);background:#fff;border-radius:11px;padding:11px 16px;font-weight:700;font-size:14px;color:var(--soft);cursor:pointer;text-align:center;white-space:nowrap}
   .tab.on{background:var(--accent);border-color:var(--accent);color:#fff}
   .stats{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:16px}
   .stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:15px}
@@ -329,6 +342,46 @@ $A = ACCENT;
   .tag.oui{background:#e3f7ec;color:#137a43}.tag.non{background:#f2f2f4;color:#777}
   .tag.vendu{background:#fff0d9;color:#a5680a}
   .tag.new{background:#eef1f6;color:#5b6472}.tag.no{background:#fdecec;color:#c0342f}
+  /* ── Script de vente (lecture) — design premium ── */
+  .pb h1,.pb h3,.pb h4{font-family:'Fraunces',Georgia,serif;font-weight:500;letter-spacing:-.015em;line-height:1.14}
+  .pb-hero{background:radial-gradient(130% 130% at 12% 0%,#242530 0%,#15161b 60%);color:#fff;border-radius:20px;padding:30px 26px;position:relative;overflow:hidden;margin-bottom:18px}
+  .pb-hero::after{content:"";position:absolute;right:-50px;top:-45px;width:230px;height:230px;border-radius:50%;background:radial-gradient(circle,rgba(245,87,51,.34),transparent 65%)}
+  .pb-hero .eb{font:700 11px 'Inter';letter-spacing:.2em;text-transform:uppercase;color:#f55733;position:relative}
+  .pb-hero h1{font-size:30px;margin:12px 0 9px;position:relative}
+  .pb-hero h1 em{font-style:italic;color:#ffb59f}
+  .pb-hero p{color:#c7c8d1;font-size:14.5px;position:relative;max-width:46ch}
+  .pb-strat{background:#fff6f3;border:1px solid #ffd9cf;border-radius:16px;padding:18px 20px;margin-bottom:22px}
+  .pb-strat .l{font:700 11px 'Inter';letter-spacing:.15em;text-transform:uppercase;color:#c0341a;margin-bottom:6px}
+  .pb-strat p{font-size:15px;color:#33363f}
+  .pb-sec{margin-bottom:26px}
+  .pb-sh{display:flex;align-items:center;gap:13px;margin-bottom:16px}
+  .pb-sh .num{width:36px;height:36px;border-radius:10px;background:#15161b;color:#fff;display:grid;place-items:center;font:700 16px 'Fraunces';flex:none}
+  .pb-sh h3{font-size:22px}
+  .pb-intro{background:#fff;border:1px solid var(--line);border-radius:15px;padding:17px 19px;margin-bottom:11px}
+  .pb-k{font:700 12px 'Inter';color:#f55733;text-transform:uppercase;letter-spacing:.05em;margin-bottom:8px;display:flex;align-items:center;gap:8px}
+  .pb-k .d{width:22px;height:22px;border-radius:7px;background:#fff1ec;color:#d8431f;display:grid;place-items:center;font:600 12px 'Fraunces';flex:none}
+  .pb-intro p{font-size:14.5px;color:#33363f;font-style:italic}
+  .pb-step{position:relative;padding:0 0 20px 44px}
+  .pb-step::before{content:"";position:absolute;left:16px;top:34px;bottom:-2px;width:2px;background:linear-gradient(#f55733,#f6c4b7)}
+  .pb-step:last-child::before{display:none}
+  .pb-step .b{position:absolute;left:0;top:2px;width:34px;height:34px;border-radius:50%;background:#f55733;color:#fff;display:grid;place-items:center;font:700 15px 'Fraunces';box-shadow:0 6px 16px -6px rgba(245,87,51,.7)}
+  .pb-step h4{font-family:'Inter';font-weight:700;font-size:16px;margin-bottom:7px}
+  .pb-step .say{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 16px;font-size:14.5px;font-style:italic;color:#33363f}
+  .pb-ob{background:#fff;border:1px solid var(--line);border-radius:13px;overflow:hidden;margin-bottom:11px}
+  .pb-ob .said{background:#f7f8fa;padding:13px 16px;font:700 14px 'Inter';color:#40454f}
+  .pb-ob .rep{padding:13px 16px;font-size:14px;font-style:italic;color:#33363f}
+  .pb-rules{background:#15161b;color:#fff;border-radius:18px;padding:24px 26px;position:relative;overflow:hidden}
+  .pb-rules::after{content:"";position:absolute;left:-50px;bottom:-50px;width:190px;height:190px;border-radius:50%;background:radial-gradient(circle,rgba(245,87,51,.28),transparent 65%)}
+  .pb-rules h3{color:#fff;font-size:20px;margin-bottom:15px;position:relative}
+  .pb-li{display:flex;gap:12px;align-items:flex-start;font-size:14.5px;color:#e2e3ea;margin-bottom:12px;position:relative}
+  .pb-li .c{width:25px;height:25px;border-radius:8px;background:#f55733;color:#fff;display:grid;place-items:center;flex:none;font:700 13px 'Inter'}
+  /* ── édition (admin) ── */
+  .pbrow{display:flex;gap:8px;align-items:flex-start;margin-bottom:9px}
+  .pbrow input,.pbrow textarea{border:1.5px solid var(--line);border-radius:9px;padding:9px 11px;font:14px inherit;width:100%}
+  .pbrow input:focus,.pbrow textarea:focus{outline:none;border-color:var(--accent)}
+  .pbrow .col{flex:1;display:flex;flex-direction:column;gap:6px}
+  .pbrow textarea{min-height:64px;resize:vertical}
+  .pbrow .del{background:#fdecec;color:#c0342f;border:0;border-radius:8px;width:32px;height:32px;flex:none;cursor:pointer;font-weight:700}
   .warn{color:#d33;font-weight:700;font-size:11px}
   .emp{background:#fff;border:1px solid var(--line);border-radius:13px;padding:14px 15px;margin-bottom:10px}
   .emp .lk{font-size:12.5px;color:var(--soft);word-break:break-all;background:#f7f7f8;border-radius:8px;padding:8px 10px;margin-top:8px;font-family:ui-monospace,Menlo,monospace}
@@ -393,10 +446,34 @@ function header(){
 function bindLogout(){ const b=document.getElementById('logout'); if(b)b.onclick=async()=>{await api('logout');location.reload();}; }
 
 /* ---------- vue COMMERCIAL ---------- */
-let FILTER='tous';
+let FILTER='tous', CVIEW='prospects', SCR=null;
 const stOf = p => p.statut || (p.interesse==='oui'?'interesse':'nouveau');
+// rendu (lecture seule) du script de vente — partagé admin + commerciaux
+function playbookHTML(s){
+  s=s||{};
+  const intros=(s.intros||[]).map((x,i)=>`<div class="pb-intro"><div class="pb-k"><span class="d">${i+1}</span> ${esc(x.title)}</div><p>${esc(x.text)}</p></div>`).join('');
+  const steps=(s.steps||[]).map((x,i)=>`<div class="pb-step"><span class="b">${i+1}</span><h4>${esc(x.title)}</h4><div class="say">${esc(x.text)}</div></div>`).join('');
+  const objs=(s.objections||[]).map(o=>`<div class="pb-ob"><div class="said">${esc(o.q)}</div><div class="rep">${esc(o.a)}</div></div>`).join('');
+  const rules=(s.rules||[]).map((r,i)=>`<div class="pb-li"><span class="c">${i+1}</span><span>${esc(r)}</span></div>`).join('');
+  return `<div class="pb-hero"><span class="eb">Playbook de vente</span><h1>Convaincre sans <em>vendre.</em></h1><p>Passer la secrétaire, éveiller l'intérêt du médecin, et le laisser conclure lui-même qu'il a tout à gagner.</p></div>
+    <div class="pb-strat"><div class="l">La stratégie</div><p>${esc(s.strategy||'')}</p></div>
+    <div class="pb-sec"><div class="pb-sh"><span class="num">1</span><h3>Passer la secrétaire</h3></div>${intros}</div>
+    <div class="pb-sec"><div class="pb-sh"><span class="num">2</span><h3>Le médecin — approche diagnostic</h3></div>${steps}</div>
+    <div class="pb-sec"><div class="pb-sh"><span class="num">3</span><h3>Réponses aux objections</h3></div>${objs}</div>
+    <div class="pb-rules"><h3>À retenir</h3>${rules}</div>`;
+}
+function cTabs(active){ return `<div class="tabs" style="margin-bottom:14px">
+  <div class="tab ${active==='prospects'?'on':''}" data-cv="prospects">Mes prospects</div>
+  <div class="tab ${active==='script'?'on':''}" data-cv="script">📄 Script</div></div>`; }
+async function commercialScript(){
+  const r=await api('get_script');
+  root.innerHTML = header() + cTabs('script') + `<div class="pb">${playbookHTML(r.script)}</div>`;
+  bindLogout();
+  document.querySelectorAll('.tab[data-cv]').forEach(t=>t.onclick=()=>{CVIEW=t.dataset.cv;commercialView();});
+}
 const today = () => new Date().toISOString().slice(0,10);
 async function commercialView(){
+  if(CVIEW==='script') return commercialScript();
   const r = await api('my_list');
   const list = r.prospects||[];
   const cAll = list.filter(p=>stOf(p)!=='pas_interesse').length;
@@ -411,7 +488,7 @@ async function commercialView(){
     if(FILTER==='no')      return s==='pas_interesse';
     return true;
   });
-  root.innerHTML = header() + `
+  root.innerHTML = header() + cTabs('prospects') + `
     <div class="chips">
       <div class="chip ${FILTER==='tous'?'on':''}" data-f="tous">Tous <span class="b">${cAll}</span></div>
       <div class="chip ${FILTER==='relance'?'on':''}" data-f="relance">À rappeler <span class="b">${cRel}</span></div>
@@ -420,6 +497,7 @@ async function commercialView(){
     </div>
     <div id="cards">${ shown.length? shown.map(cardHTML).join('') : '<div class="empty">Aucun prospect dans cette liste.</div>' }</div>`;
   bindLogout();
+  document.querySelectorAll('.tab[data-cv]').forEach(t=>t.onclick=()=>{CVIEW=t.dataset.cv;commercialView();});
   document.querySelectorAll('.chip').forEach(c=>c.onclick=()=>{FILTER=c.dataset.f;commercialView();});
   shown.forEach(bindCard);
 }
@@ -471,10 +549,11 @@ async function adminView(){
       <div class="tab ${ATAB==='equipe'?'on':''}" data-t="equipe">Commerciaux</div>
       <div class="tab ${ATAB==='interesses'?'on':''}" data-t="interesses">Intéressés</div>
       <div class="tab ${ATAB==='stats'?'on':''}" data-t="stats">Stats</div>
+      <div class="tab ${ATAB==='script'?'on':''}" data-t="script">Script</div>
     </div><div id="ac"></div>`;
   bindLogout();
   document.querySelectorAll('.tab').forEach(t=>t.onclick=()=>{ATAB=t.dataset.t;adminView();});
-  ({prospects:adminProspects, equipe:adminEquipe, interesses:adminInteresses, stats:adminStats}[ATAB])();
+  ({prospects:adminProspects, equipe:adminEquipe, interesses:adminInteresses, stats:adminStats, script:adminScript}[ATAB])();
 }
 function statusTag(p){
   if(p.vendu) return '<span class="tag vendu">Vendu</span>';
@@ -741,6 +820,48 @@ function exportCSV(rows, name){
   const blob=new Blob(['﻿'+lines.join('\r\n')],{type:'text/csv;charset=utf-8'});
   const a=document.createElement('a'); a.href=URL.createObjectURL(blob);
   a.download='dentwebpro-'+name+'-'+today()+'.csv'; a.click();
+}
+async function adminScript(){
+  const ac=document.getElementById('ac');
+  const r=await api('get_script'); SCR=r.script||{};
+  ac.innerHTML=`<div class="flex" style="justify-content:space-between;margin-bottom:14px;gap:8px">
+    <div style="font-weight:700">Script de vente <span style="color:var(--soft);font-weight:400;font-size:13px">— lecture seule pour les commerciaux</span></div>
+    <button class="btn sm" id="pb_edit">✏️ Modifier</button></div>
+    <div class="pb">${playbookHTML(SCR)}</div>`;
+  document.getElementById('pb_edit').onclick=()=>adminScriptEdit();
+}
+function pbPair(list,a,b,va,vb,pa,pb){ return `<div class="pbrow" data-list="${list}"><div class="col"><input data-f="${a}" placeholder="${pa}" value="${esc(va||'')}"><textarea data-f="${b}" placeholder="${pb}">${esc(vb||'')}</textarea></div><button class="del" title="Supprimer">✕</button></div>`; }
+function pbRule(v){ return `<div class="pbrow" data-list="rules"><div class="col"><textarea data-f="text" placeholder="Règle…">${esc(v||'')}</textarea></div><button class="del" title="Supprimer">✕</button></div>`; }
+function adminScriptEdit(){
+  const ac=document.getElementById('ac'); const s=SCR||{};
+  ac.innerHTML=`
+    <div class="cardbox"><h4>🎯 Stratégie</h4><textarea class="inp" id="pb_strategy" style="min-height:80px">${esc(s.strategy||'')}</textarea></div>
+    <div class="cardbox"><h4>1 · Intros (secrétaire)</h4><div id="L_intros">${(s.intros||[]).map(x=>pbPair('intros','title','text',x.title,x.text,'Titre','Phrase à dire')).join('')}</div><button class="btn sec sm" data-add="intros">＋ Ajouter</button></div>
+    <div class="cardbox"><h4>2 · Étapes (médecin)</h4><div id="L_steps">${(s.steps||[]).map(x=>pbPair('steps','title','text',x.title,x.text,'Titre','Phrase à dire')).join('')}</div><button class="btn sec sm" data-add="steps">＋ Ajouter</button></div>
+    <div class="cardbox"><h4>3 · Objections</h4><div id="L_objections">${(s.objections||[]).map(x=>pbPair('objections','q','a',x.q,x.a,'Il dit…','Vous répondez…')).join('')}</div><button class="btn sec sm" data-add="objections">＋ Ajouter</button></div>
+    <div class="cardbox"><h4>À retenir</h4><div id="L_rules">${(s.rules||[]).map(pbRule).join('')}</div><button class="btn sec sm" data-add="rules">＋ Ajouter</button></div>
+    <div class="flex" style="gap:8px"><button class="btn sm" id="pb_save">💾 Enregistrer</button><button class="btn sec sm" id="pb_back">Annuler</button></div>`;
+  const bindDel=()=>ac.querySelectorAll('.del').forEach(d=>d.onclick=()=>d.closest('.pbrow').remove());
+  ac.querySelectorAll('[data-add]').forEach(b=>b.onclick=()=>{
+    const k=b.dataset.add, box=document.getElementById('L_'+k);
+    box.insertAdjacentHTML('beforeend', k==='rules'?pbRule('') : k==='objections'?pbPair('objections','q','a','','','Il dit…','Vous répondez…') : pbPair(k,'title','text','','','Titre','Phrase à dire'));
+    bindDel();
+  });
+  bindDel();
+  document.getElementById('pb_back').onclick=()=>adminScript();
+  document.getElementById('pb_save').onclick=async()=>{
+    const read=(id,fields)=>[...document.querySelectorAll('#'+id+' .pbrow')].map(r=>{const o={};fields.forEach(f=>o[f]=(r.querySelector('[data-f="'+f+'"]').value||'').trim());return o;}).filter(o=>Object.values(o).some(v=>v));
+    const script={
+      strategy:document.getElementById('pb_strategy').value.trim(),
+      intros:read('L_intros',['title','text']),
+      steps:read('L_steps',['title','text']),
+      objections:read('L_objections',['q','a']),
+      rules:[...document.querySelectorAll('#L_rules .pbrow textarea')].map(t=>t.value.trim()).filter(Boolean),
+    };
+    const r=await api('save_script',{script:JSON.stringify(script)});
+    if(r.ok){ SCR=script; adminScript(); setTimeout(()=>alert('Script enregistré ✅'),80); }
+    else alert('Échec de l\'enregistrement.');
+  };
 }
 function linkFor(k){ return location.origin+location.pathname+'?k='+k; }
 function v(id){ return document.getElementById(id).value.trim(); }

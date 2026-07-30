@@ -28,11 +28,42 @@ if (!function_exists('db_boot')) {
       file_put_contents(DB_FILE, json_encode($init, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE));
     }
   }
+  function default_script() {
+    return [
+      'strategy' => "On ne « vend pas un site ». On diagnostique un manque — le cabinet est presque invisible sur Google — et on laisse le médecin comprendre seul qu'il perd des patients. Le prix arrive en dernier, comme une évidence.",
+      'intros' => [
+        ['title'=>'Le confrère pressé', 'text'=>"« Bonjour, [Prénom] à l'appareil. Vous pourriez me passer le Dr [Nom] deux minutes ? C'est au sujet de la visibilité du cabinet sur Google. »"],
+        ['title'=>'La curiosité', 'text'=>"« Je préfère en parler directement au Dr [Nom] : j'ai regardé la présence en ligne du cabinet, il y a un point qui mérite 2 minutes de son attention. Il est là ? »"],
+        ['title'=>'Le service, pas la vente', 'text'=>"« Ce n'est pas commercial, c'est technique : une question rapide pour le Dr [Nom] au sujet de la fiche du cabinet sur internet. Vous me le passez ? »"],
+        ['title'=>'On rend service', 'text'=>"« Je serai très bref. On accompagne des cabinets du secteur sur leur image en ligne, et j'ai remarqué quelque chose sur celui du Dr [Nom]. Je peux lui en toucher un mot ? »"],
+        ['title'=>'Si elle bloque', 'text'=>"« Je comprends qu'il soit occupé. Quel est le meilleur moment pour le joindre 2 min — fin de matinée ou fin de journée ? » Si « envoyez un mail » → prenez l'email ET fixez un rappel."],
+      ],
+      'steps' => [
+        ['title'=>'Constat + question', 'text'=>"« Docteur, rapidement : aujourd'hui 8 patients sur 10 cherchent leur dentiste sur Google avant d'appeler. J'ai regardé — votre cabinet n'apparaît quasiment pas. Vous en aviez conscience ? »"],
+        ['title'=>'Enfoncer le clou', 'text'=>"« Le souci, c'est que ces nouveaux patients ne vous trouvent pas… et vont chez le confrère d'à côté, bien référencé. C'est du patient qui part chaque semaine, sans que vous le voyiez. »"],
+        ['title'=>'La solution comme une évidence', 'text'=>"« Justement, on est spécialisés uniquement dans les cabinets dentaires. On s'occupe de tout — site pro, référencé sur Google, avec votre logo, livré en 3 jours. Une seule fois, à la livraison, hébergement gratuit à vie. Vous ne payez que si le résultat vous plaît. »"],
+        ['title'=>'Clôture douce', 'text'=>"« Le plus simple : je vous envoie un exemple qu'on a fait pour un autre cabinet, vous jugez sur pièces. Je vous le mets sur quel email ? »"],
+      ],
+      'objections' => [
+        ['q'=>'J\'ai déjà Doctolib', 'a'=>"« Parfait pour les rendez-vous. Mais Doctolib, c'est la page de tout le monde. Votre site, c'est vous — et c'est lui qui vous fait monter sur Google. »"],
+        ['q'=>'Je n\'ai pas le temps', 'a'=>"« C'est justement notre travail : vous n'avez rien à faire. Vous regardez juste l'exemple, 2 minutes. »"],
+        ['q'=>'C\'est combien ?', 'a'=>"« Bien plus intéressant qu'une agence : une seule fois, hébergement gratuit à vie, et vous ne payez qu'à la livraison. Un seul nouveau patient rembourse déjà le site. »"],
+        ['q'=>'Je vais réfléchir', 'a'=>"« Bien sûr, sans engagement. Je vous envoie l'exemple, vous regardez tranquillement, et je rappelle vendredi. »"],
+        ['q'=>'Le docteur décide', 'a'=>"« Bien sûr ! C'est lui que j'aimerais informer. Je laisse mon exemple par mail et je rappelle quand il est disponible. »"],
+      ],
+      'rules' => [
+        "Appel 1 = curiosité + email + rappel. On ne vend pas encore.",
+        "Appel 2 = on montre l'exemple, puis on conclut la vente.",
+        "Après chaque appel : Intéressé / Pas intéressé + Note + « Rappeler le ».",
+        "Honnêteté sur l'offre au moment de conclure : la confiance, c'est ce qui vend.",
+      ],
+    ];
+  }
   function db_load() {
     db_boot();
     $j = json_decode(file_get_contents(DB_FILE), true);
     if (!is_array($j)) $j = [];
-    $j += ['employees' => [], 'prospects' => [], 'seq' => 1, 'fails' => []];
+    $j += ['employees' => [], 'prospects' => [], 'seq' => 1, 'fails' => [], 'script' => default_script()];
     return $j;
   }
   function db_save($db) {
