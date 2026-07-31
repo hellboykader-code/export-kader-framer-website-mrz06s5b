@@ -524,6 +524,13 @@
         // masquer la FAQ NATIVE du thème (« DES RÉPONSES CLAIRES À VOS QUESTIONS ») sur TOUTES
         // les pages (accueil + contact) : on a notre propre FAQ #dwp-faq.
         +'[data-framer-name="FAQ Section"]{display:none !important}'
+        // ⭐ FIX MOBILE « site dézoomé » : le tableau comparatif (#dwp-compare, min-width 640px)
+        // débordait horizontalement et gonflait le viewport (innerWidth 543 au lieu de 390) →
+        // Framer basculait sur le breakpoint TABLETTE (≥810px) et dézoomait toute la page.
+        // On borne NOS sections injectées au viewport (overflow-x:clip = ne casse pas le sticky
+        // du header Framer, et ne rabote pas les badges verticaux, contrairement à hidden).
+        // Le tableau reste scrollable via son wrapper .dwp-compare-scroll interne.
+        +'[data-dwp]{max-width:100vw;overflow-x:clip}'
         // masquer le bloc de chiffres fictifs (10 ans / 500 sites / 140 cabinets / 98%)
         +'[data-framer-name="About Achieve Numbers"]{display:none !important}'
         // masquer la grille de prix NATIVE du thème (Essentiel/… « 20h/mois », « 8 articles »)
