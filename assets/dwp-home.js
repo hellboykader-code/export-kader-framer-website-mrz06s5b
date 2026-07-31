@@ -521,6 +521,9 @@
     if(!document.getElementById("dwp-hide-css")){
       var hc=document.createElement("style"); hc.id="dwp-hide-css";
       hc.textContent='[data-framer-name="Team Section"]{display:none !important}[data-framer-name="Awards Section"]{display:none !important}'
+        // masquer la FAQ NATIVE du thème (« DES RÉPONSES CLAIRES À VOS QUESTIONS ») sur TOUTES
+        // les pages (accueil + contact) : on a notre propre FAQ #dwp-faq.
+        +'[data-framer-name="FAQ Section"]{display:none !important}'
         // masquer le bloc de chiffres fictifs (10 ans / 500 sites / 140 cabinets / 98%)
         +'[data-framer-name="About Achieve Numbers"]{display:none !important}'
         // masquer la grille de prix NATIVE du thème (Essentiel/… « 20h/mois », « 8 articles »)
