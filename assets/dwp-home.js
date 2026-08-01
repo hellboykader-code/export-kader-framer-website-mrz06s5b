@@ -524,11 +524,6 @@
         // masquer la FAQ NATIVE du thème (« DES RÉPONSES CLAIRES À VOS QUESTIONS ») sur TOUTES
         // les pages (accueil + contact) : on a notre propre FAQ #dwp-faq.
         +'[data-framer-name="FAQ Section"]{display:none !important}'
-        // ⭐ Le fond vidéo du hero est désormais un DÉGRADÉ VIBRANT animé (fichier .mp4 remplacé,
-        //    même URL). Sur ce dégradé, le texte du hero doit passer en BLANC + ombre pour rester
-        //    lisible (il était sombre sur l'ancien fond clair).
-        +'[data-framer-name="Hero Text Wrap"] *{color:#ffffff !important}'
-        +'[data-framer-name="Hero Text Wrap"]{text-shadow:0 2px 34px rgba(20,6,40,.45)}'
         // ⭐ FIX MOBILE « site dézoomé » : le tableau comparatif (#dwp-compare, min-width 640px)
         // débordait horizontalement et gonflait le viewport (innerWidth 543 au lieu de 390) →
         // Framer basculait sur le breakpoint TABLETTE (≥810px) et dézoomait toute la page.
