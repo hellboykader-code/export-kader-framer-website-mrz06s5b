@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Inviter un client à laisser un avis — DentWebPro</title>
+<meta name="robots" content="noindex,nofollow">
+<style>
+  :root{--ink:#17171b;--accent:#f55733;--muted:#757575;--line:#e4e4e8;--bg:#f6f6f4}
+  *{margin:0;box-sizing:border-box}
+  body{font-family:-apple-system,'Segoe UI',Roboto,Helvetica,Arial,sans-serif;background:var(--bg);color:var(--ink);
+    min-height:100vh;display:grid;place-items:center;padding:24px}
+  .card{width:min(460px,100%);background:#fff;border:1px solid var(--line);border-radius:22px;
+    box-shadow:0 18px 50px -24px rgba(0,0,0,.25);padding:36px 32px}
+  .tag{display:inline-block;font-size:11px;letter-spacing:.16em;font-weight:700;color:var(--accent);
+    text-transform:uppercase;margin-bottom:10px}
+  h1{font-size:23px;letter-spacing:-.02em;margin-bottom:6px}
+  .sub{color:var(--muted);font-size:13.5px;line-height:1.55;margin-bottom:22px}
+  label{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin:14px 0 5px}
+  input{width:100%;border:1px solid var(--line);border-radius:11px;padding:11px 13px;font-size:15px;outline:none}
+  input:focus{border-color:var(--accent);box-shadow:0 0 0 3px rgba(245,87,51,.14)}
+  button{margin-top:22px;width:100%;border:0;border-radius:99px;padding:13px;font-size:15px;font-weight:700;
+    background:var(--accent);color:#fff;cursor:pointer}
+  button:disabled{opacity:.5;cursor:default}
+  .msg{margin-top:16px;border-radius:11px;padding:12px 14px;font-size:13.5px;display:none}
+  .msg.ok{display:block;background:#e9f8ef;color:#1c7a43}
+  .msg.err{display:block;background:#fdeeec;color:#b3362a}
+  .note{margin-top:18px;font-size:12px;color:var(--muted);line-height:1.6;border-top:1px solid var(--line);padding-top:12px}
+</style>
+<script>
+  (function(w,d,s,r,n){w.TrustpilotObject=n;w[n]=w[n]||function(){(w[n].q=w[n].q||[]).push(arguments)};
+      a=d.createElement(s);a.async=1;a.src=r;a.type='text/java'+s;f=d.getElementsByTagName(s)[0];
+      f.parentNode.insertBefore(a,f)})(window,document,'script', 'https://invitejs.trustpilot.com/tp.min.js', 'tp');
+      tp('register', 'Sn1Y2gyWaOhTYOZp');
+</script>
+</head>
+<body>
+  <div class="card">
+    <span class="tag">DentWebPro — outil interne</span>
+    <h1>Inviter un client à laisser un avis ⭐</h1>
+    <p class="sub">Après la livraison d'un site, entrez les coordonnées du praticien :
+      Trustpilot lui enverra l'invitation d'avis officielle par e-mail.</p>
+    <form id="f">
+      <label for="nom">Nom du client</label>
+      <input id="nom" required placeholder="Dr Martin">
+      <label for="email">E-mail du client</label>
+      <input id="email" type="email" required placeholder="dr.martin@cabinet.fr">
+      <label for="ref">Référence (site livré)</label>
+      <input id="ref" required placeholder="site-cabinet-martin">
+      <button id="btn">Envoyer l'invitation</button>
+    </form>
+    <div class="msg" id="msg"></div>
+    <p class="note">⚠️ À n'utiliser que pour de <b>vrais clients livrés</b> (règles Trustpilot).
+      Un envoi par client — la demande part via votre compte Trustpilot (unité Sn1Y2gyWaOhTYOZp).</p>
+  </div>
+<script>
+  document.getElementById('f').addEventListener('submit', function (e) {
+    e.preventDefault();
+    var msg = document.getElementById('msg'), btn = document.getElementById('btn');
+    var nom = document.getElementById('nom').value.trim();
+    var email = document.getElementById('email').value.trim();
+    var ref = document.getElementById('ref').value.trim();
+    if (!nom || !email || !ref) return;
+    try {
+      tp('createInvitation', {
+        recipientEmail: email,
+        recipientName: nom,
+        referenceId: ref,
+        source: 'InvitationScript',
+      });
+      btn.disabled = true;
+      msg.className = 'msg ok';
+      msg.textContent = '✅ Invitation transmise à Trustpilot pour ' + nom + ' (' + email + '). Elle apparaîtra dans votre espace Trustpilot Business.';
+      setTimeout(function () { btn.disabled = false; }, 4000);
+    } catch (err) {
+      msg.className = 'msg err';
+      msg.textContent = 'Échec de l\'envoi — vérifiez votre connexion et réessayez.';
+    }
+  });
+</script>
+</body>
+</html>
