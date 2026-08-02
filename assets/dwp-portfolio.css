@@ -245,3 +245,15 @@ main [data-framer-name="Team Section"]{display:none !important}
 .dwp-cta-box .dwp-btn-primary{position:relative;font-size:1.12rem;padding:17px 34px}
 .dwp-cta-sub{position:relative;margin-top:16px;color:#b9b9c2;font-size:.92rem}
 @media(max-width:560px){.dwp-cta-box{padding:44px 26px}}
+
+/* ─── « Vos données restent chez vous » (sécurité & RGPD) ─── */
+#dwp-donnees{padding:88px 0;background:#fff}
+#dwp-donnees .dwp-wrap{max-width:1240px;margin:0 auto;padding:0 28px}
+.dwp-don-sub{color:var(--dwp-muted);font-size:1.05rem;margin:10px 0 0}
+.dwp-don-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
+.dwp-don-card{background:var(--dwp-bg);border:1px solid var(--dwp-line);border-radius:18px;padding:30px 26px}
+.dwp-don-ico{width:52px;height:52px;border-radius:14px;background:#fff2ee;display:grid;place-items:center;margin-bottom:18px}
+.dwp-don-card h3{font-size:1.18rem;letter-spacing:-.02em;margin:0 0 8px;color:var(--dwp-ink)}
+.dwp-don-card p{color:var(--dwp-muted);font-size:.98rem;line-height:1.55;margin:0}
+.dwp-don-card b{color:var(--dwp-ink)}
+@media(max-width:900px){.dwp-don-grid{grid-template-columns:1fr}}

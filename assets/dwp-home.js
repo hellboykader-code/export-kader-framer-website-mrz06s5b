@@ -215,6 +215,30 @@
     return sec;
   }
 
+  // ─── « Vos données restent chez vous » (sécurité & RGPD — lève l'objection
+  //     des praticiens qui craignent pour leurs données) ───
+  function buildDonnees(){
+    var sec=document.createElement("section");
+    sec.id="dwp-donnees"; sec.setAttribute("data-dwp","1");
+    var ico=function(p){ return '<span class="dwp-don-ico"><svg width="26" height="26" viewBox="0 0 24 24" fill="none">'+p+'</svg></span>'; };
+    var shield=ico('<path d="M12 3l7 2.6v5.1c0 4.6-3 8.1-7 9.3-4-1.2-7-4.7-7-9.3V5.6L12 3z" stroke="#f55733" stroke-width="1.6" stroke-linejoin="round"/><path d="M9.2 12l2 2 3.6-3.8" stroke="#f55733" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/>');
+    var lock=ico('<rect x="5" y="10.5" width="14" height="9" rx="2.4" stroke="#f55733" stroke-width="1.6"/><path d="M8.5 10.5V8a3.5 3.5 0 017 0v2.5" stroke="#f55733" stroke-width="1.6" stroke-linecap="round"/><circle cx="12" cy="15" r="1.4" fill="#f55733"/>');
+    var home=ico('<path d="M4 11l8-7 8 7" stroke="#f55733" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/><path d="M6.5 9.5V20h11V9.5" stroke="#f55733" stroke-width="1.6" stroke-linecap="round"/><path d="M10 20v-5.5h4V20" stroke="#f55733" stroke-width="1.6" stroke-linejoin="round"/>');
+    sec.innerHTML='<div class="dwp-wrap">'+
+      '<div class="dwp-thead">'+
+        '<span class="dwp-eyebrow2">{ Sécurité &amp; RGPD }</span>'+
+        '<h2>Vos données restent chez vous</h2>'+
+        '<p class="dwp-don-sub">Un site vitrine met votre cabinet en valeur — il ne touche jamais à vos dossiers patients.</p>'+
+      '</div>'+
+      '<div class="dwp-don-grid">'+
+        '<div class="dwp-don-card">'+shield+'<h3>Zéro donnée médicale</h3><p>Votre logiciel métier et vos dossiers patients restent chez vous. Le site n’y a <b>aucun accès</b> — et n’en demande jamais.</p></div>'+
+        '<div class="dwp-don-card">'+lock+'<h3>Formulaire minimal, consentement RGPD</h3><p>Nom, téléphone, créneau souhaité — <b>rien de plus</b>, comme un appel téléphonique. Consentement explicite et politique de confidentialité inclus.</p></div>'+
+        '<div class="dwp-don-card">'+home+'<h3>Vous êtes l’unique propriétaire</h3><p>Les demandes arrivent <b>directement chez vous</b>, jamais sur une plateforme tierce qui centralise les données. Suppression automatique après la durée que vous choisissez.</p></div>'+
+      '</div>'+
+    '</div>';
+    return sec;
+  }
+
   // ─── FAQ (accordéon) ───
   function buildFaq(){
     var sec=document.createElement("section");
@@ -226,7 +250,8 @@
       ["Et le nom de domaine ?","La <b>1ʳᵉ année est offerte</b>. Ensuite, il faut seulement <b>50€/an</b> pour le renouvellement du domaine (ex. votre-cabinet.fr)."],
       ["Puis-je modifier mon site plus tard ?","Bien sûr. Les <b>modifications sont incluses</b> dès la formule Pro, et jusqu’à <b>5 modifications par an</b> en Premium."],
       ["Combien ça coûte ?","À partir de <b>290€</b>, une seule fois. Pas d’abonnement, pas de frais cachés — le prix affiché est le prix final."],
-      ["Quand dois-je payer ?","<b>Uniquement à la livraison</b>, une fois votre site en ligne et validé par vos soins. Aucun paiement avant."]
+      ["Quand dois-je payer ?","<b>Uniquement à la livraison</b>, une fois votre site en ligne et validé par vos soins. Aucun paiement avant."],
+      ["Et les données de mes patients ?","Nos sites sont des <b>sites vitrines</b> : aucune donnée médicale n’y transite. Vos dossiers patients restent dans votre logiciel métier. Le formulaire ne collecte que le strict minimum (nom, téléphone, créneau), avec <b>consentement RGPD</b>, envoyé <b>directement chez vous</b> — jamais sur une plateforme tierce — et supprimé automatiquement après la durée que vous choisissez."]
     ].map(function(x){
       return '<details class="dwp-faq-item"><summary>'+x[0]+plus+'</summary><div class="dwp-faq-a">'+x[1]+'</div></details>';
     }).join("");
@@ -565,7 +590,7 @@
     // Comment ça marche → Tarifs (3 formules) → Garanties → FAQ
     if(isHome){
       var anchor=document.getElementById("dwp-gallery");
-      [["dwp-proof",buildProof],["dwp-why",buildWhy],["dwp-steps",buildSteps],["dwp-tarifs",buildTarifs],["dwp-compare",buildCompare],["dwp-garanties",buildGaranties],["dwp-faq",buildFaq],["dwp-cta",buildCta]].forEach(function(pair){
+      [["dwp-proof",buildProof],["dwp-why",buildWhy],["dwp-steps",buildSteps],["dwp-tarifs",buildTarifs],["dwp-compare",buildCompare],["dwp-garanties",buildGaranties],["dwp-donnees",buildDonnees],["dwp-faq",buildFaq],["dwp-cta",buildCta]].forEach(function(pair){
         var ex=document.getElementById(pair[0]);
         if(ex){ anchor=ex; return; }
         var node=pair[1]();
