@@ -245,10 +245,20 @@ if ($action !== '') {
     unset($p); if ($n) db_save($db);
     echo json_encode(['ok' => true, 'moved' => $n]); exit;
   }
-  if ($action === 'transfer_all') {    // transférer TOUTE la liste d'un commercial à un autre
-    $from = trim((string)($in['fromKey'] ?? '')); $to = trim((string)($in['toKey'] ?? '')); $n = 0;
-    foreach ($db['prospects'] as &$p) if (($p['assignedTo'] ?? '') === $from) { $p['assignedTo'] = $to; $p['updated'] = time(); $n++; }
-    unset($p); if ($n) db_save($db);
+  if ($action === 'transfer_all') {    // transférer la liste d'un commercial à un autre (tout, ou un nombre limité)
+    $from = trim((string)($in['fromKey'] ?? '')); $to = trim((string)($in['toKey'] ?? ''));
+    $limit = (int)($in['limit'] ?? 0); if ($limit < 0) $limit = 0;   // 0 = tous
+    // indices des prospects de l'émetteur ; priorité aux « nouveau » (non traités)
+    $idx = array_keys(array_filter($db['prospects'], fn($p) => ($p['assignedTo'] ?? '') === $from));
+    usort($idx, function ($a, $b) use ($db) {
+      $na = ($db['prospects'][$a]['statut'] ?? '') === 'nouveau' ? 0 : 1;
+      $nb = ($db['prospects'][$b]['statut'] ?? '') === 'nouveau' ? 0 : 1;
+      return $na <=> $nb;
+    });
+    if ($limit > 0) $idx = array_slice($idx, 0, $limit);
+    $n = 0;
+    foreach ($idx as $i) { $db['prospects'][$i]['assignedTo'] = $to; $db['prospects'][$i]['updated'] = time(); $n++; }
+    if ($n) db_save($db);
     echo json_encode(['ok' => true, 'moved' => $n]); exit;
   }
   echo json_encode(['ok' => false, 'msg' => 'Action inconnue.']); exit;
@@ -703,23 +713,27 @@ function adminEquipe(){
       <button class="btn sm" id="ne_add">Créer le lien</button></div>
       <div class="hint" style="margin-top:8px">Choisissez le code, ou laissez vide = généré automatiquement. Un lien privé sera créé.</div>
     </div>
-    <div class="cardbox"><h4>🔄 Transférer toute une liste d'un commercial à un autre</h4>
-      <div class="flex" style="align-items:center">
+    <div class="cardbox"><h4>🔄 Transférer une liste d'un commercial à un autre</h4>
+      <div class="flex" style="align-items:center;flex-wrap:wrap">
         <select class="inp" id="tr_from" style="flex:1;min-width:130px">${comOptions('')}</select>
         <span style="font-weight:800;color:var(--accent)">→</span>
         <select class="inp" id="tr_to" style="flex:1;min-width:130px">${comOptions('')}</select>
+        <input class="inp" id="tr_n" type="number" min="1" step="1" placeholder="Combien ? (vide = tous)" style="width:170px" inputmode="numeric">
         <button class="btn sm" id="tr_go">Transférer</button>
       </div>
-      <div class="hint" style="margin-top:8px">Déplace TOUS les prospects du 1ᵉʳ commercial vers le 2ᵉ.</div>
+      <div class="hint" style="margin-top:8px">Déplace les prospects du 1ᵉʳ commercial vers le 2ᵉ. Laissez « Combien ? » vide pour tout transférer, ou saisissez un nombre (les prospects « nouveau » non traités partent en priorité).</div>
     </div>
     <div id="emps">${cs.length? cs.map(empHTML).join('') : '<div class="empty">Aucun commercial. Créez le premier ci-dessus.</div>'}</div>`;
   document.getElementById('tr_go').onclick=async()=>{
     const from=document.getElementById('tr_from').value, to=document.getElementById('tr_to').value;
     if(from===to){alert('Choisissez deux commerciaux différents.');return;}
+    const nRaw=document.getElementById('tr_n').value.trim();
+    const limit=nRaw===''?0:Math.max(0,parseInt(nRaw,10)||0);
     const fn=from?comName(from):'Non assigné', tn=to?comName(to):'Non assigné';
-    if(confirm('Transférer tous les prospects de « '+fn+' » vers « '+tn+' » ?')){
-      const r=await api('transfer_all',{fromKey:from,toKey:to});
-      if(r.ok){ adminView(); setTimeout(()=>alert(r.moved+' prospect(s) transféré(s).'),100); }
+    const howMany=limit>0?('jusqu\'à '+limit+' prospect(s)'):'TOUS les prospects';
+    if(confirm('Transférer '+howMany+' de « '+fn+' » vers « '+tn+' » ?')){
+      const r=await api('transfer_all',{fromKey:from,toKey:to,limit});
+      if(r.ok){ document.getElementById('tr_n').value=''; adminView(); setTimeout(()=>alert(r.moved+' prospect(s) transféré(s).'),100); }
     }
   };
   document.getElementById('ne_add').onclick=async()=>{
