@@ -18,6 +18,8 @@
   // Sites réels déjà livrés & en ligne (clic -> ouverture du site en direct, nouvel onglet)
   var LIVE=[
     // Modèle haut de gamme (démo récente) — ouverture de la page locale
+    {name:"Lumière", city:"Modèle", url:"/realisations/lumiere/index.html", vid:"lumiere", brand:"#241528", accent:"#b08d57"},
+    {name:"Kúra",    city:"Modèle", url:"/realisations/kura/index.html",    vid:"kura",    brand:"#2b4bf2", accent:"#12cf9f"},
     {name:"Sereine", city:"Modèle", url:"/realisations/sereine/index.html", img:"sereine.jpg", brand:"#14332c", accent:"#c99a4e"},
     {name:"Oléa",  city:"Marseille", url:"https://hellboykader-code.github.io/export-kader1-framer-website-ms074a1w/",  vid:"olea",  brand:"#0d1b15", accent:"#d1fc71"},
     {name:"Novéo", city:"Lyon",      url:"https://hellboykader-code.github.io/export-kader9-framer-website-mrzfoouq/",  vid:"noveo", brand:"#33231a", accent:"#e8853b"},
